@@ -3,9 +3,7 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - pip install numpy
-  - pip install scipy
-  - pip install matplotlib
+  - pip install -r requirements.txt
   - python setup.py install  # install catplot
 # command to run tests
 script:
