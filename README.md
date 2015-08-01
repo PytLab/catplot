@@ -9,13 +9,15 @@ CatPlot
 2. ...
 
 ###依赖
-- python2.7.x
-- Numpy
-- scipy
-- matplotlib
+- `python2.7.x`
+- `Numpy`
+- `scipy`
+- `matplotlib`
 
 ###下载
 发布版本下载链接：
+
+[单击下载](https://github.com/PytLab/catplot/archive/master.zip)
 
 通过git：
 
