@@ -29,7 +29,7 @@ data_files = [
     'scripts/mplot/input.txt',
 ]
 platforms = ['linux', 'windows']
-url = ''
+url = 'https://github.com/PytLab/catplot'
 download_url = ''
 
 setup(
