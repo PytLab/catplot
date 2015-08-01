@@ -3,6 +3,8 @@ CatPlot
 
 **CatPlot** is a Python module for catalysis data plotting.
 
+催化剂相关的python作图库
+
 ###目前提供的功能
 
 1. Plotting energy profile
