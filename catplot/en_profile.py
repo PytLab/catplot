@@ -256,7 +256,7 @@ def plot_single_energy_diagram(*args, **kwargs):
         kwargs['subsection_length'] if 'subsection_length' in kwargs else 1.0
     line_color = kwargs['line_color'] if 'line_color' in kwargs else '#000000'
     has_shadow = kwargs['has_shadow'] if 'has_shadow' in kwargs else True
-    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'jpeg'
+    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'png'
     show_mode = kwargs['show_mode'] if 'show_mode' in kwargs else 'show'
 
     #####################  args setting END  #######################
@@ -493,7 +493,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
         kwargs['subsection_length'] if 'subsection_length' in kwargs else 1.0
     line_color = kwargs['line_color'] if 'line_color' in kwargs else '#000000'
     has_shadow = kwargs['has_shadow'] if 'has_shadow' in kwargs else True
-    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'jpeg'
+    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'png'
     init_y_offset = kwargs['init_y_offset'] if 'init_y_offset' in kwargs else 0.0
     show_note = kwargs['show_note'] if 'show_note' in kwargs else True
     show_aux_line = kwargs['show_aux_line'] if 'show_aux_line' in kwargs else True
