@@ -92,12 +92,12 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 
 一个基元反应：
 
-![](https://github.com/PytLab/catplot/tree/master/examples/0.jpeg)
+![](https://github.com/PytLab/catplot/blob/master/examples/0.jpeg)
 
 多个基元反应：
 
-![](https://github.com/PytLab/catplot/tree/master/examples/multi_energy_diagram_04.jpeg)
+![](https://github.com/PytLab/catplot/blob/master/examples/multi_energy_diagram_04.jpeg)
 
 两条路径合并：
 
-![](https://github.com/PytLab/catplot/tree/master/examples/merged_energy_profile_1_trans.png)
+![](https://github.com/PytLab/catplot/blob/master/examples/merged_energy_profile_1_trans.png)
