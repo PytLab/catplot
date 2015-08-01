@@ -278,7 +278,7 @@ def plot_single_energy_diagram(*args, **kwargs):
     y_scale = abs(y_max - y_min)
 
     ###################      start Artist Mode!      #######################
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111)
     ax.set_ylim(y_min - y_scale/5, y_max + y_scale/5)
     ax.set_xlim(-subsection_length/3, x_max)
