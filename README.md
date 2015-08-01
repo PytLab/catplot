@@ -1,6 +1,10 @@
 CatPlot
 ========
 
+[![Build Status](https://travis-ci.org/PytLab/catplot.svg?branch=master)](https://travis-ci.org/PytLab/catplot)
+[![platform](https://img.shields.io/badge/python-2.7-green.svg)]()
+[![versions](https://img.shields.io/badge/versions%20-%20%200.1.0-blue.svg)]()
+
 **CatPlot** is a Python module for catalysis data plotting.
 
 催化剂相关的python绘图库
