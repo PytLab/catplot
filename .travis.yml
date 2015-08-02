@@ -1,6 +1,10 @@
 language: python
 python:
   - "2.7"
+
+notifications:
+  email: false
+
 before_install:
   - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
@@ -23,5 +27,7 @@ install:
 script:
   - cd scripts/mplot
   - python plot_merge_profile.py --save
+  - python plot_merge_profile.py --save --trans
   - cd ../plot
   - python plot_energy_profile.py --save
+  - python plot_energy_profile.py --save --trans
