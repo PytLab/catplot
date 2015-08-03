@@ -2,6 +2,7 @@ CatPlot
 ========
 
 [![Build Status](https://travis-ci.org/PytLab/catplot.svg?branch=master)](https://travis-ci.org/PytLab/catplot)
+[![platform](https://img.shields.io/badge/python-2.6-green.svg)]()
 [![platform](https://img.shields.io/badge/python-2.7-green.svg)]()
 [![versions](https://img.shields.io/badge/versions%20-%20%200.1.0-blue.svg)]()
 
@@ -15,7 +16,7 @@ CatPlot
 2. ...
 
 ###依赖
-- `python2.7.x`
+- `python2.6.x` or `python2.7.x`
 - `Numpy`
 - `scipy`
 - `matplotlib`
@@ -64,7 +65,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 #####参数设置说明
 以`catplot/scripts/plot/input.txt`为例:
 
-若进行多个基元反应的energy profile的绘制则需要将`rxn_equations`和`energy_tuples`的注视取消。
+若进行多个基元反应的energy profile的绘制则需要将`rxn_equations`和`energy_tuples`的注释`#`取消。
 
 **基元反应式**
 
@@ -88,7 +89,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
         (3.0, 4.7, 0.7),
     ]
 
-*能量和基元反应式的形状必须匹配，否则程序会把抛出异常。
+*能量和基元反应式的形状必须匹配，否则程序会抛出异常。
 
 其余的参数用于调节绘图的其他效果，例如是否显示标注，线的颜色，阴影颜色和深度等等，使用者可以根据自己需求进行调节。
 
@@ -96,12 +97,21 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 
 一个基元反应：
 
-![](https://github.com/PytLab/catplot/blob/master/examples/0.jpeg)
+![](https://github.com/PytLab/catplot/blob/master/pic/single.png)
 
 多个基元反应：
 
-![](https://github.com/PytLab/catplot/blob/master/examples/multi_energy_diagram_04.jpeg)
+![](https://github.com/PytLab/catplot/blob/master/pic/multi_energy_diagram.png)
+
+多个基元反应(无注释、无辅助线、黑色)
+
+![](https://github.com/PytLab/catplot/blob/master/examples/energy_profilesingle_trans.png)
+
+
+多个基元反应(无注释、无辅助线、红色)
+
+![](https://github.com/PytLab/catplot/blob/master/examples/energy_profilered_trans.png)
 
 两条路径合并：
 
-![](https://github.com/PytLab/catplot/blob/master/examples/merged_energy_profile_1_trans.png)
+![](https://github.com/PytLab/catplot/blob/master/examples/merged_energy_profile1_trans.png)
