@@ -105,13 +105,13 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 
 多个基元反应(无注释、无辅助线、黑色)
 
-![](https://github.com/PytLab/catplot/blob/master/examples/energy_profilesingle_trans.png)
+![](https://github.com/PytLab/catplot/blob/master/pic/energy_profilesingle_trans.png)
 
 
 多个基元反应(无注释、无辅助线、红色)
 
-![](https://github.com/PytLab/catplot/blob/master/examples/energy_profilered_trans.png)
+![](https://github.com/PytLab/catplot/blob/master/pic/energy_profilered_trans.png)
 
 两条路径合并：
 
-![](https://github.com/PytLab/catplot/blob/master/examples/merged_energy_profile1_trans.png)
+![](https://github.com/PytLab/catplot/blob/master/pic/merged_energy_profile1_trans.png)
