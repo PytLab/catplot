@@ -13,7 +13,7 @@ CatPlot
 
 ###目前提供的功能
 
-1. Plotting energy profile
+1. Plotting **parabolic** energy profile
 2. ...
 
 ###依赖
