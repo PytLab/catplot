@@ -13,7 +13,8 @@ from math import sqrt
 from matplotlib.patches import Ellipse
 from scipy.optimize import fsolve
 
-from functions import get_relative_energy_tuple, equation2list
+from functions import get_relative_energy_tuple
+from chem_parser import *
 
 
 class ShadowThread(threading.Thread):
@@ -238,10 +239,10 @@ def plot_single_energy_diagram(*args, **kwargs):
 
     Examples
     --------
-    >>> m.plotter.plot_single_energy_diagram((0.0, 1.2, 0.6),
-                                             'COO_s -> CO2_g + *_s',
-                                             has_shadow=True,
-                                             'fname'='pytlab')
+    >>> plot_single_energy_diagram((0.0, 1.2, 0.6),
+                                   'COO_s -> CO2_g + *_s',
+                                   has_shadow=True,
+                                   'fname'='pytlab')
     >>> <matplotlib.figure.Figure at 0x5659f30>
     """
     ###############  args setting before plotting  ################
@@ -261,7 +262,7 @@ def plot_single_energy_diagram(*args, **kwargs):
 
     #####################  args setting END  #######################
 
-    rxn_list = equation2list(rxn_equation)
+    rxn_list = RxnEquation(rxn_equation).tolist()
     energy_tuple = get_relative_energy_tuple(energy_tuple)
     #energy info
     rxn_energy = round(energy_tuple[-1] - energy_tuple[0], 2)
@@ -284,7 +285,7 @@ def plot_single_energy_diagram(*args, **kwargs):
     ax.set_xlim(-subsection_length/3, x_max)
     xlabel = ax.set_xlabel('Reaction Coordinate')
     ylabel = ax.set_ylabel('Free Energy(eV)')
-    title = ax.set_title(rxn_equation,
+    title = ax.set_title(r'$\bf{'+RxnEquation(rxn_equation).texen()+r'}$',
                          fontdict={
                              'fontsize': 13,
                              'weight': 1000,
@@ -311,12 +312,12 @@ def plot_single_energy_diagram(*args, **kwargs):
     #initial state
     note_x_i = subsection_length/10
     note_y_i = energy_tuple[0] + note_offset
-    note_str_i = r'$\bf{' + rxn_list[0] + r'}$'
+    note_str_i = r'$\bf{' + rxn_list[0].texen() + r'}$'
     param_list.append((note_x_i, note_y_i, note_str_i))
     #final state
     note_x_f = subsection_length/10 + subsection_length + ts_scale
     note_y_f = energy_tuple[-1] + note_offset
-    note_str_f = r'$\bf{' + rxn_list[-1] + r'}$'
+    note_str_f = r'$\bf{' + rxn_list[-1].texen() + r'}$'
     param_list.append((note_x_f, note_y_f, note_str_f))
     if len(energy_tuple) == 3:
         #transition state
@@ -326,7 +327,7 @@ def plot_single_energy_diagram(*args, **kwargs):
         #####################
         barrier_x = x[idx]  # x value of TS point
         #####################
-        note_str_b = r'$\bf' + rxn_list[1] + r'}$'
+        note_str_b = r'$\bf' + rxn_list[1].texen() + r'}$'
         param_list.append((note_x_b, note_y_b, note_str_b))
     #add annotates
     for idx, param_tuple in enumerate(param_list):
@@ -503,7 +504,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     #####################  args setting END  #######################
 
     #convert rxn_equation_list(str) to elementary_rxns_list alike list
-    rxns_list = [equation2list(rxn_equation)
+    rxns_list = [RxnEquation(rxn_equation).tolist()
                  for rxn_equation in rxn_equations_list]
 
     x_offset, y_offset = 0.0, init_y_offset
@@ -575,7 +576,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     ax.set_title('Energy Profile',
                  fontdict={
                      'fontsize': 15,
-                     'weight': 1000,
+                     'weight': 100,
                      'verticalalignment': 'bottom'
                      })
     ax.set_xlabel('Reaction Coordinate')
@@ -588,7 +589,10 @@ def plot_multi_energy_diagram(*args, **kwargs):
     ax.plot(total_x, total_y, color=line_color, linewidth=3)
 
     #get state string list as notes
-    state_str_list = [tuple(rxn_list[:-1]) for rxn_list in rxns_list]
+    state_str_list = []
+    for rxn_list in rxns_list:
+        t = tuple([state_obj.texen() for state_obj in rxn_list[:-1]])
+        state_str_list.append(t)
 
     ####################     Main loop to add notes     ###################
     #This is the main loop to add extral info to main line
@@ -698,7 +702,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     #add species note at last section
     if show_note:
         pt = pts[-1]
-        tex_state = rxns_list[-1][-1]
+        tex_state = rxns_list[-1][-1].texen()
         ax.text(pt[0]+0.2*subsection_length, pt[-1]+y_scale/50,
                 r'$\bf{'+tex_state+r'}$',
                 fontdict={'fontsize': 13, 'color': '#1874CD'})
