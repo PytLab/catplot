@@ -5,16 +5,16 @@
 #elementary reaction equations
 multi_rxn_equations = [
     [
-        'CO2 + * -> CO2*',
-        'CO2* <-> CO-O_* -> CO*',
-        'CO* <-> C-O* -> C*',
+        'CO2_g + *_s -> CO2_s',
+        'CO2_s <-> CO-O_s -> CO_s',
+        'CO_s <-> C-O_s -> C_s',
     ],
 
     [
-        'CO2 + * -> CO2*',
-        'CO2* <-> CO-O_* -> CO*',
-        'CO* + H* <-> CO-H* -> COH*',
-        'COH* <-> CH-O* -> CH*',
+        'CO2_g + *_s -> CO2_s',
+        'CO2_s <-> CO-O_s -> CO_s',
+        'CO_s + H_s <-> CO-H_s -> COH_s',
+        'COH_s <-> CH-O_s -> CH_s',
     ],
 ]
 
