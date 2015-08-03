@@ -30,7 +30,7 @@ data_files = [
 ]
 platforms = ['linux', 'windows']
 url = 'https://github.com/PytLab/catplot'
-download_url = ''
+download_url = 'https://github.com/PytLab/catplot/releases'
 
 setup(
     author=author,
