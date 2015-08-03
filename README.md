@@ -61,7 +61,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
   - `plot_energy_profile.py` -- 绘图脚本
 - scripts/mplot (绘制合并的energy profile)
   - `input.txt` -- 输入文件模板
-  - `plot_energy_profile.py` -- 绘图脚本
+  - `plot_merge_profile.py` -- 绘图脚本
 
 #####参数设置说明
 以`catplot/scripts/plot/input.txt`为例:
@@ -91,6 +91,18 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
     ]
 
 *能量和基元反应式的形状必须匹配，否则程序会抛出异常。
+
+**运行**
+
+绘制并直接保存图片
+
+    $ python ./plot_merge_profile.py --save
+或者
+
+绘制背景透明的矢量图(方便后期处理)
+    
+    $ python ./plot_merge_profile.py --save --trans
+生成的图片会保存在`./energy_profle/`下。
 
 其余的参数用于调节绘图的其他效果，例如是否显示标注，线的颜色，阴影颜色和深度等等，使用者可以根据自己需求进行调节。
 
