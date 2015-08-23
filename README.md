@@ -69,7 +69,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 若进行多个基元反应的energy profile的绘制则需要将`rxn_equations`和`energy_tuples`的注释`#`取消。
 
 **基元反应式**
-
+``` python
     #elementary reaction equations
     rxn_equations = [
         'HCOOH_g + 2*_s <-> HCOO-H_s + *_s -> HCOO_s + H_s',
@@ -77,9 +77,9 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
         'COO_s -> CO2_g + *_s',
         '2H_s <-> H-H_s + *_s -> H2_g + 2*_s'
     ]
-
+```
 **相应每个态的能量**
-
+``` python
     #relative energies
     energy_tuples = [
         # IS,  TS,  FS
@@ -89,7 +89,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
         (0.0, 4.0),
         (3.0, 4.7, 0.7),
     ]
-
+```
 *能量和基元反应式的形状必须匹配，否则程序会抛出异常。
 
 **运行**
