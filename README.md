@@ -130,4 +130,17 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 ![](https://github.com/PytLab/catplot/blob/master/pic/merged_energy_profile1_trans.png)
 
 ###更新日志
-2015-08-28 版本 0.1.1 新增半峰宽设置
+<table>
+    <tbody>
+        <tr>
+            <td><em>*日期*</em></td>
+            <td><em>*版本*</em></td>
+            <td><em>*内容*</em></td>
+        </tr>
+        <tr>
+            <td>2015-08-28</td>
+            <td>0.1.1</td>
+            <td>新增半峰宽设置</td>
+        </tr>
+    </tbody>
+</table>
