@@ -34,6 +34,7 @@ for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data)
     fig, x_total, y_total = \
         plot_multi_energy_diagram(rxn_equations, energy_tuples,
                                   init_y_offset=init_y_offset,
+                                  halfpeak_width=locs['halfpeak_width'],
                                   n=10000, show_mode='save',
                                   fname=fname)
     print "Ok."

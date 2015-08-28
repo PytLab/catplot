@@ -26,13 +26,15 @@ if 'rxn_equations' in locs and 'energy_tuples' in locs:  # multi rxn
     for idx, args in enumerate(zip(locs['energy_tuples'], locs['rxn_equations'])):
         fname = str(idx).zfill(2)
         print "Plotting diagram " + fname + "..."
-        plot_single_energy_diagram(*args, show_mode='save', fname=fname)
+        plot_single_energy_diagram(*args, halfpeak_width=locs['halfpeak_width'],
+                                   show_mode='save', fname=fname)
         print "Ok."
 
     #plot multi-diagram
     print "Plotting multi-diagram..."
     fig, x_total, y_total = \
         plot_multi_energy_diagram(locs['rxn_equations'], locs['energy_tuples'],
+                                  halfpeak_width=locs['halfpeak_width'],
                                   show_mode='save')
     print "Ok."
 
@@ -70,6 +72,7 @@ if locs.get('custom'):
             ax.set_yticks(np.linspace(ymin, ymax, locs['n_yticks']))
     if 'yticklabels' in locs:
         ax.set_yticklabels(locs['yticklabels'])
+    ax.set_ymargin(0.1)
 
     #add line shadow
     shadow_depth = locs['shadow_depth'] if 'shadow_depth' in locs else 7

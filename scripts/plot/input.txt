@@ -48,3 +48,6 @@ color = '#000000'  # line color
 shadow_depth = 8
 shadow_color = '#595959'
 offset_coeff = 8.0
+
+#half-peak width
+halfpeak_width = 1.0

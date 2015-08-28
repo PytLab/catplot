@@ -124,7 +124,8 @@ def add_line_shadow(ax, x, y, depth, color, line_width=3, offset_coeff=1.0):
 
 
 def get_potential_energy_points(energy_tuple, n=100,
-                                subsection_length=1.0):
+                                subsection_length=1.0,
+                                halfpeak_width=0.5):
     """
     Expect a energuy_tuple containing 3 components, number of points
     return two 1-D arrays(x, y).
@@ -137,12 +138,14 @@ def get_potential_energy_points(energy_tuple, n=100,
         Number of points interpolated.
     subsection_length : int, optional
         Length of each subsection(x_i, x_f)
+    halfpeak_width : float, default to be 0.5
+        equals to (halfpeak_width / subsection_length)
     """
     #use quadratic interpolation to get barrier points
     if len(energy_tuple) == 3:
         #transition state y
         a, b, c, f = quadratic_interp_poly(0.0, energy_tuple[0],
-                                           subsection_length/2,
+                                           subsection_length*halfpeak_width,
                                            energy_tuple[1])
         y3 = energy_tuple[-1]
         try:
@@ -230,6 +233,10 @@ def plot_single_energy_diagram(*args, **kwargs):
         'show' : show the figure in a interactive way.
         'save' : save the figure automatically.
 
+    halfpeak_width : float, 0.5(default)
+        half-peak width if TS exists.
+        equals to (halfpeak_width / subsection_length)
+
     Other parameters
     ----------------
     kwargs :
@@ -259,6 +266,7 @@ def plot_single_energy_diagram(*args, **kwargs):
     has_shadow = kwargs['has_shadow'] if 'has_shadow' in kwargs else True
     fmt = kwargs['fmt'] if 'fmt' in kwargs else 'png'
     show_mode = kwargs['show_mode'] if 'show_mode' in kwargs else 'show'
+    halfpeak_width = kwargs['halfpeak_width'] if 'halfpeak_width' in kwargs else 0.5
 
     #####################  args setting END  #######################
 
@@ -271,7 +279,8 @@ def plot_single_energy_diagram(*args, **kwargs):
     #get x, y array
     x, y, ts_scale = \
         get_potential_energy_points(energy_tuple, n=n,
-                                    subsection_length=subsection_length)
+                                    subsection_length=subsection_length,
+                                    halfpeak_width=halfpeak_width)
     #get maximum and minimum values of x and y axis
     y_min, y_max = np.min(y), np.max(y)
     x_max = 2.7*subsection_length + ts_scale
@@ -323,7 +332,7 @@ def plot_single_energy_diagram(*args, **kwargs):
         #transition state
         note_y_b = np.max(y) + note_offset  # equal to energy_tuple[1]
         idx = np.argmax(y)
-        note_x_b = x[idx] - ts_scale/3
+        note_x_b = x[idx] - ts_scale/4
         #####################
         barrier_x = x[idx]  # x value of TS point
         #####################
@@ -469,6 +478,10 @@ def plot_multi_energy_diagram(*args, **kwargs):
         'show' : show the figure in a interactive way.
         'save' : save the figure automatically.
 
+    halfpeak_width : float, 0.5(default)
+        half-peak width if TS exists.
+        equals to (halfpeak_width / subsection_length)
+
     Other parameters
     ----------------
     kwargs :
@@ -500,6 +513,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     show_aux_line = kwargs['show_aux_line'] if 'show_aux_line' in kwargs else True
     show_arrow = kwargs['show_arrow'] if 'show_arrow' in kwargs else True
     show_mode = kwargs['show_mode'] if 'show_mode' in kwargs else 'show'
+    halfpeak_width = kwargs['halfpeak_width'] if 'halfpeak_width' in kwargs else 0.5
 
     #####################  args setting END  #######################
 
@@ -516,7 +530,8 @@ def plot_multi_energy_diagram(*args, **kwargs):
             get_relative_energy_tuple(energy_tuples[idx])
         x, y, ts_scale = get_potential_energy_points(
             energy_tuple=energy_tuple, n=n,
-            subsection_length=subsection_length
+            subsection_length=subsection_length,
+            halfpeak_width=halfpeak_width,
         )
         x_scale = 2*subsection_length + ts_scale
         #get total y
@@ -532,7 +547,8 @@ def plot_multi_energy_diagram(*args, **kwargs):
         p1 = (2*subsection_length+offseted_x[0], offseted_y[0])
         p3 = (offseted_x[-1], offseted_y[-1])
         if len(energy_tuple) == 3:
-            p2 = (2.5*subsection_length+offseted_x[0], energy_tuple[1]+y_offset)
+            p2 = ((2+halfpeak_width)*subsection_length+offseted_x[0],
+                  energy_tuple[1]+y_offset)
             piece_points.append((p1, p2, p3))
         elif len(energy_tuple) == 2:
             piece_points.append((p1, p3))
