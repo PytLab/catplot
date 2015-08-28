@@ -20,13 +20,6 @@ long_description = file('README.md').read()
 name = 'python-catplot'
 packages = [
     'catplot',
-    'scripts',
-    'scripts.plot',
-    'scripts.mplot',
-]
-data_files = [
-    'scripts/plot/input.txt',
-    'scripts/mplot/input.txt',
 ]
 platforms = ['linux', 'windows']
 url = 'https://github.com/PytLab/catplot'
@@ -41,7 +34,6 @@ setup(
     maintainer=maintainer,
     name=name,
     packages=packages,
-    data_files=data_files,
     platforms=platforms,
     url=url,
     download_url=download_url,
