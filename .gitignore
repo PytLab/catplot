@@ -101,3 +101,7 @@ $RECYCLE.BIN/
 *.lnk
 MANIFEST
 *.exe
+
+#test dir
+/scripts/plot/energy_profile
+/scripts/mplot/energy_profile
