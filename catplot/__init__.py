@@ -1,2 +1,2 @@
 __all__ = ['en_profile', 'functions', 'chem_parser']
-__version__ = '0.1.0'
+__version__ = '0.1.1'  # add half-peak width setting

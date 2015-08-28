@@ -102,7 +102,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 绘制背景透明的矢量图(方便后期处理)
     
     $ python ./plot_merge_profile.py --save --trans
-生成的图片会保存在`./energy_profle/`下。
+生成的图片会保存在`./energy_profile/`下。
 
 其余的参数用于调节绘图的其他效果，例如是否显示标注，线的颜色，阴影颜色和深度等等，使用者可以根据自己需求进行调节。
 
@@ -128,3 +128,6 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 两条路径合并：
 
 ![](https://github.com/PytLab/catplot/blob/master/pic/merged_energy_profile1_trans.png)
+
+###更新日志
+2015-08-28 版本 0.1.1 新增半峰宽设置
