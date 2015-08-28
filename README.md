@@ -5,7 +5,7 @@ CatPlot
 [![platform](https://img.shields.io/badge/python-2.6-green.svg)](https://www.python.org/download/releases/2.6.9/)
 [![platform](https://img.shields.io/badge/python-2.7-green.svg)](https://www.python.org/downloads/release/python-2710/)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![versions](https://img.shields.io/badge/versions%20-%20%200.1.0-blue.svg)](https://github.com/PytLab/catplot/releases/tag/v0.1.0-alpha)
+[![versions](https://img.shields.io/badge/versions%20-%20%200.1.1-blue.svg)](https://github.com/PytLab/catplot/releases/tag/v0.1.1-alpha)
 
 **CatPlot** is a Python module for catalysis data plotting.
 
@@ -130,4 +130,17 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 ![](https://github.com/PytLab/catplot/blob/master/pic/merged_energy_profile1_trans.png)
 
 ###更新日志
-2015-08-28 版本 0.1.1 新增半峰宽设置
+<table>
+    <tbody>
+        <tr>
+            <td><em>*日期*</em></td>
+            <td><em>*版本*</em></td>
+            <td><em>*内容*</em></td>
+        </tr>
+        <tr>
+            <td>2015-08-28</td>
+            <td>0.1.1</td>
+            <td>新增半峰宽设置</td>
+        </tr>
+    </tbody>
+</table>
