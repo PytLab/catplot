@@ -1,5 +1,5 @@
 '''
-    Script to plot energy profile
+    Script to plot no-merged energy profile
 '''
 import sys
 
