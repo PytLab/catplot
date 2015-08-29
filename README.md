@@ -133,9 +133,9 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 <table>
     <tbody>
         <tr>
-            <td><em>*日期*</em></td>
-            <td><em>*版本*</em></td>
-            <td><em>*内容*</em></td>
+            <td><strong>日期</strong></td>
+            <td><strong>版本</strong></td>
+            <td><strong>内容</strong></td>
         </tr>
         <tr>
             <td>2015-08-28</td>
