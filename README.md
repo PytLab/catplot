@@ -25,6 +25,7 @@ CatPlot
 ###下载
 下载链接：
 [v0.1.0-alpha](https://github.com/PytLab/catplot/releases/tag/v0.1.0-alpha)
+
 exe版本(免安装可直接运行):
 [下载链接](http://pan.baidu.com/s/1HiidC)
 
