@@ -142,5 +142,10 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
             <td>0.1.1</td>
             <td>新增半峰宽设置</td>
         </tr>
+        <tr>
+            <td>2015-09-07</td>
+            <td>0.1.2</td>
+            <td>新增纯数据文件数据可视化(pdos等数据的直接绘制)</td>
+        </tr>
     </tbody>
 </table>
