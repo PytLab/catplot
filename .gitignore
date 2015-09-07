@@ -105,3 +105,5 @@ MANIFEST
 #test dir
 /scripts/plot/energy_profile
 /scripts/mplot/energy_profile
+#DOS file
+DOS*
