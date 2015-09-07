@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -26,13 +27,25 @@ class DataPlotter(object):
 
         return data
 
-    def plot2d(self, xcol, ycol):
+    def plot2d(self, xcol, ycols):
         "显示特定两列数据"
+        '''
+        Parameter
+        ---------
+        xcol: int
+            column number of data for x values
+        ycols: tuple of int
+            column numbers of data for y values
+            (start, stop[, step])
+        Example:
+        >>> a.plot2d(0, (1, 3, 1))
+        '''
         x = self.data[:, xcol]
-        y = self.data[:, ycol]
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(x, y, color='#104E8B', linewidth=3)
+        for i in xrange(*ycols):
+            y = self.data[:, i]
+            ax.plot(x, y, linewidth=3)
 
         fig.show()
 
