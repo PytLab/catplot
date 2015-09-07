@@ -131,7 +131,7 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
 
 ###新增数据文件绘图
 
-![](https://github.com/PytLab/catplot/blob/master/pic/pdos.png)
+![](https://github.com/PytLab/catplot/blob/dev/pic/pdos.png)
 
 ###更新日志
 <table>
