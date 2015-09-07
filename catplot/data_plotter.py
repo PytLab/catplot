@@ -17,6 +17,8 @@ class DataPlotter(object):
         data = []
         with open(self.filename, 'r') as f:
             for line in f:
+                if line.startswith('#'):
+                    continue
                 linedata = line2list(line, field=self.field,
                                      dtype=self.dtype)
                 data.append(linedata)
@@ -29,6 +31,16 @@ class DataPlotter(object):
         y = self.data[:, ycol]
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(x, y, color='#104E8B', linewidth=2)
+        ax.plot(x, y, color='#104E8B', linewidth=3)
 
+        fig.show()
+
+    def plotall(self):
+        ncols = self.data.shape[1]
+        x = self.data[:, 0]
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        for col in xrange(1, ncols):
+            y = self.data[:, col]
+            ax.plot(x, y, linewidth=3)
         fig.show()
