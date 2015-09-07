@@ -32,3 +32,5 @@ script:
   - cd ../plot
   - python plot_energy_profile.py --save
   - python plot_energy_profile.py --save --trans
+  - cd ../pdos
+  - python plot_pdos.py
