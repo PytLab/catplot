@@ -27,6 +27,7 @@ class DataPlotter(object):
         return data
 
     def plot2d(self, xcol, ycol):
+        "显示特定两列数据"
         x = self.data[:, xcol]
         y = self.data[:, ycol]
         fig = plt.figure()
@@ -36,6 +37,7 @@ class DataPlotter(object):
         fig.show()
 
     def plotall(self):
+        "将所有数据一起显示"
         ncols = self.data.shape[1]
         x = self.data[:, 0]
         fig = plt.figure()
