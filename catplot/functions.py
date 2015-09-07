@@ -50,3 +50,13 @@ def verify_attrlen(attr, n):
                              (str(attr), n))
     else:
         raise ValueError('%s is not iterable!' % str(attr))
+
+
+def line2list(line, field=' ', dtype=float):
+    "Convert text data in a line to data object list."
+    strlist = line.strip().split(field)
+    if type(dtype) != type:
+        raise TypeError('Illegal dtype.')
+    datalist = [dtype(i) for i in strlist if i != '']
+
+    return datalist
