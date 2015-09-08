@@ -18,6 +18,7 @@ class DataPlotter(object):
         data = []
         with open(self.filename, 'r') as f:
             for line in f:
+                line = line.strip()
                 if not line[0].isdigit():  # comment line or not
                     continue
                 linedata = line2list(line, field=self.field,
