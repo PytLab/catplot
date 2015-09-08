@@ -5,7 +5,7 @@ CatPlot
 [![platform](https://img.shields.io/badge/python-2.6-green.svg)](https://www.python.org/download/releases/2.6.9/)
 [![platform](https://img.shields.io/badge/python-2.7-green.svg)](https://www.python.org/downloads/release/python-2710/)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![versions](https://img.shields.io/badge/versions%20-%20%200.1.1-blue.svg)](https://github.com/PytLab/catplot/releases/tag/v0.1.1-alpha)
+[![versions](https://img.shields.io/badge/versions%20-%20%200.1.2-blue.svg)](https://github.com/PytLab/catplot/releases/tag/v0.1.1-alpha)
 
 **CatPlot** is a Python module for catalysis data plotting.
 
@@ -14,7 +14,8 @@ CatPlot
 ###目前提供的功能
 
 1. Plotting **parabolic** energy profile
-2. ...
+2. Data file visualization
+3. ...
 
 ###依赖
 - `python2.6.x` or `python2.7.x`
