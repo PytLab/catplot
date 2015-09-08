@@ -18,7 +18,7 @@ class DataPlotter(object):
         data = []
         with open(self.filename, 'r') as f:
             for line in f:
-                if line.startswith('#'):
+                if not line[0].isdigit():  # comment line or not
                     continue
                 linedata = line2list(line, field=self.field,
                                      dtype=self.dtype)
