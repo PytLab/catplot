@@ -42,6 +42,7 @@ elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
     print "Plotting multi-diagram..."
     fig, x_total, y_total = \
         plot_single_energy_diagram(locs['energy_tuple'], locs['rxn_equation'],
+                                   halfpeak_width=locs['halfpeak_width'],
                                    show_mode='save')
     print "Ok."
 else:  # no equation and energy tuple
