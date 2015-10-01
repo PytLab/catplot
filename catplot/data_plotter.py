@@ -7,6 +7,22 @@ from functions import line2list
 
 class DataPlotter(object):
     def __init__(self, filename, field=' ', dtype=float):
+        """
+        Create a pure data file class.
+
+        Example:
+
+        >>> a = DataPlotter(filename='DOS1')
+
+        Class attributes descriptions
+        =======================================================
+          Attribute      Description
+          ============  =======================================
+          filename       string, name of the SPLITED DOS file
+          field          string, separator of a line
+          dtype          type, convertion type of data
+          ============  =======================================
+        """
         self.filename = filename
         self.field = field
         self.dtype = dtype
@@ -20,7 +36,10 @@ class DataPlotter(object):
             for line in f:
                 line = line.strip()
                 if not line[0].isdigit():  # comment line or not
-                    continue
+                    if not line.startswith('-'):
+                        continue
+                    elif not line[1].isdigit():
+                        continue
                 linedata = line2list(line, field=self.field,
                                      dtype=self.dtype)
                 data.append(linedata)
