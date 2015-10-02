@@ -11,7 +11,7 @@ globs, locs = {}, {}
 execfile('input.txt', globs, locs)
 
 if 'rxn_equations' in locs and 'energy_tuples' in locs:  # multi rxn
-    #check data shape
+    # check data shape
     if len(locs['rxn_equations']) != len(locs['energy_tuples']):
         raise ValueError("lengths of rxn_equations and energy_tuples " +
                          "are different.")
@@ -21,28 +21,39 @@ if 'rxn_equations' in locs and 'energy_tuples' in locs:  # multi rxn
         if len(equation_list) != len(energy_tuple):
             raise ValueError("unmatched shape: %s, %s" %
                              (rxn_equation, str(energy_tuple)))
+    # check peak_withs length
+    if 'peak_widths' in locs:
+        peak_widths = locs['peak_widths']
+        if len(locs['peak_widths']) != len(locs['rxn_equations']):
+            raise ValueError("lengths of peak widths is not matched.")
+    else:
+        peak_widths = tuple([1.0]*len(locs['rxn_equations']))
 
     #plot single diagrams
     for idx, args in enumerate(zip(locs['energy_tuples'], locs['rxn_equations'])):
         fname = str(idx).zfill(2)
         print "Plotting diagram " + fname + "..."
-        plot_single_energy_diagram(*args, halfpeak_width=locs['halfpeak_width'],
-                                   show_mode='save', fname=fname)
+        plot_single_energy_diagram(*args, show_mode='save', fname=fname)
         print "Ok."
 
     #plot multi-diagram
     print "Plotting multi-diagram..."
     fig, x_total, y_total = \
         plot_multi_energy_diagram(locs['rxn_equations'], locs['energy_tuples'],
-                                  halfpeak_width=locs['halfpeak_width'],
-                                  show_mode='save')
+                                  peak_widths=peak_widths, show_mode='save')
     print "Ok."
 
 elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
-    print "Plotting multi-diagram..."
+    print "Plotting single-diagram..."
+    if 'peak_widths' in locs:
+        peak_widths = locs['peak_widths']
+        if len(peak_widths) != 1:
+            raise ValueError("lengths of peak widths is not matched.")
+    else:
+        peak_widths = (1.0)
     fig, x_total, y_total = \
         plot_single_energy_diagram(locs['energy_tuple'], locs['rxn_equation'],
-                                   halfpeak_width=locs['halfpeak_width'],
+                                   peak_width=peak_widths[0],
                                    show_mode='save')
     print "Ok."
 else:  # no equation and energy tuple
