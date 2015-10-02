@@ -2,10 +2,10 @@
     Data for energy profile plotting.
 '''
 
-#for a number of rxn equations
-#COMMENT THEM OUT if not a number of rxn equations
+# for a number of rxn equations
+# COMMENT THEM OUT if not a number of rxn equations
 
-#elementary reaction equations
+# elementary reaction equations
 rxn_equations = [
     'HCOOH_g + 2*_s <-> HCOO-H_s + *_s -> HCOO_s + H_s',
     'HCOO_s + *_s <-> H-COO_s + *_s -> COO_s + H_s',
@@ -13,7 +13,7 @@ rxn_equations = [
     '2H_s <-> H-H_s + *_s -> H2_g + 2*_s'
 ]
 
-#relative energies
+# relative energies
 energy_tuples = [
     # IS,  TS,  FS
     #--------------
@@ -24,8 +24,8 @@ energy_tuples = [
 ]
 
 
-#for a single rxn equation.
-#COMMENT THEM OUT if not single rxn equation
+# for a single rxn equation.
+# COMMENT THEM OUT if not single rxn equation
 '''
 rxn_equation = 'HCOOH_g + 2*_s <-> HCOO-H_s + *_s -> HCOO_s + H_s'
 
@@ -33,7 +33,7 @@ rxn_equation = 'HCOOH_g + 2*_s <-> HCOO-H_s + *_s -> HCOO_s + H_s'
 energy_tuple = (0.0, 0.33, -0.26)
 '''
 
-#custom plotting attrs setting
+# custom plotting attrs setting
 
 custom = True  # True or False. if False, no custom diagram is plotted.
 
@@ -44,10 +44,10 @@ custom = True  # True or False. if False, no custom diagram is plotted.
 
 color = '#000000'  # line color
 
-#shadow attrs
+# shadow attrs
 shadow_depth = 8
 shadow_color = '#595959'
 offset_coeff = 8.0
 
-#half-peak width
-halfpeak_width = 1.0
+# peak width
+peak_widths = (1.0, 1.5, 1.0, 1.5)
