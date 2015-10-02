@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 '''
     Module to plot energy profile.
 '''
@@ -41,7 +42,7 @@ class NoteThread(threading.Thread):
 
 # ---------------------------------------
 # two functions below are deprecated
-# I just keep them as a souvenir
+# I just keep them as a souvenir (ฅ´ω`ฅ)
 def quadratic_interp_poly(x1, y1, x2, y2):
     """
     Return polynomial function object f(x)
