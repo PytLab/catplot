@@ -5,7 +5,7 @@ CatPlot
 [![platform](https://img.shields.io/badge/python-2.6-green.svg)](https://www.python.org/download/releases/2.6.9/)
 [![platform](https://img.shields.io/badge/python-2.7-green.svg)](https://www.python.org/downloads/release/python-2710/)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![versions](https://img.shields.io/badge/versions%20-%20%200.1.2-blue.svg)](https://github.com/PytLab/catplot/releases/tag/v0.1.1-alpha)
+[![versions](https://img.shields.io/badge/versions%20-%20%20v1.0.0-blue.svg)]()
 
 **CatPlot** is a Python module for catalysis data plotting.
 
@@ -144,6 +144,11 @@ catplot/scripts/ 中提供了两个绘制energy profile的脚本和输入文件�
             <td><strong>日期</strong></td>
             <td><strong>版本</strong></td>
             <td><strong>内容</strong></td>
+        </tr>
+        <tr>
+            <td>2015-10-02</td>
+            <td>1.0.0</td>
+            <td>使用新的quadratic interpolation算法<br>进行energy profile绘制</td>
         </tr>
         <tr>
             <td>2015-08-28</td>
