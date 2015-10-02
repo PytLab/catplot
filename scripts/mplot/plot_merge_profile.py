@@ -16,6 +16,14 @@ multi_rxn_equations, multi_energy_tuples = \
     locs['multi_rxn_equations'], locs['multi_energy_tuples']
 verify_multi_shape(multi_rxn_equations, multi_energy_tuples)
 
+if 'peak_widths' in locs:
+    set_peak_widths = True
+    peak_widths = locs['peak_widths']
+    # check peak_widths length
+    for widths, energy_tuples in zip(peak_widths, multi_energy_tuples):
+        if len(widths) != len(energy_tuples):
+            raise ValueError("lengths of peak widths is not matched.")
+
 nlines = len(multi_rxn_equations)  # number of lines
 
 if 'init_y_offsets' in locs:
@@ -31,12 +39,19 @@ zipped_data = zip(multi_rxn_equations, multi_energy_tuples, init_y_offsets)
 for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data):
     fname = 'multi_energy_diagram_' + str(idx).zfill(2)
     print "Plotting diagram " + fname + "..."
-    fig, x_total, y_total = \
-        plot_multi_energy_diagram(rxn_equations, energy_tuples,
-                                  init_y_offset=init_y_offset,
-                                  halfpeak_width=locs['halfpeak_width'],
-                                  n=10000, show_mode='save',
-                                  fname=fname)
+    if set_peak_widths:
+        fig, x_total, y_total = \
+            plot_multi_energy_diagram(rxn_equations, energy_tuples,
+                                      init_y_offset=init_y_offset,
+                                      peak_widths=peak_widths[idx],
+                                      n=10000, show_mode='save',
+                                      fname=fname)
+    else:
+        fig, x_total, y_total = \
+            plot_multi_energy_diagram(rxn_equations, energy_tuples,
+                                      init_y_offset=init_y_offset,
+                                      n=10000, show_mode='save',
+                                      fname=fname)
     print "Ok."
     points_list.append((x_total, y_total))
 
