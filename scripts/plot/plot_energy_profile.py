@@ -2,6 +2,7 @@
     Script to plot no-merged energy profile
 '''
 import sys
+import csv
 
 from catplot.en_profile import *
 from catplot.functions import equation2list
@@ -107,3 +108,13 @@ if locs.get('custom'):
     else:
         raise ValueError('Unrecognized show mode parameter : %s.', sys.argv[1])
     print 'Ok.'
+
+    # write plot data to csv file
+    print "writing data file..."
+    with open('./energy_profile/data.csv', 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(['X', 'Y'])
+        x_col = x_total.reshape(-1, 1)
+        y_col = y_total.reshape(-1, 1)
+        writer.writerows(np.append(x_col, y_col, axis=1))
+    print 'ok'

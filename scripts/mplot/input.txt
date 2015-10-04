@@ -57,6 +57,6 @@ n_yticks = 9  # ticks number on y axis
 
 #half-peak width
 peak_widths = [
-    (1.0, 1.0, 1.0),
+    (1.0, 1.0, 4.0),
     (1.0, 1.0, 1.0, 1.0)
 ]
