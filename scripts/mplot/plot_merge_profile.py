@@ -2,6 +2,7 @@
     Script to plot merged energy profile
 '''
 import sys
+import csv
 
 import matplotlib.pyplot as plt
 
@@ -109,4 +110,17 @@ if sys.argv[1] == '--show':
     new_fig.show()
 elif sys.argv[1] == '--save':
     new_fig.savefig('./energy_profile/merged_energy_profile.png', dpi=500)
+print 'Ok.'
+
+# write data to csv file
+print 'writting data files...'
+header = ['X', 'Y']
+for idx, (x_total, y_total) in enumerate(points_list):
+    x_col = x_total.reshape(-1, 1)
+    y_col = y_total.reshape(-1, 1)
+    rows = np.append(x_col, y_col, axis=1)
+    with open('./energy_profile/data'+str(idx)+'.csv', 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(rows)
 print 'Ok.'
