@@ -5,16 +5,16 @@
 
 import threading
 import os
+from math import sqrt
 
 import numpy as np
 from scipy import interpolate
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
-from math import sqrt
 from matplotlib.patches import Ellipse
 from scipy.optimize import fsolve
 
-from functions import get_relative_energy_tuple
+from catplot.functions import get_relative_energy_tuple
 from chem_parser import *
 
 
@@ -58,9 +58,10 @@ def quadratic_interp_poly(x1, y1, x2, y2):
     Examples
     --------
     >>> f = m.plotter.quadratic_interp_poly(0.0, 0.0, 2.0, 2.0)
-    >>> -0.5, 2, 0, <function kinetic.plotters.general_plotter.poly_func>
+    >>> <function kinetic.plotters.general_plotter.poly_func>
 
     """
+    # {{{
     A = np.matrix([[x1**2, x1, 1],
                    [x2**2, x2, 1],
                    [ 2*x2,  1, 0]])
@@ -72,10 +73,12 @@ def quadratic_interp_poly(x1, y1, x2, y2):
 
     poly_func = lambda x: a*x**2 + b*x + c
 
-    return a, b, c, poly_func
+    return poly_func
+    # }}}
 
 
 def nonlinear_quadratic_interp_poly(x1, y1, x3, y3, y2):
+    # {{{
     def f(x):
         a, b, c = x.tolist()
         return [
@@ -97,6 +100,7 @@ def nonlinear_quadratic_interp_poly(x1, y1, x3, y3, y2):
     poly_func = lambda x: a*x**2 + b*x + c
 
     return a, b, c, poly_func
+    # }}}
 # ------- two functions above are deprecated ------
 
 
@@ -105,6 +109,7 @@ def quadratic_interp(x1, y1, x3, y3, y2):
     use 'y = m*(x - n)**2 + l' to interpolate points,
     and find value of x2.
     '''
+    # {{{
     k = (y3 - y2)/(y1 - y2)
     a = k - 1
     b = 2*x3 - 2*k*x1
@@ -126,11 +131,41 @@ def quadratic_interp(x1, y1, x3, y3, y2):
     func = lambda x: m*(x - n)**2 + l
 
     return x2, func
+    # }}}
+
+
+def spline_interp(x1, y1, x3, y3, y2):
+    '''
+    Use the spline interpolate function in scipy to interpolate points.
+    '''
+    x2 = (x1 + x3)/2.0
+    x, y = [], []
+
+    # Insert temporary point.
+    # The first half.
+    quad_func = quadratic_interp_poly(x1, y1, x2, y2)
+    quad_func = np.frompyfunc(quad_func, 1, 1)
+    insert_x1 = np.linspace(x1, x2, 5)
+    insert_y1 = quad_func(insert_x1)
+    x = np.append(x, insert_x1)
+    y = np.append(y, insert_y1)
+
+    # The second half.
+    quad_func = quadratic_interp_poly(x3, y3, x2, y2)
+    quad_func = np.frompyfunc(quad_func, 1, 1)
+    insert_x2 = np.linspace(x2 + 0.1, x3, 5)
+    insert_y2 = quad_func(insert_x2)
+    x = np.append(x, insert_x2)
+    y = np.append(y, insert_y2)
+
+    func = interpolate.UnivariateSpline(x, y, s=0)
+
+    return x2, func
 
 
 def add_line_shadow(ax, x, y, depth, color, line_width=3, offset_coeff=1.0):
     "Add shadow to line in axes 'ax' by changing attribute of the object"
-
+    # {{{
     def add_single_shadow(ax, x, y, order, depth, color, line_width):
         offset = transforms.ScaledTranslation(offset_coeff*order,
                                               -offset_coeff*order,
@@ -154,6 +189,7 @@ def add_line_shadow(ax, x, y, depth, color, line_width=3, offset_coeff=1.0):
         threads[i].join()
 
     return ax.lines
+    # }}}
 
 
 def get_potential_energy_points(energy_tuple, n=100,
@@ -173,6 +209,7 @@ def get_potential_energy_points(energy_tuple, n=100,
         Length of each subsection(x_i, x_f)
     peak_width : float, default to be 1.0
     """
+    # {{{
     #use quadratic interpolation to get barrier points
     if len(energy_tuple) == 3:
         y1, y2, y3 = energy_tuple  # E_is, E_ts, E_fs
@@ -180,7 +217,8 @@ def get_potential_energy_points(energy_tuple, n=100,
         if not (y2 > max(y1, y3)):
             raise ValueError('abnormal energy : ' + str(energy_tuple))
         # get x2
-        x2, f = quadratic_interp(0.0, y1, peak_width, y3, y2)
+        #x2, f = quadratic_interp(0.0, y1, peak_width, y3, y2)
+        x2, f = spline_interp(0.0, y1, peak_width, y3, y2)
         init_x_b = np.linspace(0, peak_width, n)
         f_ufunc = np.frompyfunc(f, 1, 1)  # convert to universal function
         y_b = f_ufunc(init_x_b)
@@ -228,6 +266,7 @@ def get_potential_energy_points(energy_tuple, n=100,
 #    plt.plot(x, y)
 #    plt.show()
     return x, y, x2  # x2 is the x value of barrier
+    # }}}
 
 
 def plot_single_energy_diagram(*args, **kwargs):
@@ -282,6 +321,7 @@ def plot_single_energy_diagram(*args, **kwargs):
                                    fname='pytlab')
     >>> <matplotlib.figure.Figure at 0x5659f30>
     """
+    # {{{
     ###############  args setting before plotting  ################
 
     #for args
@@ -459,6 +499,7 @@ def plot_single_energy_diagram(*args, **kwargs):
         raise ValueError('Unrecognized show mode parameter : ' + show_mode)
 
     return fig, x, y
+    # }}}
 
 
 def plot_multi_energy_diagram(*args, **kwargs):
@@ -534,6 +575,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     --------
 
     """
+    # {{{
     ###############  args setting before plotting  ################
     #for args
     if len(args) != 2:
@@ -793,3 +835,5 @@ def plot_multi_energy_diagram(*args, **kwargs):
         raise ValueError('Unrecognized show mode parameter : ' + show_mode)
 
     return fig, total_x, total_y
+    # }}}
+
