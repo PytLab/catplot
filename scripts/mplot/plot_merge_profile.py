@@ -10,7 +10,7 @@ from catplot.plotutil import plot_multi_energy_diagram, add_line_shadow
 from catplot.functions import verify_multi_shape, verify_attrlen
 
 globs, locs = {}, {}
-execfile('input.txt', globs, locs)  # get input data
+exec(open('input.txt', 'r').read(), globs, locs)  # get input data
 
 # Check the shape of input data.
 multi_rxn_equations = locs['multi_rxn_equations']
@@ -37,14 +37,14 @@ else:
     init_y_offsets = [0.0]*nlines
 
 points_list = []
-print "Plotting single multi-energy profile..."
+print("Plotting single multi-energy profile...")
 
 # Zip data.
 zipped_data = zip(multi_rxn_equations, multi_energies, init_y_offsets)
 
 for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data):
     fname = 'multi_energy_diagram_' + str(idx).zfill(2)
-    print "Plotting diagram " + fname + "..."
+    print("Plotting diagram {}...".format(fname))
 
     if set_peak_widths:
         fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
@@ -59,11 +59,11 @@ for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data)
                                                           init_y_offset=init_y_offset,
                                                           n=10000, show_mode='save',
                                                           fname=fname)
-    print "Ok."
+    print("Ok.")
     points_list.append((x_total, y_total))
 
 # Merge lines
-print 'Merge diagrams...'
+print("Merge diagrams...")
 new_fig = plt.figure(figsize=(16, 9))
 
 # transparent figure
@@ -125,18 +125,18 @@ elif display_mode == "save":
 else:
     raise ValueError("Invalide display mode: {}".format(display_mode))
 
-print 'Ok.'
+print("Ok.")
 
 # write data to csv file
-print 'writting data files...'
+print("writting data files...")
 header = ['X', 'Y']
 for idx, (x_total, y_total) in enumerate(points_list):
     x_col = x_total.reshape(-1, 1)
     y_col = y_total.reshape(-1, 1)
     rows = np.append(x_col, y_col, axis=1)
-    with open('./energy_profile/data'+str(idx)+'.csv', 'wb') as f:
+    with open('./energy_profile/data'+str(idx)+'.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerow(header)
         writer.writerows(rows)
-print 'Ok.'
+print("Ok.")
 

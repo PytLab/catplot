@@ -13,7 +13,7 @@ from catplot.plotutil import add_line_shadow
 
 # get input data
 globs, locs = {}, {}
-execfile('input.txt', globs, locs)
+exec(open('input.txt', 'r').read(), globs, locs)
 
 if 'rxn_equations' in locs and 'energies' in locs:  # multi rxn
     rxn_equations = locs["rxn_equations"]
@@ -39,23 +39,23 @@ if 'rxn_equations' in locs and 'energies' in locs:  # multi rxn
     # Plot single diagrams.
     for idx, args in enumerate(zip(energies, rxn_equations)):
         fname = str(idx).zfill(2)
-        print "Plotting diagram " + fname + "..."
+        print("Plotting diagram {}...".format(fname))
         plot_single_energy_diagram(*args, show_mode='save', fname=fname)
-        print "Ok."
+        print("Ok.")
 
     # Plot multi-diagram.
-    print "Plotting multi-diagram..."
+    print("Plotting multi-diagram...")
     fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
                                                       energies,
                                                       peak_widths=peak_widths,
                                                       show_mode='save')
-    print "Ok."
+    print("Ok.")
 
 elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
     rxn_equation = locs["rxn_equation"]
     energy_tuple = locs["energy_tuple"]
 
-    print "Plotting single-diagram..."
+    print("Plotting single-diagram...")
     if 'peak_widths' in locs:
         peak_widths = locs['peak_widths']
         if len(peak_widths) != 1:
@@ -66,14 +66,14 @@ elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
                                                        rxn_equation,
                                                        peak_width=peak_widths[0],
                                                        show_mode='save')
-    print "Ok."
+    print("Ok.")
 else:  # no equation and energy tuple
     raise ValueError('No rxn equation and energy tuple is defined.\n' +
                      'Please check you data file...')
 
 # Customize your diagram.
 if locs.get('custom'):
-    print "Custom plotting..."
+    print("Custom plotting...")
     new_fig = plt.figure(figsize=(16, 9))
     # transparent figure
     if locs.get("transparent"):
@@ -108,7 +108,7 @@ if locs.get('custom'):
                     offset_coeff=offset_coeff)
 
     if 'color' not in locs:
-        print "No custom color. \nUse default color: black."
+        print("No custom color. \nUse default color: black.")
         color = '#000000'
     else:
         color = locs['color']
@@ -121,15 +121,15 @@ if locs.get('custom'):
         new_fig.savefig('./energy_profile/energy_profile.png', dpi=500)
     else:
         raise ValueError('Unrecognized show mode parameter : %s.', display_mode)
-    print 'Ok.'
+    print("Ok.")
 
     # write plot data to csv file
-    print "writing data file..."
-    with open('./energy_profile/data.csv', 'wb') as f:
+    print("writing data file...")
+    with open('./energy_profile/data.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['X', 'Y'])
         x_col = x_total.reshape(-1, 1)
         y_col = y_total.reshape(-1, 1)
         writer.writerows(np.append(x_col, y_col, axis=1))
-    print 'ok'
+    print("ok")
 

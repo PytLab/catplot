@@ -11,7 +11,7 @@ def get_relative_energy_tuple(energy_tuple):
     """
     energy_list = list(energy_tuple)
     reference_energy = energy_list[0]
-    for i in xrange(len(energy_list)):
+    for i in range(len(energy_list)):
         energy_list[i] = energy_list[i] - reference_energy
     return tuple(energy_list)
 
