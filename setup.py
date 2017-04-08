@@ -16,7 +16,7 @@ requires = [
 ]
 
 license = 'LICENSE'
-long_description = open('README.md').read()
+long_description = open('README.rst').read()
 name = 'catplot'
 packages = [
     'catplot',

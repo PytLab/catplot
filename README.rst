@@ -14,7 +14,11 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+.. image:: https://img.shields.io/badge/pypi-v2.0.0-blue.svg
+    :target: https://pypi.python.org/pypi/catplot/
+    :alt: versions
+
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://raw.githubusercontent.com/PytLab/catplot/master/LICENSE
 
 
