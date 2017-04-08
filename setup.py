@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 from catplot import __version__ as version
 
 maintainer = 'Shao-Zheng-Jiang'
@@ -17,25 +17,34 @@ requires = [
 
 license = 'LICENSE'
 long_description = open('README.md').read()
-name = 'python-catplot'
+name = 'catplot'
 packages = [
     'catplot',
 ]
-platforms = ['linux', 'windows']
+platforms = ['linux', 'windows', 'macos']
 url = 'https://github.com/PytLab/catplot'
 download_url = 'https://github.com/PytLab/catplot/releases'
 
-setup(
-    author=author,
-    author_email=author_email,
-    description=description,
-    license=license,
-    long_description=long_description,
-    maintainer=maintainer,
-    name=name,
-    packages=packages,
-    platforms=platforms,
-    url=url,
-    download_url=download_url,
-    version=version,
-    )
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Topic :: Utilities',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.5',
+]
+
+setup(author=author,
+      author_email=author_email,
+      description=description,
+      license=license,
+      long_description=long_description,
+      maintainer=maintainer,
+      name=name,
+      packages=packages,
+      platforms=platforms,
+      url=url,
+      download_url=download_url,
+      version=version)
+
