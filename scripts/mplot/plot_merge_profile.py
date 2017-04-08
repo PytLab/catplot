@@ -1,12 +1,12 @@
-'''
-    Script to plot merged energy profile
-'''
-import sys
+""" Script to plot merged energy profile
+"""
+
 import csv
 
+import numpy as np
 import matplotlib.pyplot as plt
 
-from catplot.en_profile import *
+from catplot.plotutil import plot_multi_energy_diagram, add_line_shadow
 from catplot.functions import verify_multi_shape, verify_attrlen
 
 globs, locs = {}, {}
@@ -47,12 +47,12 @@ for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data)
     print "Plotting diagram " + fname + "..."
 
     if set_peak_widths:
-        fig, x_total, y_total =  plot_multi_energy_diagram(rxn_equations,
-                                                           energy_tuples,
-                                                           init_y_offset=init_y_offset,
-                                                           peak_widths=peak_widths[idx],
-                                                           n=10000, show_mode='save',
-                                                           fname=fname)
+        fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
+                                                          energy_tuples,
+                                                          init_y_offset=init_y_offset,
+                                                          peak_widths=peak_widths[idx],
+                                                          n=10000, show_mode='save',
+                                                          fname=fname)
     else:
         fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
                                                           energy_tuples,

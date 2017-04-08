@@ -6,10 +6,10 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-from catplot.en_profile import plot_single_energy_diagram
-from catplot.en_profile import plot_multi_energy_diagram
-from catplot.en_profile import add_line_shadow
-from catplot.functions import equation2list
+from catplot.chem_parser import RxnEquation
+from catplot.plotutil import plot_single_energy_diagram
+from catplot.plotutil import plot_multi_energy_diagram
+from catplot.plotutil import add_line_shadow
 
 # get input data
 globs, locs = {}, {}
@@ -24,7 +24,7 @@ if 'rxn_equations' in locs and 'energies' in locs:  # multi rxn
         raise ValueError("lengths of rxn_equations and energies are different.")
 
     for rxn_equation, energy_tuple in zip(rxn_equations, energies):
-        equation_list = equation2list(rxn_equation)
+        equation_list = RxnEquation(rxn_equation).tolist()
         if len(equation_list) != len(energy_tuple):
             raise ValueError("unmatched shape: %s, %s" % (rxn_equation, str(energy_tuple)))
 
