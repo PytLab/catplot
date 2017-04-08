@@ -43,20 +43,29 @@ Get points in energy profile for a reaction:
 
 .. code-block:: python
 
-    >>> from catplot import interpolate
-    >>> x, y, _ = interpolate.get_potential_energy_points([0.0, 1.3, 0.7])
+    In [1]: from catplot import interpolate
+
+    In [2]: x1, y1, _ = interpolate.get_potential_energy_points([0.0, 1.3, 0.7])
+
+    In [3]: x2, y2, _ = interpolate.get_potential_energy_points([0.0, 1.0, 0.5])
 
 You can plot it with visualization tools:
 
 .. code-block:: python
 
-    >>> import matplotlib.pyplot as plt
-    >>> plt.plot(x, y)
-    >>> plt.show()
+    In [4]: import matplotlib.pyplot as plt
+
+    In [5]: plt.plot(x1, y1)
+    Out[5]: [<matplotlib.lines.Line2D at 0x1159a29e8>]
+
+    In [6]: plt.plot(x2, y2)
+    Out[6]: [<matplotlib.lines.Line2D at 0x1159c5240>]
+
+    In [7]: plt.show()
 
 Result:
 
-.. image:: https://github.com/PytLab/catplot/blob/dev/pic/interactive.png
+.. image:: https://github.com/PytLab/catplot/blob/master/pic/interactive.png
 
 
 Important update log
