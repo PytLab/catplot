@@ -19,6 +19,26 @@ class EPLine(object):
         self.shadow_color = kwargs.pop("shadow_color", "#595959")
         self.shadow_depth = kwargs.pop("shadow_depth", 7)
 
+    def translate(self, distance, direction="x"):
+        """ Translate all points in line.
+
+        Parameters:
+        -----------
+        distance: float, translation distance.
+        direction: str, translation direction ("x", "y").
+
+        Example:
+        --------
+        >>> line.translate(-1.0, direction="y")
+
+        """
+        if direction == "x":
+            self.x += distance
+        elif direction == "y":
+            self.y += distance
+        else:
+            raise ValueError("Invalide direction {}".format(direction))
+
 
 class ElementaryLine(EPLine):
     """ Energy profile line for an elementary reaction.
