@@ -1,50 +1,60 @@
 '''
-    Script to plot no-merged energy profile
+Script to plot no-merged energy profile
 '''
-import sys
 import csv
 
-from catplot.en_profile import *
+import numpy as np
+import matplotlib.pyplot as plt
+
+from catplot.en_profile import plot_single_energy_diagram
+from catplot.en_profile import plot_multi_energy_diagram
+from catplot.en_profile import add_line_shadow
 from catplot.functions import equation2list
 
-#get input data
+# get input data
 globs, locs = {}, {}
 execfile('input.txt', globs, locs)
 
-if 'rxn_equations' in locs and 'energy_tuples' in locs:  # multi rxn
-    # check data shape
-    if len(locs['rxn_equations']) != len(locs['energy_tuples']):
-        raise ValueError("lengths of rxn_equations and energy_tuples " +
-                         "are different.")
-    for rxn_equation, energy_tuple in \
-            zip(locs['rxn_equations'], locs['energy_tuples']):
+if 'rxn_equations' in locs and 'energies' in locs:  # multi rxn
+    rxn_equations = locs["rxn_equations"]
+    energies = locs["energies"]
+
+    # Check data shape.
+    if len(rxn_equations) != len(energies):
+        raise ValueError("lengths of rxn_equations and energies are different.")
+
+    for rxn_equation, energy_tuple in zip(rxn_equations, energies):
         equation_list = equation2list(rxn_equation)
         if len(equation_list) != len(energy_tuple):
-            raise ValueError("unmatched shape: %s, %s" %
-                             (rxn_equation, str(energy_tuple)))
-    # check peak_withs length
+            raise ValueError("unmatched shape: %s, %s" % (rxn_equation, str(energy_tuple)))
+
+    # Check peak_withs length.
     if 'peak_widths' in locs:
         peak_widths = locs['peak_widths']
-        if len(locs['peak_widths']) != len(locs['rxn_equations']):
+        if len(peak_widths) != len(rxn_equations):
             raise ValueError("lengths of peak widths is not matched.")
     else:
-        peak_widths = tuple([1.0]*len(locs['rxn_equations']))
+        peak_widths = [1.0]*len(rxn_equations)
 
-    #plot single diagrams
-    for idx, args in enumerate(zip(locs['energy_tuples'], locs['rxn_equations'])):
+    # Plot single diagrams.
+    for idx, args in enumerate(zip(energies, rxn_equations)):
         fname = str(idx).zfill(2)
         print "Plotting diagram " + fname + "..."
         plot_single_energy_diagram(*args, show_mode='save', fname=fname)
         print "Ok."
 
-    #plot multi-diagram
+    # Plot multi-diagram.
     print "Plotting multi-diagram..."
-    fig, x_total, y_total = \
-        plot_multi_energy_diagram(locs['rxn_equations'], locs['energy_tuples'],
-                                  peak_widths=peak_widths, show_mode='save')
+    fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
+                                                      energies,
+                                                      peak_widths=peak_widths,
+                                                      show_mode='save')
     print "Ok."
 
 elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
+    rxn_equation = locs["rxn_equation"]
+    energy_tuple = locs["energy_tuple"]
+
     print "Plotting single-diagram..."
     if 'peak_widths' in locs:
         peak_widths = locs['peak_widths']
@@ -52,32 +62,34 @@ elif 'rxn_equation' in locs and 'energy_tuple' in locs:  # single rxn
             raise ValueError("lengths of peak widths is not matched.")
     else:
         peak_widths = (1.0)
-    fig, x_total, y_total = \
-        plot_single_energy_diagram(locs['energy_tuple'], locs['rxn_equation'],
-                                   peak_width=peak_widths[0],
-                                   show_mode='save')
+    fig, x_total, y_total = plot_single_energy_diagram(energy_tuple,
+                                                       rxn_equation,
+                                                       peak_width=peak_widths[0],
+                                                       show_mode='save')
     print "Ok."
 else:  # no equation and energy tuple
     raise ValueError('No rxn equation and energy tuple is defined.\n' +
                      'Please check you data file...')
 
-#customize your diagram
+# Customize your diagram.
 if locs.get('custom'):
     print "Custom plotting..."
     new_fig = plt.figure(figsize=(16, 9))
     # transparent figure
-    if len(sys.argv) > 2 and sys.argv[2] == '--trans':
+    if locs.get("trans_background"):
         new_fig.patch.set_alpha(0)
 
     ax = new_fig.add_subplot(111)
+
     # transparent axe
-    if len(sys.argv) > 2 and sys.argv[2] == '--trans':
+    if locs.get("trans_background"):
         ax.patch.set_alpha(0)
-    #remove xticks
+
+    # remove xticks
     ax.set_xticks([])
     ax.set_xmargin(0.03)
 
-    #set attributes of y-axis
+    # set attributes of y-axis
     if 'ylim' in locs:
         ymin, ymax = locs['ylim']
         ax.set_ylim(ymin, ymax)
@@ -87,10 +99,10 @@ if locs.get('custom'):
         ax.set_yticklabels(locs['yticklabels'])
     ax.set_ymargin(0.1)
 
-    #add line shadow
-    shadow_depth = locs['shadow_depth'] if 'shadow_depth' in locs else 7
-    shadow_color = locs['shadow_color'] if 'shadow_color' in locs else '#595959'
-    offset_coeff = locs['offset_coeff'] if 'offset_coeff' in locs else 9.0
+    # add line shadow
+    shadow_depth = locs.get("shadow_depth", 7)
+    shadow_color = locs.get("shadow_color", "#595959")
+    offset_coeff = locs.get("offset_coeff", 9.0)
     add_line_shadow(ax, x_total, y_total, depth=shadow_depth,
                     color=shadow_color, line_width=5.4,
                     offset_coeff=offset_coeff)
@@ -101,12 +113,14 @@ if locs.get('custom'):
     else:
         color = locs['color']
     ax.plot(x_total, y_total, linewidth=5.4, color=color)
-    if sys.argv[1] == '--show':
+
+    display_mode = locs.get("display_mode", "save")
+    if display_mode == "interactive":
         new_fig.show()
-    elif sys.argv[1] == '--save':
+    elif display_mode == "save":
         new_fig.savefig('./energy_profile/energy_profile.png', dpi=500)
     else:
-        raise ValueError('Unrecognized show mode parameter : %s.', sys.argv[1])
+        raise ValueError('Unrecognized show mode parameter : %s.', display_mode)
     print 'Ok.'
 
     # write plot data to csv file
@@ -118,3 +132,4 @@ if locs.get('custom'):
         y_col = y_total.reshape(-1, 1)
         writer.writerows(np.append(x_col, y_col, axis=1))
     print 'ok'
+
