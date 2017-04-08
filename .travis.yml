@@ -1,6 +1,5 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
 
 notifications:
@@ -27,10 +26,7 @@ install:
 # command to run tests
 script:
   - cd scripts/mplot
-  - python plot_merge_profile.py --save
-  - python plot_merge_profile.py --save --trans
+  - python plot_merge_profile.py
   - cd ../plot
-  - python plot_energy_profile.py --save
-  - python plot_energy_profile.py --save --trans
-  - cd ../pdos
-  - python plot_pdos.py
+  - python plot_energy_profile.py
+
