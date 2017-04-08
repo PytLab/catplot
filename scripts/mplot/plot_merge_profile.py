@@ -12,21 +12,24 @@ from catplot.functions import verify_multi_shape, verify_attrlen
 globs, locs = {}, {}
 execfile('input.txt', globs, locs)  # get input data
 
-#check the shape of input data
-multi_rxn_equations, multi_energy_tuples = \
-    locs['multi_rxn_equations'], locs['multi_energy_tuples']
-verify_multi_shape(multi_rxn_equations, multi_energy_tuples)
+# Check the shape of input data.
+multi_rxn_equations = locs['multi_rxn_equations']
+multi_energies = locs['multi_energies']
+verify_multi_shape(multi_rxn_equations, multi_energies)
 
 if 'peak_widths' in locs:
     set_peak_widths = True
     peak_widths = locs['peak_widths']
-    # check peak_widths length
-    for widths, energy_tuples in zip(peak_widths, multi_energy_tuples):
+
+    # Check peak_widths length.
+    for widths, energy_tuples in zip(peak_widths, multi_energies):
         if len(widths) != len(energy_tuples):
             raise ValueError("lengths of peak widths is not matched.")
 
-nlines = len(multi_rxn_equations)  # number of lines
+# Number of lines to be drawn.
+nlines = len(multi_rxn_equations)
 
+# Get initial points offset on y axis.
 if 'init_y_offsets' in locs:
     init_y_offsets = locs['init_y_offsets']
     verify_attrlen(init_y_offsets, nlines)
@@ -35,56 +38,63 @@ else:
 
 points_list = []
 print "Plotting single multi-energy profile..."
-#zip data
-zipped_data = zip(multi_rxn_equations, multi_energy_tuples, init_y_offsets)
+
+# Zip data.
+zipped_data = zip(multi_rxn_equations, multi_energies, init_y_offsets)
+
 for idx, (rxn_equations, energy_tuples, init_y_offset) in enumerate(zipped_data):
     fname = 'multi_energy_diagram_' + str(idx).zfill(2)
     print "Plotting diagram " + fname + "..."
+
     if set_peak_widths:
-        fig, x_total, y_total = \
-            plot_multi_energy_diagram(rxn_equations, energy_tuples,
-                                      init_y_offset=init_y_offset,
-                                      peak_widths=peak_widths[idx],
-                                      n=10000, show_mode='save',
-                                      fname=fname)
+        fig, x_total, y_total =  plot_multi_energy_diagram(rxn_equations,
+                                                           energy_tuples,
+                                                           init_y_offset=init_y_offset,
+                                                           peak_widths=peak_widths[idx],
+                                                           n=10000, show_mode='save',
+                                                           fname=fname)
     else:
-        fig, x_total, y_total = \
-            plot_multi_energy_diagram(rxn_equations, energy_tuples,
-                                      init_y_offset=init_y_offset,
-                                      n=10000, show_mode='save',
-                                      fname=fname)
+        fig, x_total, y_total = plot_multi_energy_diagram(rxn_equations,
+                                                          energy_tuples,
+                                                          init_y_offset=init_y_offset,
+                                                          n=10000, show_mode='save',
+                                                          fname=fname)
     print "Ok."
     points_list.append((x_total, y_total))
 
-#merge lines
+# Merge lines
 print 'Merge diagrams...'
 new_fig = plt.figure(figsize=(16, 9))
+
 # transparent figure
-if len(sys.argv) > 2 and sys.argv[2] == '--trans':
+if locs.get("transparent"):
     new_fig.patch.set_alpha(0)
 
 ax = new_fig.add_subplot(111)
+
 # transparent axe
-if len(sys.argv) > 2 and sys.argv[2] == '--trans':
+if locs.get("transparent"):
     ax.patch.set_alpha(0)
 
-#remove xticks
+# Remove xticks.
 ax.set_xticks([])
 ax.set_xmargin(0.03)
 
-#set attributes of y-axis
+# Set attributes of y-axis.
 ax.set_ymargin(0.03)
+
 if 'ylim' in locs:
     ymin, ymax = locs['ylim']
     ax.set_ylim(ymin, ymax)
     if 'n_yticks' in locs:  # must set ylim befor setting n_yticks
         n_yticks = locs['n_yticks']
         ax.set_yticks(np.linspace(ymin, ymax, n_yticks))
+
 if 'yticklabels' in locs:
     yticklabels = locs['yticklabels']
     ax.set_yticklabels(yticklabels)
 
-#colors setting
+# Colors setting.
 if 'colors' in locs:
     colors = locs['colors']
     verify_attrlen(colors, nlines)
@@ -93,23 +103,28 @@ elif nlines <= 6:
 else:
     raise ValueError('Line color is undefined.')
 
-#shadow attrs setting
-shadow_depth = locs['shadow_depth'] if 'shadow_depth' in locs else 7
-shadow_color = locs['shadow_color'] if 'shadow_color' in locs else '#595959'
-offset_coeff = locs['offset_coeff'] if 'offset_coeff' in locs else 9.0
+# Shadow attrs setting.
+shadow_depth = locs.get("shadow_depth", 7)
+shadow_color = locs.get("shadow_color", "#595959")
+offset_coeff = locs.get("offset_coeff", 9.0)
 
-#line attr setting
-line_width = locs['line_width'] if 'line_width' in locs else 4.5
+# Line attr setting
+line_width = locs.get("line_width", 4.5)
 
 for color, points in zip(colors, points_list):
     add_line_shadow(ax, *points, depth=shadow_depth, color=shadow_color,
                     line_width=3, offset_coeff=offset_coeff)
     ax.plot(*points, linewidth=line_width, color=color)
 
-if sys.argv[1] == '--show':
+display_mode = locs.get("display_mode", "save")
+
+if display_mode == "interactive":
     new_fig.show()
-elif sys.argv[1] == '--save':
+elif display_mode == "save":
     new_fig.savefig('./energy_profile/merged_energy_profile.png', dpi=500)
+else:
+    raise ValueError("Invalide display mode: {}".format(display_mode))
+
 print 'Ok.'
 
 # write data to csv file
@@ -124,3 +139,4 @@ for idx, (x_total, y_total) in enumerate(points_list):
         writer.writerow(header)
         writer.writerows(rows)
 print 'Ok.'
+

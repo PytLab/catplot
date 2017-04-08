@@ -1,5 +1,5 @@
 '''
-    Data for energy profile plotting.
+Data for energy profile plotting.
 '''
 
 #elementary reaction equations
@@ -19,7 +19,7 @@ multi_rxn_equations = [
 ]
 
 #relative energies
-multi_energy_tuples = [
+multi_energies = [
     # IS,  TS,  FS
     #--------------
     [
@@ -60,3 +60,10 @@ peak_widths = [
     (1.0, 1.0, 4.0),
     (1.0, 1.0, 1.0, 1.0)
 ]
+
+# Display mode.
+display_mode = "save"
+
+# Transparent background and axes.
+transparent = True
+
