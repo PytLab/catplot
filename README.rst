@@ -2,8 +2,8 @@
 catplot
 =======
 
-.. image:: https://travis-ci.org/PytLab/VASPy.svg?branch=master
-    :target: https://travis-ci.org/PytLab/VASPy
+.. image:: https://travis-ci.org/PytLab/catplot.svg?branch=master
+    :target: https://travis-ci.org/PytLab/catplot
     :alt: Build Status
 
 .. image:: https://img.shields.io/badge/python-3.5-green.svg
@@ -25,8 +25,10 @@ CatPlot is a Python library for plotting energy profile using interpolation algr
 Installation
 ------------
 1. Via pip (recommend)::
+
    pip install catplot
 
 2. From source::
+
    python setup.py install
 
