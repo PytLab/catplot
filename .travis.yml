@@ -1,6 +1,7 @@
 language: python
 python:
   - "2.7"
+  - "3.5"
 
 notifications:
   email: false
@@ -21,7 +22,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 # command to install dependencies
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy matplotlib nose
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib
   - python setup.py install  # install catplot
 # command to run tests
 script:
