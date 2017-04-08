@@ -32,3 +32,24 @@ Installation
 
    python setup.py install
 
+Example
+-------
+
+Get points in energy profile for a reaction:
+
+.. code_block:: python
+
+    >>> from catplot import interpolate
+    >>> x, y, _ = interpolate.get_potential_energy_points([0.0, 1.3, 0.7])
+
+You can plot it with visualization tools:
+
+.. code_block:: python
+    >>> import matplotlib.pyplot as plt
+    >>> plt.plot(x, y)
+    >>> plt.show()
+
+Result:
+
+.. image:: https://github.com/PytLab/catplot/blob/dev/pic/interactive.png
+
