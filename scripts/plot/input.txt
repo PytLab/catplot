@@ -55,5 +55,5 @@ peak_widths = (1.0, 1.5, 1.0, 1.5)
 
 # Display mode.
 display_mode = "save"  # "save" | "interactive"
-trans_bgd = True  # Transparent background
+transparent = True  # Transparent background
 

@@ -76,13 +76,13 @@ if locs.get('custom'):
     print "Custom plotting..."
     new_fig = plt.figure(figsize=(16, 9))
     # transparent figure
-    if locs.get("trans_background"):
+    if locs.get("transparent"):
         new_fig.patch.set_alpha(0)
 
     ax = new_fig.add_subplot(111)
 
     # transparent axe
-    if locs.get("trans_background"):
+    if locs.get("transparent"):
         ax.patch.set_alpha(0)
 
     # remove xticks
