@@ -107,3 +107,7 @@ MANIFEST
 /scripts/mplot/energy_profile
 #DOS file
 DOS*
+
+# vim temp files.
+*.swp
+
