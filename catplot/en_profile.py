@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 '''
-    Module to plot energy profile.
+Module to plot energy profile.
 '''
 
 import threading
@@ -12,10 +12,9 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 from matplotlib.patches import Ellipse
-from scipy.optimize import fsolve
 
 from catplot.functions import get_relative_energy_tuple
-from chem_parser import *
+from catplot.chem_parser import RxnEquation
 
 
 class ShadowThread(threading.Thread):
@@ -40,20 +39,35 @@ class NoteThread(threading.Thread):
         apply(self.func, self.args)
 
 
-# ---------------------------------------
-# two functions below are deprecated
-# I just keep them as a souvenir (ฅ´ω`ฅ)
-def quadratic_interp_poly(x1, y1, x2, y2):
+def quadratic_connect_interp(x1, y1, x2, y2):
+    # {{{
     """
-    Return polynomial function object f(x)
-    obtained from quadratic interpolation.
+    Use quadratic interpolation(y = ax^2 + bx + c) to connect points (x1, y1) and (x2, y2).
+
+    ------------------------------
+
+    A = (x1, y1)
+    B = (x2, y2)
+
+         B                       B
+         _                       _
+                                /
+                -->            /
+    A           -->         A /
+    _                       _/
+
+    ------------------------------
 
     Parameters
     ----------
     x1, y1 : float
-        x and y value of the left point.
+        x and y value of the first point.
     x2, y2 : float
-        x and y value of the left point(maximum value point).
+        x and y value of the second point.
+
+    Return:
+    -------
+    Quadratic function object.
 
     Examples
     --------
@@ -61,10 +75,9 @@ def quadratic_interp_poly(x1, y1, x2, y2):
     >>> <function kinetic.plotters.general_plotter.poly_func>
 
     """
-    # {{{
     A = np.matrix([[x1**2, x1, 1],
                    [x2**2, x2, 1],
-                   [ 2*x2,  1, 0]])
+                   [2*x2, 1, 0]])
 
     b = np.matrix([[y1], [y2], [0]])
     x = A.I * b
@@ -77,39 +90,40 @@ def quadratic_interp_poly(x1, y1, x2, y2):
     # }}}
 
 
-def nonlinear_quadratic_interp_poly(x1, y1, x3, y3, y2):
-    # {{{
-    def f(x):
-        a, b, c = x.tolist()
-        return [
-            x1**2*a + x1*b + c - y1,
-            x3**2*a + x3*b + c - y3,
-            y2*4*a + b**2 - 4*a*c,
-        ]
-
-    #calculate jacobian matrix to speed up
-    def j(x):
-        a, b, c = x.tolist()
-        return [
-            [x1**2,       x1,    1],
-            [x3**2,       x3,    1],
-            [4*y2 - 4*c, 2*b, -4*a]
-        ]
-
-    a, b, c = fsolve(f, [1, 1, 1], fprime=j)
-    poly_func = lambda x: a*x**2 + b*x + c
-
-    return a, b, c, poly_func
-    # }}}
-# ------- two functions above are deprecated ------
-
-
 def quadratic_interp(x1, y1, x3, y3, y2):
-    '''
-    use 'y = m*(x - n)**2 + l' to interpolate points,
-    and find value of x2.
-    '''
     # {{{
+    r"""
+    Given the y value of the second point and use quadratic function to
+    find the x value of second point by solving the equation
+         y = m*(x - n)**2
+
+    ------------------------------------
+
+    A = (x1, y1)
+    B = (x2, y2) *<x2 will be found>
+    C = (x3, y3)
+                                    B
+    BBBBB                           _
+          C                        / \ C
+          _        -->            /   \_
+    A              -->         A /
+    _                          _/
+
+    ------------------------------------
+
+    Parameters:
+    -----------
+    x1, y1 : float
+        x and y value of the first point(A).
+    x3, y3 : float
+        x and y value of the third point(C).
+    y2: float
+        the y value of the second point(B).
+
+    Return:
+    -------
+    (x value of second point, quadratic function object)
+    """
     k = (y3 - y2)/(y1 - y2)
     a = k - 1
     b = 2*x3 - 2*k*x1
@@ -120,7 +134,7 @@ def quadratic_interp(x1, y1, x3, y3, y2):
         (-b - sqrt(b**2 - 4*a*c)) / (2*a),
     ]
     # get root between x1 and x3
-    root = filter(lambda x: min(x1, x3) <= x <= max(x1, x3), roots)
+    root = [x for x in roots if min(x1, x3) <= x <= max(x1, x3)]
     if len(root) == 0:
         raise ValueError('No real root.')
     else:
@@ -134,16 +148,54 @@ def quadratic_interp(x1, y1, x3, y3, y2):
     # }}}
 
 
-def spline_interp(x1, y1, x3, y3, y2):
-    '''
-    Use the spline interpolate function in scipy to interpolate points.
-    '''
-    x2 = (x1 + x3)/2.0
+def spline_interp(x1, y1, x3, y3, y2, x2_ratio=0.5):
+    # {{{
+    r"""
+    Use both quadratic and spline interpolation to interpolate three given points.
+
+    ---------------------------------------
+
+    A = (x1, y1)
+    B = (x2, y2) = ( (x1 + x3)*x2_ratio )
+    C = (x3, y3)
+
+       B                            B
+       _                            _
+          C                        / \ C
+          _        -->            /   \_
+    A              -->         A /
+    _                          _/
+
+    --------------------------------------
+
+    Parameters:
+    -----------
+    x1, y1 : float
+        x and y value of the first point(A).
+    x3, y3 : float
+        x and y value of the third point(C).
+    y2: float
+        the y value of the second point(B).
+    x2_ratio: float (0 ~ 1)
+        define the horizontal position of the second point(B),
+        x2 = (x1 + x3)*x2_ratio
+
+    Return:
+    -------
+    (x value of second point, quadratic function object)
+
+    """
+    if not 0.0 < x2_ratio < 1.0:
+        raise ValueError("Invalide x2 ratio({}) which should be in (0 ~ 1)".format(x2_ratio))
+
+    x2 = (x1 + x3)*x2_ratio
+
+    # Collect all points to be interpolated.
     x, y = [], []
 
     # Insert temporary point.
     # The first half.
-    quad_func = quadratic_interp_poly(x1, y1, x2, y2)
+    quad_func = quadratic_connect_interp(x1, y1, x2, y2)
     quad_func = np.frompyfunc(quad_func, 1, 1)
     insert_x1 = np.linspace(x1, x2, 5)
     insert_y1 = quad_func(insert_x1)
@@ -151,7 +203,7 @@ def spline_interp(x1, y1, x3, y3, y2):
     y = np.append(y, insert_y1)
 
     # The second half.
-    quad_func = quadratic_interp_poly(x3, y3, x2, y2)
+    quad_func = quadratic_connect_interp(x3, y3, x2, y2)
     quad_func = np.frompyfunc(quad_func, 1, 1)
     insert_x2 = np.linspace(x2 + 0.1, x3, 5)
     insert_y2 = quad_func(insert_x2)
@@ -161,6 +213,7 @@ def spline_interp(x1, y1, x3, y3, y2):
     func = interpolate.UnivariateSpline(x, y, s=0)
 
     return x2, func
+    # }}}
 
 
 def add_line_shadow(ax, x, y, depth, color, line_width=3, offset_coeff=1.0):
@@ -192,73 +245,93 @@ def add_line_shadow(ax, x, y, depth, color, line_width=3, offset_coeff=1.0):
     # }}}
 
 
-def get_potential_energy_points(energy_tuple, n=100,
-                                subsection_length=1.0,
-                                peak_width=1.0):
+def get_potential_energy_points(energies,
+                                n=100,
+                                hline_length=1.0,
+                                peak_width=1.0,
+                                kind="spline"):
+    # {{{
     """
-    Expect a energuy_tuple containing 3 components, number of points
-    return two 1-D arrays(x, y).
+    Get all points for a reaction process containing IS, TS, FS.
 
     Parameters
     ----------
-    energy_tuple : tuple
-        A tuple containing (E_IS, E_TS, E_FS).
+    energies : tuple
+        A energy tuple containing (E_IS, E_TS, E_FS).
     n : float, optional
         Number of points interpolated.
-    subsection_length : int, optional
-        Length of each subsection(x_i, x_f)
+    hline_length : int, optional
+        Length of the horizontal line for the IS & FS.
     peak_width : float, default to be 1.0
+    kind: str, optional
+        Specifies the kind of interpolation as a string ('quadratic', 'spline').
+        Default is 'spline'.
+
+    Return:
+    -------
+    (points for x, points for y), two 1-D arrays.
     """
-    # {{{
-    #use quadratic interpolation to get barrier points
-    if len(energy_tuple) == 3:
-        y1, y2, y3 = energy_tuple  # E_is, E_ts, E_fs
+    if kind == "spline":
+        interp_func = spline_interp
+    elif kind == "quadratic":
+        interp_func = quadratic_interp
+    else:
+        raise ValueError(("Invalide interpolation kind({}) which should be" +
+                          "in ('quadiatic', 'spline')").format(kind))
+
+    # Use interpolation method to get barrier point.
+    if len(energies) == 3:
+        y1, y2, y3 = energies  # E_is, E_ts, E_fs
         # check energy tuple
         if not (y2 > max(y1, y3)):
-            raise ValueError('abnormal energy : ' + str(energy_tuple))
+            raise ValueError('abnormal energy : ' + str(energies))
         # get x2
-        #x2, f = quadratic_interp(0.0, y1, peak_width, y3, y2)
-        x2, f = spline_interp(0.0, y1, peak_width, y3, y2)
+        x2, f = interp_func(0.0, y1, peak_width, y3, y2)
         init_x_b = np.linspace(0, peak_width, n)
         f_ufunc = np.frompyfunc(f, 1, 1)  # convert to universal function
         y_b = f_ufunc(init_x_b)
-        x_b = init_x_b + subsection_length  # translation
-        #initial state y
-        x_i = np.linspace(0, subsection_length, n)
+        x_b = init_x_b + hline_length     # translation
+
+        # initial state y
+        x_i = np.linspace(0, hline_length, n)
         y_i = np.linspace(y1, y1, n)
-        #final state y
-        x_f = np.linspace(subsection_length+peak_width,
-                          2*subsection_length+peak_width, n)
+
+        # final state y
+        x_f = np.linspace(hline_length+peak_width,
+                          2*hline_length+peak_width, n)
         y_f = np.linspace(y3, y3, n)
-        #combine all points
+        # Combine all points
         y = np.array(y_i.tolist() + y_b.tolist() + y_f.tolist())
-        #x = np.linspace(0, x3 + 2*subsection_length, 3*n)
+        #x = np.linspace(0, x3 + 2*hline_length, 3*n)
         x = np.array(x_i.tolist() + x_b.tolist() + x_f.tolist())
 
-    if len(energy_tuple) == 2:
+    if len(energies) == 2:
         #transition state
-        energy_list = list(energy_tuple)
+        energy_list = list(energies)
         if energy_list[0] < energy_list[-1]:
-            energy_list.insert(1, energy_tuple[-1]+1e-100)
+            energy_list.insert(1, energies[-1]+1e-100)
             init_x_b = np.array([0.0, peak_width - 1e-5, peak_width])
         else:
-            energy_list.insert(1, energy_tuple[0]+1e-100)
+            energy_list.insert(1, energies[0]+1e-100)
             init_x_b = np.array([0.0, 1e-5, peak_width])
-        energy_tuple = tuple(energy_list)
+        energies = tuple(energy_list)
 
-        init_y_b = np.array(energy_tuple)
+        init_y_b = np.array(energies)
         f_b = interpolate.interp1d(init_x_b, init_y_b, kind='quadratic')
         x_b = np.linspace(0, peak_width, n)
         y_b = f_b(x_b)
-        x_b = x_b + subsection_length
-        #initial state y
-        y_i = np.linspace(energy_tuple[0], energy_tuple[0], n)
-        x_i = np.linspace(0, subsection_length, n)
-        #final state y
-        y_f = np.linspace(energy_tuple[-1], energy_tuple[-1], n)
-        x_f = np.linspace(subsection_length + peak_width,
-                          2*subsection_length + peak_width, n)
-        #combine all points
+        x_b = x_b + hline_length
+
+        # initial state y
+        y_i = np.linspace(energies[0], energies[0], n)
+        x_i = np.linspace(0, hline_length, n)
+
+        # final state y
+        y_f = np.linspace(energies[-1], energies[-1], n)
+        x_f = np.linspace(hline_length + peak_width,
+                          2*hline_length + peak_width, n)
+
+        # Combine all points
         y = np.array(y_i.tolist() + y_b.tolist() + y_f.tolist())
         x = np.array(x_i.tolist() + x_b.tolist() + x_f.tolist())
         x2 = 0.0
@@ -277,7 +350,7 @@ def plot_single_energy_diagram(*args, **kwargs):
 
     Parameters
     ----------
-    energy_tuple : tuple of float, essential
+    energies : tuple of float, essential
         energy data for profile plotting.
         e.g. (0.0, 1.2, 0.7)
 
@@ -285,7 +358,7 @@ def plot_single_energy_diagram(*args, **kwargs):
         reaction equation string according to rules in setup file.
         e.g. 'HCOOH_g + 2*_s <-> HCOO-H_s + *_s -> HCOO_s + H_s'.
 
-    subsection_length : int, optional
+    hline_length : int, optional
         Length of each subsection(x_i, x_f), defualt to be 1.0.
 
     line_color : str, optional
@@ -324,43 +397,48 @@ def plot_single_energy_diagram(*args, **kwargs):
     # {{{
     ###############  args setting before plotting  ################
 
-    #for args
+    # Get arguments.
     if len(args) != 2:
-        raise ValueError("Need at least 2 args: energy_tuple, rxn_equation.")
-    energy_tuple, rxn_equation = args
-    #for kwargs
-    n = kwargs['n'] if 'n' in kwargs else 100
-    subsection_length = \
-        kwargs['subsection_length'] if 'subsection_length' in kwargs else 1.0
-    line_color = kwargs['line_color'] if 'line_color' in kwargs else '#000000'
-    has_shadow = kwargs['has_shadow'] if 'has_shadow' in kwargs else True
-    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'png'
-    show_mode = kwargs['show_mode'] if 'show_mode' in kwargs else 'show'
-    peak_width = kwargs['peak_width'] if 'peak_width' in kwargs else 1.0
+        raise ValueError("Need at least 2 args: energies, rxn_equation.")
+    energies, rxn_equation = args
+
+    # Get keyword arguments.
+    n = kwargs.pop("n", 100)
+    hline_length = kwargs.pop("hline_length", 1.0)
+    line_color = kwargs.pop("line_color", "#000000")
+    has_shadow = kwargs.pop("has_shadow", True)
+    fmt = kwargs.pop("fmt", "png")
+    show_mode = kwargs.pop("show_mode", "show")
+    peak_width = kwargs.pop("peak_width", 1.0)
 
     #####################  args setting END  #######################
 
     rxn_list = RxnEquation(rxn_equation).tolist()
-    energy_tuple = get_relative_energy_tuple(energy_tuple)
-    #energy info
-    rxn_energy = round(energy_tuple[-1] - energy_tuple[0], 2)
-    if len(energy_tuple) == 3:
-        act_energy = round(energy_tuple[1] - energy_tuple[0], 2)
-    #get x, y array
-    x, y, x2 = get_potential_energy_points(energy_tuple, n=n,
-                                       subsection_length=subsection_length,
-                                       peak_width=peak_width)
+    energies = get_relative_energy_tuple(energies)
+
+    # energy info
+    rxn_energy = round(energies[-1] - energies[0], 2)
+    if len(energies) == 3:
+        act_energy = round(energies[1] - energies[0], 2)
+
+    # get x, y array
+    x, y, _ = get_potential_energy_points(energies, n=n,
+                                          hline_length=hline_length,
+                                          peak_width=peak_width)
+
     # get maximum and minimum values of x and y axis
     y_min, y_max = np.min(y), np.max(y)
-    x_max = 3.7*subsection_length
-    #scale of y
+    x_max = 3.7*hline_length
+
+    # scale of y
     y_scale = abs(y_max - y_min)
 
     ###################      start Artist Mode!      #######################
+
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111)
     ax.set_ylim(y_min - y_scale/5, y_max + y_scale/5)
-    ax.set_xlim(-subsection_length/3, x_max)
+    ax.set_xlim(-hline_length/3, x_max)
     xlabel = ax.set_xlabel('Reaction Coordinate')
     ylabel = ax.set_ylabel('Free Energy(eV)')
     title = ax.set_title(r'$\bf{'+RxnEquation(rxn_equation).texen()+r'}$',
@@ -370,44 +448,50 @@ def plot_single_energy_diagram(*args, **kwargs):
                              'verticalalignment': 'bottom'
                          })
 
-    #add shadow
+    # add shadow
     if has_shadow:
         add_line_shadow(ax, x, y, depth=8, color='#595959')
-    #main line
+
+    # main line
     ax.plot(x, y, color=line_color, linewidth=3)
 
-    #energy latex string
+    # energy latex string
     if 'act_energy' in dir():
         act_energy_latex = r'$\bf{G_{a} = ' + str(act_energy) + r' eV}$'
     rxn_energy_latex = r'$\bf{\Delta G = ' + str(rxn_energy) + r' eV}$'
 
     #######################   annotates   #######################
 
-    #add species annotation
-    #get annotate coordiantes
+    # add species annotation
+
+    # get annotate coordiantes
     note_offset = y_scale/40
     param_list = []
-    #initial state
-    note_x_i = subsection_length/10
-    note_y_i = energy_tuple[0] + note_offset
+
+    # initial state
+    note_x_i = hline_length/10
+    note_y_i = energies[0] + note_offset
     note_str_i = r'$\bf{' + rxn_list[0].texen() + r'}$'
     param_list.append((note_x_i, note_y_i, note_str_i))
-    #final state
-    note_x_f = subsection_length/10 + subsection_length + peak_width
-    note_y_f = energy_tuple[-1] + note_offset
+
+    # final state
+    note_x_f = hline_length/10 + hline_length + peak_width
+    note_y_f = energies[-1] + note_offset
     note_str_f = r'$\bf{' + rxn_list[-1].texen() + r'}$'
     param_list.append((note_x_f, note_y_f, note_str_f))
-    if len(energy_tuple) == 3:
-        #transition state
-        note_y_b = np.max(y) + note_offset  # equal to energy_tuple[1]
+
+    if len(energies) == 3:
+        # transition state
+        note_y_b = np.max(y) + note_offset  # equal to energies[1]
         idx = np.argmax(y)
-        note_x_b = x[idx] - subsection_length/4
+        note_x_b = x[idx] - hline_length/4
         #####################
         barrier_x = x[idx]  # x value of TS point
         #####################
         note_str_b = r'$\bf' + rxn_list[1].texen() + r'}$'
         param_list.append((note_x_b, note_y_b, note_str_b))
-    #add annotates
+
+    # add annotates
     for idx, param_tuple in enumerate(param_list):
         if idx == 2:
             ax.text(*param_tuple, fontdict={'fontsize': 13,
@@ -416,32 +500,33 @@ def plot_single_energy_diagram(*args, **kwargs):
             ax.text(*param_tuple, fontdict={'fontsize': 13,
                                             'color': '#1874CD'})
 
-    ######################################################
-    #                                                    #
-    #  inflection points coordinates:                    #
-    #    (subsection_length, energy_tuple[0])            #
-    #    (barrier_x, np.max(y))                          #
-    #    (2*subsection_length, energy_tuple[-1])         #
-    #                                                    #
-    ######################################################
+    #########################################
+    #                                       #
+    #  inflection points coordinates:       #
+    #    (hline_length, energies[0])        #
+    #    (barrier_x, np.max(y))             #
+    #    (2*hline_length, energies[-1])     #
+    #                                       #
+    #########################################
 
-    #energy change annotation
+    # energy change annotation
 
-    #initial state horizontal line
-    hori_x_i = np.linspace(subsection_length,
-                           peak_width + 2*subsection_length, 50)
-    hori_y_i = np.linspace(energy_tuple[0], energy_tuple[0], 50)
+    # initial state horizontal line
+    hori_x_i = np.linspace(hline_length,
+                           peak_width + 2*hline_length, 50)
+    hori_y_i = np.linspace(energies[0], energies[0], 50)
+
     ax.plot(hori_x_i, hori_y_i, color=line_color, linewidth=1,
             linestyle='dashed')
 
     el = Ellipse((2, -1), 0.5, 0.5)
 
-    if len(energy_tuple) == 3:  # for reaction with barrier
-        #arrow between barrier
-        ax.annotate('', xy=(barrier_x, energy_tuple[0]), xycoords='data',
+    if len(energies) == 3:  # for reaction with barrier
+        # arrow between barrier
+        ax.annotate('', xy=(barrier_x, energies[0]), xycoords='data',
                     xytext=(barrier_x, np.max(y)), textcoords='data',
                     arrowprops=dict(arrowstyle="<->"))
-        #text annotations of barrier
+        # text annotations of barrier
         ax.annotate(act_energy_latex,
                     xy=(barrier_x, np.max(y)/2), xycoords='data',
                     xytext=(-150, 30), textcoords='offset points',
@@ -453,36 +538,36 @@ def plot_single_energy_diagram(*args, **kwargs):
                     )
 
     # arrow between reaction energy
-    ax.annotate(
-        '',
-        xy=(subsection_length*3/2 + peak_width, energy_tuple[-1]),
-        xycoords='data',
-        xytext=(subsection_length*3/2 + peak_width, energy_tuple[0]),
-        textcoords='data',
-        arrowprops=dict(arrowstyle="<->")
-    )
+    ax.annotate('', xy=(hline_length*3/2 + peak_width, energies[-1]),
+                xycoords='data',
+                xytext=(hline_length*3/2 + peak_width, energies[0]),
+                textcoords='data',
+                arrowprops=dict(arrowstyle="<->"))
+
     # text annotations of reaction energy
-    ax.annotate(
-        rxn_energy_latex,
-        xy=(subsection_length*3/2 + peak_width,
-            (energy_tuple[-1]+energy_tuple[0])/2),
-        xycoords='data',
-        xytext=(50, 30), textcoords='offset points',
-        size=13, color='#8E388E',
-        arrowprops=dict(arrowstyle="simple",
-                        fc="0.6", ec="none",
-                        patchB=el,
-                        connectionstyle="arc3,rad=-0.2"),
-    )
+    ax.annotate(rxn_energy_latex,
+                xy=(hline_length*3/2 + peak_width, (energies[-1]+energies[0])/2),
+                xycoords='data',
+                xytext=(50, 30), textcoords='offset points',
+                size=13, color='#8E388E',
+                arrowprops=dict(arrowstyle="simple",
+                                fc="0.6", ec="none",
+                                patchB=el,
+                                connectionstyle="arc3,rad=-0.2"))
+
           ##############      annotates end      ################
      #################      Artist Mode End !      #######################
-    #remove xticks
+
+    # remove xticks
     ax.set_xticks([])
-    #save the figure object
-    #creat path
+
+    # save the figure object
+
+    # creat path
     if not os.path.exists("./energy_profile"):
         os.mkdir("./energy_profile")
-    #filename
+
+    # filename
     if 'fname' in kwargs:
         fname = kwargs['fname'] + '.' + fmt
     else:
@@ -519,7 +604,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
               'HCOO_s + *_s <-> H-COO_s + *_s -> COO_s + H_s',
               'COO_s -> CO2_g + *_s',
               '2H_s <-> H-H_s + *_s -> H2_g + 2*_s'].
-    energy_tuples : list of tuples
+    energies : list of tuples
         e.g. [
                  (0.0, 1.0, 0.5),
                  (3.0, 4.7, 0.7),
@@ -527,7 +612,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
                  (3.0, 4.7, 0.7),
              ]
 
-    subsection_length : int, optional
+    hline_length : int, optional
         Length of each subsection(x_i, x_f), defualt to be 1.0.
 
     line_color : str, optional
@@ -576,15 +661,15 @@ def plot_multi_energy_diagram(*args, **kwargs):
 
     """
     # {{{
-    ###############  args setting before plotting  ################
-    #for args
-    if len(args) != 2:
-        raise ValueError("Need at least 2 args: " +
-                         "rxn_equations_list, energy_tuples.")
-    rxn_equations_list, energy_tuples = args
 
-    #for kwargs
-    # peak widths
+    ###############  args setting before plotting  ################
+
+    # Get arguments.
+    if len(args) != 2:
+        raise ValueError("Need at least 2 args: rxn_equations_list, energies_tuple.")
+    rxn_equations_list, energies_tuple = args
+
+    # Get keyword arguements.
     if 'peak_widths' in kwargs:
         peak_widths = kwargs['peak_widths']
         if len(peak_widths) != len(rxn_equations_list):
@@ -593,83 +678,83 @@ def plot_multi_energy_diagram(*args, **kwargs):
     else:  # set to (1.0, 1.0, ...)
         peak_widths = tuple([1.0]*len(rxn_equations_list))
 
-    n = kwargs['n'] if 'n' in kwargs else 100
-    subsection_length = \
-        kwargs['subsection_length'] if 'subsection_length' in kwargs else 1.0
-    line_color = kwargs['line_color'] if 'line_color' in kwargs else '#000000'
-    has_shadow = kwargs['has_shadow'] if 'has_shadow' in kwargs else True
-    fmt = kwargs['fmt'] if 'fmt' in kwargs else 'png'
-    init_y_offset = kwargs['init_y_offset'] if 'init_y_offset' in kwargs else 0.0
-    show_note = kwargs['show_note'] if 'show_note' in kwargs else True
-    show_aux_line = kwargs['show_aux_line'] if 'show_aux_line' in kwargs else True
-    show_arrow = kwargs['show_arrow'] if 'show_arrow' in kwargs else True
-    show_mode = kwargs['show_mode'] if 'show_mode' in kwargs else 'show'
+    n = kwargs.pop("n", 100)
+    hline_length = kwargs.pop("hline_length", 1.0)
+    line_color = kwargs.pop("line_color", "#000000")
+    has_shadow = kwargs.pop("has_shadow", True)
+    fmt = kwargs.pop("fmt", "png")
+    init_y_offset = kwargs.pop("init_y_offset", 0.0)
+    show_note = kwargs.pop("show_note", True)
+    show_aux_line = kwargs.pop("show_aux_line", True)
+    show_arrow = kwargs.pop("show_arrow", True)
+    show_mode = kwargs.pop("show_mode", "show")
 
     #####################  args setting END  #######################
 
-    #convert rxn_equation_list(str) to elementary_rxns_list alike list
-    rxns_list = [RxnEquation(rxn_equation).tolist()
-                 for rxn_equation in rxn_equations_list]
+    # convert rxn_equation_list(str) to elementary_rxns_list alike list
+    rxns_list = [RxnEquation(rxn_equation).tolist() for rxn_equation in rxn_equations_list]
 
     x_offset, y_offset = 0.0, init_y_offset
     total_x, total_y = [], []
     piece_points = []  # collectors
 
-    for idx, (rxn_equation, peak_width) in \
-            enumerate(zip(rxn_equations_list, peak_widths)):
-        energy_tuple = get_relative_energy_tuple(energy_tuples[idx])
-        x, y, x2 = get_potential_energy_points(
-            energy_tuple=energy_tuple, n=n,
-            subsection_length=subsection_length,
-            peak_width=peak_widths[idx],
-        )
-        x_scale = 2*subsection_length + peak_width
-        #get total y
+    for idx, (rxn_equation, peak_width) in enumerate(zip(rxn_equations_list, peak_widths)):
+        energies = get_relative_energy_tuple(energies_tuple[idx])
+        x, y, x2 = get_potential_energy_points(energies=energies, n=n,
+                                               hline_length=hline_length,
+                                               peak_width=peak_widths[idx])
+        x_scale = 2*hline_length + peak_width
+
+        # get total y
         offseted_y = y + y_offset
         total_y.extend(offseted_y.tolist())
-        #get total x
+
+        # get total x
         offseted_x = x + x_offset
         total_x.extend(offseted_x.tolist())
 
         #######   collect values for adding annotations   #######
 
-        #there are 3 points in each part
-        p1 = (2*subsection_length+offseted_x[0], offseted_y[0])
+        # there are 3 points in each part
+        p1 = (2*hline_length+offseted_x[0], offseted_y[0])
         p3 = (offseted_x[-1], offseted_y[-1])
-        if len(energy_tuple) == 3:
-            p2 = (2*subsection_length + x2 + offseted_x[0],  # x2 is the x value of barrier
-                  energy_tuple[1] + y_offset)
+
+        if len(energies) == 3:
+            p2 = (2*hline_length + x2 + offseted_x[0],  # x2 is the x value of barrier
+                  energies[1] + y_offset)
             piece_points.append((p1, p2, p3))
-        elif len(energy_tuple) == 2:
+        elif len(energies) == 2:
             piece_points.append((p1, p3))
 
         ################   Collection End   ################
 
-        #update offset value for next loop
+        # update offset value for next loop
         x_offset += x_scale
         y_offset = offseted_y[-1]
 
-    #Add extral line
+    # Add extral line
 
-    #add head horizontal line
-    head_extral_x = np.linspace(0.0, subsection_length, n).tolist()
-    offseted_total_x = (np.array(total_x)+subsection_length).tolist()
+    # add head horizontal line
+    head_extral_x = np.linspace(0.0, hline_length, n).tolist()
+    offseted_total_x = (np.array(total_x)+hline_length).tolist()
     head_extral_y = [total_y[0]]*n
     total_x = head_extral_x + offseted_total_x
     total_y = head_extral_y + total_y
-    #add the last horizontal line
+
+    # add the last horizontal line
     tail_extral_x = np.linspace(total_x[-1],
-                                total_x[-1]+subsection_length,
+                                total_x[-1]+hline_length,
                                 n).tolist()
     tail_extral_y = [total_y[-1]]*n
     total_x += tail_extral_x
     total_y += tail_extral_y
     total_x, total_y = np.array(total_x), np.array(total_y)
 
-    #get extreme values of x and y
+    # get extreme values of x and y
     y_min, y_max = np.min(total_y), np.max(total_y)
     x_min, x_max = total_x[0], total_x[-1]
     y_scale = y_max-y_min
+
     ###################      start Artist Mode!      ######################
 
     multi = len(rxn_equations_list)/2.2
@@ -677,7 +762,7 @@ def plot_multi_energy_diagram(*args, **kwargs):
     #fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_ylim(y_min - y_scale/10, y_max + y_scale/10)
-    ax.set_xlim(x_min-subsection_length, x_max+subsection_length)
+    ax.set_xlim(x_min-hline_length, x_max+hline_length)
     ax.set_title('Energy Profile',
                  fontdict={
                      'fontsize': 15,
@@ -686,23 +771,25 @@ def plot_multi_energy_diagram(*args, **kwargs):
                      })
     ax.set_xlabel('Reaction Coordinate')
     ax.set_ylabel('Free Energy(eV)')
-    #add shadow
+
+    # add shadow
     if has_shadow:
         add_line_shadow(ax, total_x, total_y, depth=8,
                         color='#595959')
-    #main line
+
+    # main line
     ax.plot(total_x, total_y, color=line_color, linewidth=3)
 
-    #get state string list as notes
+    # get state string list as notes
     state_str_list = []
     for rxn_list in rxns_list:
         t = tuple([state_obj.texen() for state_obj in rxn_list[:-1]])
         state_str_list.append(t)
 
     ####################     Main loop to add notes     ###################
-    #This is the main loop to add extral info to main line
-    #For each single loop, we get 3 or 2 points(tuple) for each elementary rxn
-    #and the first 2 or 1 latex reaction state string(involved in list)
+    # This is the main loop to add extral info to main line
+    # For each single loop, we get 3 or 2 points(tuple) for each elementary rxn
+    # and the first 2 or 1 latex reaction state string(involved in list)
 
     def add_state_note(pts, tex_states):
         "function to add notes to a state"
@@ -711,49 +798,46 @@ def plot_multi_energy_diagram(*args, **kwargs):
         # add horizontal lines and vertical arrowa
         if show_aux_line:
             # plot horizontal lines
-            hori_x = np.linspace(start_point[0],
-                                 end_point[0]+2*subsection_length, 50)
+            hori_x = np.linspace(start_point[0], end_point[0]+2*hline_length, 50)
             hori_y = np.linspace(start_point[-1], start_point[-1], 50)
-            ax.plot(hori_x, hori_y, color=line_color, linewidth=1,
-                    linestyle='dashed')
+            ax.plot(hori_x, hori_y, color=line_color, linewidth=1, linestyle='dashed')
+
             # plot vertical arrows
             if len(pts) == 3:
                 mid_point = pts[1]
                 #plot activation energy arrow
-                ax.annotate(
-                    '',
-                    xy=(mid_point[0], mid_point[-1]),
-                    xycoords='data',
-                    xytext=(mid_point[0], start_point[-1]),
-                    textcoords='data',
-                    arrowprops=dict(arrowstyle="<->")
-                    )
+                ax.annotate('', xy=(mid_point[0], mid_point[-1]),
+                            xycoords='data',
+                            xytext=(mid_point[0], start_point[-1]),
+                            textcoords='data',
+                            arrowprops=dict(arrowstyle="<->"))
+
             # plot reaction energy arrow
-            ax.annotate(
-                '',
-                xy=(end_point[0]+subsection_length, end_point[-1]),
-                xycoords='data',
-                xytext=(end_point[0]+subsection_length, start_point[-1]),
-                textcoords='data',
-                arrowprops=dict(arrowstyle="<->")
-                )
+            ax.annotate('', xy=(end_point[0]+hline_length, end_point[-1]),
+                        xycoords='data',
+                        xytext=(end_point[0]+hline_length, start_point[-1]),
+                        textcoords='data',
+                        arrowprops=dict(arrowstyle="<->"))
+
         if show_note:
             # add species notes
             if len(pts) == 3:  # those who have TS
                 for state_idx, (pt, tex_state) in enumerate(zip(pts, tex_states)):
                     if state_idx == 0:  # for initial or final state
-                        note_x = pt[0] - 1.8*subsection_length
+                        note_x = pt[0] - 1.8*hline_length
                         note_y = pt[-1] + y_scale/50
                         ax.text(note_x, note_y, r'$\bf{'+tex_state+r'}$',
                                 fontdict={'fontsize': 13, 'color': '#1874CD'})
+
                     if state_idx == 1:  # for transition state
-                        note_x = pt[0] - subsection_length/2
+                        note_x = pt[0] - hline_length/2
                         note_y = pt[-1] + y_scale/50
                         ax.text(note_x, note_y, r'$\bf{'+tex_state+r'}$',
                                 fontdict={'fontsize': 13, 'color': '#CD5555'})
-            if len(pts) == 2:  # no TS
+            # no TS.
+            if len(pts) == 2:
                 pt, tex_state = pts[0], tex_states[0]
-                note_x = pt[0] - 1.8*subsection_length
+                note_x = pt[0] - 1.8*hline_length
                 note_y = pt[-1] + y_scale/50
                 ax.text(note_x, note_y, r'$\bf{'+tex_state+r'}$',
                         fontdict={'fontsize': 13, 'color': '#1874CD'})
@@ -764,16 +848,15 @@ def plot_multi_energy_diagram(*args, **kwargs):
             # annotation between IS and FS
             rxn_energy = round(end_point[-1] - start_point[-1], 2)
             rxn_energy_latex = r'$\bf{\Delta G = ' + str(rxn_energy) + r' eV}$'
-            ax.annotate(rxn_energy_latex, xy=(end_point[0]+subsection_length,
-                                              (start_point[-1]+end_point[-1])/2),
+            ax.annotate(rxn_energy_latex,
+                        xy=(end_point[0]+hline_length, (start_point[-1]+end_point[-1])/2),
                         xycoords='data',
                         xytext=(-70, 30), textcoords='offset points',
                         size=13, color='#8E388E',
                         arrowprops=dict(arrowstyle="simple",
                                         fc="0.6", ec="none",
                                         patchB=el,
-                                        connectionstyle="arc3,rad=0.2"),
-                        )
+                                        connectionstyle="arc3,rad=0.2"))
             if len(pts) == 3:
                 # annotation between TS and IS
                 act_energy = round((mid_point[-1] - start_point[-1]), 2)
@@ -786,11 +869,11 @@ def plot_multi_energy_diagram(*args, **kwargs):
                             arrowprops=dict(arrowstyle="simple",
                                             fc="0.6", ec="none",
                                             patchB=el,
-                                            connectionstyle="arc3,rad=-0.2"),
-                            )
+                                            connectionstyle="arc3,rad=-0.2"))
+
     #########    Main Loop END    ########
 
-    #use multiple thread to add notes
+    # use multiple thread to add notes
     note_threads = []
     nstates = len(state_str_list)
 
@@ -808,17 +891,20 @@ def plot_multi_energy_diagram(*args, **kwargs):
     if show_note:
         pt = pts[-1]
         tex_state = rxns_list[-1][-1].texen()
-        ax.text(pt[0]+0.2*subsection_length, pt[-1]+y_scale/50,
+        ax.text(pt[0]+0.2*hline_length, pt[-1]+y_scale/50,
                 r'$\bf{'+tex_state+r'}$',
                 fontdict={'fontsize': 13, 'color': '#1874CD'})
-    #remove xticks
+
+    # remove xticks
     ax.set_xticks([])
 
 #####################   Artist Mode End   #####################
-    #creat path
+
+    # creat path
     if not os.path.exists("./energy_profile"):
         os.mkdir("./energy_profile")
-    #filename
+
+    # filename
     if 'fname' in kwargs:
         fname = kwargs['fname'] + '.' + fmt
     else:

@@ -60,3 +60,4 @@ def line2list(line, field=' ', dtype=float):
     datalist = [dtype(i) for i in strlist if i != '']
 
     return datalist
+
