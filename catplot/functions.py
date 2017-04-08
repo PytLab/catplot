@@ -2,6 +2,8 @@
 #static functions
 import re
 
+from catplot.chem_parser import RxnEquation
+
 
 #functions for general energy profile
 def get_relative_energy_tuple(energy_tuple):
@@ -29,13 +31,12 @@ def equation2list(rxn_equation):
 #functions for merged energy profile
 def verify_multi_shape(multi_rxn_equations, multi_energy_tuples):
     "Verify the legitimacy of input data."
-    for rxn_equations, energy_tuples in \
-            zip(multi_rxn_equations, multi_energy_tuples):
+    for rxn_equations, energy_tuples in zip(multi_rxn_equations, multi_energy_tuples):
         if len(rxn_equations) != len(energy_tuples):
-            raise ValueError('Unmatched shape.\n' +
-                             'Check your input data please.')
+            raise ValueError('Unmatched shape.\nCheck your input data please.')
+
         for rxn_equation, energy_tuple in zip(rxn_equations, energy_tuples):
-            rxn_list = equation2list(rxn_equation)
+            rxn_list = RxnEquation(rxn_equation).tolist()
             if len(rxn_list) != len(energy_tuple):
                 raise ValueError("unmatched shape: %s, %s" %
                                  (rxn_equation, str(energy_tuple)))
@@ -46,18 +47,7 @@ def verify_attrlen(attr, n):
     "Verify length of iterable attr."
     if hasattr(attr, '__getitem__'):  # if iterable
         if len(attr) != n:
-            raise ValueError('length of %s is not equal to %d' %
-                             (str(attr), n))
+            raise ValueError('length of %s is not equal to %d' % (str(attr), n))
     else:
         raise ValueError('%s is not iterable!' % str(attr))
-
-
-def line2list(line, field=' ', dtype=float):
-    "Convert text data in a line to data object list."
-    strlist = line.strip().split(field)
-    if type(dtype) != type:
-        raise TypeError('Illegal dtype.')
-    datalist = [dtype(i) for i in strlist if i != '']
-
-    return datalist
 
