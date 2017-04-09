@@ -94,6 +94,7 @@ class ElementaryLine(EPLine):
         shadow depth of the line, default is 7.
     """
     # Descriptors.
+
     energies = dc.ElementaryEnergies("energies")
     rxn_equation = dc.ElementaryReaction("rxn_equation")
     interp_method = dc.InterpolationMethod("interp_method")

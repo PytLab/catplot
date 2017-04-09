@@ -6,6 +6,7 @@
 
 from catplot.chem_parser import RxnEquation
 
+
 class DescriptorBase(object):
     """ Abstract base class for other descriptor class.
     """
@@ -26,7 +27,6 @@ class DescriptorBase(object):
     def _check(self, instance, value):
         """ Just a placeholder.
         """
-        pass
 
 
 class ElementaryEnergies(DescriptorBase):
