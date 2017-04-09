@@ -74,3 +74,14 @@ class InterpolationMethod(DescriptorBase):
         if value not in candidates:
             raise ValueError("inter)p_method must be one of {}.".format(candidates))
 
+
+class MarginRatio(DescriptorBase):
+    """ Descriptor for canvas margin ratio.
+    """
+    def __init__(self, name):
+        super(MarginRatio, self).__init__(name)
+
+    def _check(self, instance, value):
+        if value <= 0.0 or value > 1.0:
+            raise ValueError("margin ratio must be in (0, 1]")
+
