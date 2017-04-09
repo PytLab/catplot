@@ -20,10 +20,12 @@ class DescriptorBase(object):
             raise AttributeError(msg)
 
     def __set__(self, instance, value):
-        self.__check(instance, value)
+        self._check(instance, value)
         instance.__dict__[self.name] = value
 
-    def __check(self, instance, value):
+    def _check(self, instance, value):
+        """ Just a placeholder.
+        """
         pass
 
 
@@ -33,7 +35,7 @@ class ElementaryEnergies(DescriptorBase):
     def __init__(self, name):
         super(ElementaryEnergies, self).__init__(name)
 
-    def __check(self, instance, value):
+    def _check(self, instance, value):
         """ Check elementary energies validity.
         """
         if len(value) == 3:
@@ -48,7 +50,7 @@ class ElementaryReaction(DescriptorBase):
     def __init__(self, name):
         super(ElementaryReaction, self).__init__(name)
 
-    def __check(self, instance, value):
+    def _check(self, instance, value):
         """ Check reaction validity.
         """
         if value is None:
@@ -57,7 +59,7 @@ class ElementaryReaction(DescriptorBase):
         rxn_equation = RxnEquation(value)
 
         if len(rxn_equation.tolist()) != len(instance.energies):
-            msg = "Reaction length conflict with energies"
+            msg = "Reaction length is not equal to the energies length"
             raise ValueError(msg)
 
 
@@ -67,8 +69,8 @@ class InterpolationMethod(DescriptorBase):
     def __init__(self, name):
         super(InterpolationMethod, self).__init__(name)
 
-    def __check(self, instance, value):
+    def _check(self, instance, value):
         candidates = ["spline", "quadratic"]
         if value not in candidates:
-            raise ValueError("interp_method must be one of {}.".format(candidates))
+            raise ValueError("inter)p_method must be one of {}.".format(candidates))
 
