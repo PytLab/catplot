@@ -36,6 +36,17 @@ class ElementaryLineTest(unittest.TestCase):
         self.assertEqual(line.n, 2)
         self.assertEqual(line.peak_width, 1.0)
 
+        # Check invalid reaction equation.
+        self.assertRaises(ValueError, ElementaryLine, [0.0, 1.2, 0.7],
+                          rxn_equation="A + B -> C")
+
+        # Check invalid interpolation algorithm.
+        self.assertRaises(ValueError, ElementaryLine, [0.0, 1.2, 0.7],
+                          interp_method="abc")
+
+        # Check invalid energy tuple.
+        self.assertRaises(ValueError, ElementaryLine, [0.0, 1.2, 1.5])
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
