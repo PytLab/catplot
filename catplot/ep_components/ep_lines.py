@@ -4,12 +4,29 @@
 """ Module for line object in energy profile.
 """
 
+from matplotlib.lines import Line2D
+from matplotlib import transforms
+
 import catplot.ep_components.descriptors as dc
 from catplot.interpolate import get_potential_energy_points
 
 
 class EPLine(object):
-    """ Base class for lines in energy profile.
+    """ Base class for lines in energy profile providing some general attributes.
+
+    Parameters:
+    -----------
+    x: 1-D array or list, x values of points.
+    y: 1-D array or list, y values of points.
+
+    line_width: float, optional
+        line width, default is 3.
+    color: str, optional,
+        color code of the line, default is #000000 (black).
+    shadow_color: str, optional
+        color code of the shadow lines, default is #595959.
+    shadow_color: int, optional
+        shadow depth of the line, default is 7.
     """
     def __init__(self, x, y, **kwargs):
         self.x = x
@@ -18,6 +35,7 @@ class EPLine(object):
         self.color = kwargs.pop("color", "#000000")
         self.shadow_color = kwargs.pop("shadow_color", "#595959")
         self.shadow_depth = kwargs.pop("shadow_depth", 7)
+        self.line_width = kwargs.pop("line_width", 3)
 
     def translate(self, distance, direction="x"):
         """ Translate all points in line.
@@ -38,6 +56,13 @@ class EPLine(object):
             self.y += distance
         else:
             raise ValueError("Invalide direction {}".format(direction))
+
+    def line2d(self):
+        """ Create a corresponding matplotlib.lines.Line2D object.
+        """
+        return Line2D(self.x, self.y,
+                      linewidth=self.line_width,
+                      color=self.color)
 
 
 class ElementaryLine(EPLine):
