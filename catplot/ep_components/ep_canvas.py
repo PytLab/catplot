@@ -43,7 +43,7 @@ class EPCanvas(object):
 
         self.lines.extend(ep_lines)
 
-    def render_ep_lines(self):
+    def _render_ep_lines(self):
         """ Render energy profile lines in canvas.
         """
         for line in self.lines:
@@ -94,7 +94,7 @@ class EPCanvas(object):
             self.axes.add_line(line.line2d())
 
         # Render energy profile lines.
-        self.render_ep_lines()
+        self._render_ep_lines()
 
         # Draw shadows.
         for shadow_line in self.shadow_lines:
