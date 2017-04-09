@@ -3,10 +3,10 @@
 
 from collections import namedtuple
 
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import transforms
 from matplotlib.lines import Line2D
+import numpy as np
 
 import catplot.ep_components.descriptors as dc
 from catplot.ep_components.ep_lines import EPLine
@@ -14,6 +14,12 @@ from catplot.ep_components.ep_lines import EPLine
 
 class EPCanvas(object):
     """ Energy profile canvas.
+
+    Parameters:
+    -----------
+    margin_ratio: float, optional, default is 0.1
+        control the white space between energy profile line and axes.
+
     """
     margin_ratio = dc.MarginRatio("margin_ratio")
 
