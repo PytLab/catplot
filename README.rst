@@ -68,6 +68,9 @@ Result:
 .. image:: https://github.com/PytLab/catplot/blob/master/pic/interactive.png
 
 
+.. _老版README: https://github.com/PytLab/catplot/blob/master/README_old.md
+
+
 Important update log
 --------------------
 
