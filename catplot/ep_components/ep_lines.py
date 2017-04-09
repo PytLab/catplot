@@ -43,6 +43,7 @@ class EPLine(object):
 class ElementaryLine(EPLine):
     """ Energy profile line for an elementary reaction.
     """
+    # Descriptors.
     energies = dc.ElementaryEnergies("energies")
     rxn_equation = dc.ElementaryReaction("rxn_equation")
     interp_method = dc.InterpolationMethod("interp_method")
