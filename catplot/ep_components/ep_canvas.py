@@ -77,13 +77,13 @@ class EPCanvas(object):
         scale_y = max_y - min_y
 
         # Define a namedtuple to be returned.
-        Limit = namedtuple("Limit", ["max_x", "min_x", "max_y", "min_y"])
+        Limits = namedtuple("Limits", ["max_x", "min_x", "max_y", "min_y"])
         limits = [max_x + self.margin_ratio*scale_x,
                   min_x - self.margin_ratio*scale_x,
                   max_y + self.margin_ratio*scale_y,
                   min_x - self.margin_ratio*scale_y]
 
-        return Limit._make(limits)
+        return Limits._make(limits)
 
 
     def draw(self):
