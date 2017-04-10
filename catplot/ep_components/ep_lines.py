@@ -28,8 +28,8 @@ class EPLine(object):
         color code of the line, default is #000000 (black).
     shadow_color: str, optional
         color code of the shadow lines, default is #595959.
-    shadow_color: int, optional
-        shadow depth of the line, default is 7.
+    shadow_depth: int, optional
+        shadow depth of the line, default is 0, no shadow.
     """
     def __init__(self, x, y, **kwargs):
         self.x = x
@@ -37,7 +37,7 @@ class EPLine(object):
 
         self.color = kwargs.pop("color", "#000000")
         self.shadow_color = kwargs.pop("shadow_color", "#595959")
-        self.shadow_depth = kwargs.pop("shadow_depth", 7)
+        self.shadow_depth = kwargs.pop("shadow_depth", 0)
         self.line_width = kwargs.pop("line_width", 3)
 
     def translate(self, distance, direction="x"):
@@ -96,8 +96,8 @@ class ElementaryLine(EPLine):
         color code of the line, default is #000000 (black).
     shadow_color: str, optional
         color code of the shadow lines, default is #595959.
-    shadow_color: int, optional
-        shadow depth of the line, default is 7.
+    shadow_depth: int, optional
+        shadow depth of the line, default is 0, no shadow.
     """
     # Descriptors.
 
