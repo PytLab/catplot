@@ -27,8 +27,6 @@ install:
   - python setup.py install  # install catplot
 # command to run tests
 script:
-  - cd scripts/mplot
-  - python plot_merge_profile.py
-  - cd ../plot
-  - python plot_energy_profile.py
+  - cd tests
+  - python catplot_test.py
 
