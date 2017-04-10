@@ -83,6 +83,19 @@ class EPCanvasTest(unittest.TestCase):
         self.assertEqual(len(canvas.chains), 1)
         self.assertTrue(isinstance(canvas.chains[0], EPChain))
 
+    def test_contains(self):
+        canvas = EPCanvas()
+
+        l1 = ElementaryLine([0.0, 1.2, 0.6])
+        l2 = ElementaryLine([0.0, 1.0, 0.8])
+        chain = EPChain([l1])
+
+        canvas.add_chain(chain)
+
+        self.assertTrue(l1 in canvas)
+        self.assertTrue(chain in canvas)
+        self.assertFalse(l2 in canvas)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 

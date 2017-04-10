@@ -12,6 +12,7 @@ from catplot.chem_parser import RxnEquation
 import catplot.ep_components.descriptors as dc
 from catplot.ep_components.ep_lines import EPLine
 from catplot.ep_components.ep_chain import EPChain
+from catplot.ep_components.ep_lines import ElementaryLine
 
 
 class EPCanvas(object):
