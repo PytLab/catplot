@@ -54,6 +54,14 @@ class EPCanvasTest(unittest.TestCase):
         canvas.add_lines([line])
         canvas.add_horizontal_auxiliary_line(line)
 
+    def test_add_vertical_auxiliary_line(self):
+        """ Make sure the vertical line can be added without exceptions.
+        """
+        canvas = EPCanvas()
+        line = ElementaryLine([0.0, 1.3, 0.8])
+        canvas.add_lines([line])
+        canvas.add_vertical_auxiliary_lines(line)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 

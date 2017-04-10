@@ -130,6 +130,10 @@ class EPCanvas(object):
 
     def add_horizontal_auxiliary_line(self, ep_line):
         """ Add horizontal auxiliary line to a specific energy profile line.
+
+        Parameters:
+        -----------
+        ep_line: EPLine object, the energy profile line.
         """
         eigen_pts = ep_line.eigen_points
 
@@ -145,6 +149,36 @@ class EPCanvas(object):
         # Add it to axes.
         aux_line = Line2D(x, y, color="#595959", linewidth=1, linestyle="dashed")
         self.axes.add_line(aux_line)
+
+    def add_vertical_auxiliary_lines(self, ep_line):
+        """ Add vertical auxiliary line to a specific energy profile line.
+
+        Parameters:
+        -----------
+        ep_line: EPLine object, the energy profile line.
+        """
+        eigen_pts = ep_line.eigen_points
+
+        if eigen_pts.has_barrier:
+            # Arrow between barrier.
+            x = eigen_pts.C[0]
+            y1 = eigen_pts.B[1]
+            y2 = eigen_pts.C[1]
+            self.axes.annotate("", xy=(x, y1),
+                               xycoords="data",
+                               xytext=(x, y2),
+                               textcoords="data",
+                               arrowprops=dict(arrowstyle="<->"))
+
+        # Arrow between reaction energy.
+        x = (eigen_pts.D[0] + eigen_pts.E[0])/2.0
+        y1 = eigen_pts.D[-1]
+        y2 = eigen_pts.B[-1]
+        self.axes.annotate('', xy=(x, y1),
+                           xycoords="data",
+                           xytext=(x, y2),
+                           textcoords="data",
+                           arrowprops=dict(arrowstyle="<->"))
 
     def draw(self):
         """ Draw all lines to canvas.
