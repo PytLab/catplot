@@ -8,6 +8,7 @@ from matplotlib import transforms
 from matplotlib.lines import Line2D
 import numpy as np
 
+from catplot.chem_parser import RxnEquation
 import catplot.ep_components.descriptors as dc
 from catplot.ep_components.ep_lines import EPLine
 
@@ -85,6 +86,52 @@ class EPCanvas(object):
 
         return Limits._make(limits)
 
+    def add_species_annotates(self, ep_line):
+        """ Add annoatates to a specific elementary energy profile line.
+
+        Parameters:
+        -----------
+        ep_line: EPLine object, the energy profile line.
+        """
+        if ep_line.rxn_equation is None:
+            return
+
+        eigen_pts = ep_line.eigen_points
+        states = RxnEquation(ep_line.rxn_equation).tolist()
+
+        # Energy latex strings.
+        if eigen_pts.has_barrier:
+            act_energy_latex = r"$\bf{G_{a} = " + str(ep_line.energies[1]) + r" eV}$"
+        rxn_energy_latex = r"$\bf{\Delta G = " + str(ep_line.energies[-1]) + r" eV}$"
+
+        note_offset = ep_line.scale_y/40
+        params = []
+
+        # IS
+        x_i = ep_line.hline_length/10
+        y_i = eigen_pts.A[0] + note_offset
+        note_i = r"$\bf{" + states[0].texen() + r"}$"
+        params.append([x_i, y_i, note_i])
+
+        # FS
+        x_f = ep_line.hline_length/10 + eigen_pts.D[0]
+        y_f = eigen_pts.D[1] + note_offset
+        note_f = r"$\bf{" + states[-1].texen() + r"}$"
+        params.append([x_f, y_f, note_f])
+
+        # TS
+        if eigen_pts.has_barrier:
+            x_t = eigen_pts.C[0] - ep_line.hline_length/4
+            y_t = eigen_pts.C[1] + note_offset
+            note_t = r"$\bf" + states[1].texen() + r"}$"
+            params.append([x_t, y_t, note_t])
+
+        # Add them to canvas.
+        for idx, param_list in enumerate(params):
+            if idx == 2:
+                self.axes.text(*param_list, fontdict={"fontsize": 13, "color": "#CD5555"})
+            else:
+                self.axes.text(*param_list, fontdict={'fontsize': 13, 'color': '#1874CD'})
 
     def draw(self):
         """ Draw all lines to canvas.
