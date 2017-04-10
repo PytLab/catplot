@@ -83,6 +83,9 @@ class EPCanvasTest(unittest.TestCase):
         self.assertEqual(len(canvas.chains), 1)
         self.assertTrue(isinstance(canvas.chains[0], EPChain))
 
+        # Exception is expected if add the chain again.
+        self.assertRaises(ValueError, canvas.add_chain, chain)
+
     def test_contains(self):
         canvas = EPCanvas()
 
@@ -95,6 +98,26 @@ class EPCanvasTest(unittest.TestCase):
         self.assertTrue(l1 in canvas)
         self.assertTrue(chain in canvas)
         self.assertFalse(l2 in canvas)
+
+    def test_add_line(self):
+        """ Test the line can be add to canvas correctly.
+        """
+        canvas = EPCanvas()
+        l1 = ElementaryLine([0.0, 1.2, 0.6])
+        canvas.add_line(l1)
+
+        # Add repeat line, exception raises.
+        self.assertRaises(ValueError, canvas.add_line, l1)
+
+    def test_add_lines(self):
+        canvas = EPCanvas()
+
+        l1 = ElementaryLine([0.0, 1.2, 0.6])
+        l2 = ElementaryLine([0.0, 1.0, 0.8])
+        canvas.add_lines([l1, l2])
+
+        canvas.lines = []
+        self.assertRaises(ValueError, canvas.add_lines, [l1, l1])
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)

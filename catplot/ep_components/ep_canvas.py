@@ -39,21 +39,34 @@ class EPCanvas(object):
         # Energy profile chains.
         self.chains = []
 
+    def add_line(self, ep_line):
+        """ Add an energy profile line to canvas.
+        """
+        if not isinstance(ep_line, ElementaryLine):
+            raise ValueError("line added must be instance of EPLine")
+
+        if ep_line in self:
+            msg = "the line is already in canvas, try to add the copy of it if you want."
+            raise ValueError(msg)
+
+        self.lines.append(ep_line)
+
     def add_lines(self, ep_lines):
         """ Add energy profile lines to canvas.
         """
         # Check lines before adding.
         for line in ep_lines:
-            if not isinstance(line, EPLine):
-                raise ValueError("line in ep_lines must be instance of EPLine")
-
-        self.lines.extend(ep_lines)
+            self.add_line(line)
 
     def add_chain(self, ep_chain):
         """ Add energy profile line chain to canvas.
         """
         if not isinstance(ep_chain, EPChain):
             raise ValueError("Added chain must be instance of EPChain")
+
+        if ep_chain in self:
+            msg = "the chain is already in canvas, try to add the copy of it if you want."
+            raise ValueError(msg)
 
         self.chains.append(ep_chain)
         self.lines.extend(ep_chain.elementary_lines)
