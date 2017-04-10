@@ -119,6 +119,17 @@ class EPCanvasTest(unittest.TestCase):
         canvas.lines = []
         self.assertRaises(ValueError, canvas.add_lines, [l1, l1])
 
+    def test_add_horizontal_auxiliary_lines(self):
+        """ Make sure we can add all horizontal auxiliary lines to canvas.
+        """
+        canvas = EPCanvas()
+
+        l1 = ElementaryLine([0.0, 1.2, 0.6])
+        l2 = ElementaryLine([0.0, 1.0, 0.8])
+        canvas.add_lines([l1, l2])
+
+        canvas.add_horizontal_auxiliary_lines()
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
