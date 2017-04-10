@@ -63,6 +63,14 @@ class EPCanvasTest(unittest.TestCase):
         canvas.add_lines([line])
         canvas.add_vertical_auxiliary_lines(line)
 
+    def test_add_energy_annotations(self):
+        """ Make sure the energy annotations can be added correctly.
+        """
+        canvas = EPCanvas()
+        line = ElementaryLine([0.0, 1.3, 0.8])
+        canvas.add_lines([line])
+        canvas.add_energy_annotations(line)
+
     def test_add_chain(self):
         """ Test energy profile chain can be added correctly to canvas.
         """
@@ -119,7 +127,7 @@ class EPCanvasTest(unittest.TestCase):
         canvas.lines = []
         self.assertRaises(ValueError, canvas.add_lines, [l1, l1])
 
-    def test_add_horizontal_auxiliary_lines(self):
+    def test_add_all_horizontal_auxiliary_lines(self):
         """ Make sure we can add all horizontal auxiliary lines to canvas.
         """
         canvas = EPCanvas()
@@ -128,7 +136,7 @@ class EPCanvasTest(unittest.TestCase):
         l2 = ElementaryLine([0.0, 1.0, 0.8])
         canvas.add_lines([l1, l2])
 
-        canvas.add_horizontal_auxiliary_lines()
+        canvas.add_all_horizontal_auxiliary_lines()
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)

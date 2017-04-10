@@ -6,6 +6,7 @@ from collections import namedtuple
 import matplotlib.pyplot as plt
 from matplotlib import transforms
 from matplotlib.lines import Line2D
+from matplotlib.patches import Ellipse
 import numpy as np
 
 from catplot.chem_parser import RxnEquation
@@ -179,6 +180,8 @@ class EPCanvas(object):
             else:
                 self.axes.text(*param_list, fontdict={'fontsize': 13, 'color': '#1874CD'})
 
+        return self
+
     def add_horizontal_auxiliary_line(self, ep_line):
         """ Add horizontal auxiliary line to a specific energy profile line.
 
@@ -188,11 +191,6 @@ class EPCanvas(object):
         """
         eigen_pts = ep_line.eigen_points
 
-        # Energy latex strings.
-        if eigen_pts.has_barrier:
-            act_energy_latex = r"$\bf{G_{a} = " + str(ep_line.energies[1]) + r" eV}$"
-        rxn_energy_latex = r"$\bf{\Delta G = " + str(ep_line.energies[-1]) + r" eV}$"
-
         # Horizontal auxiliary line.
         x = [eigen_pts.B[0], eigen_pts.E[0]]
         y = [eigen_pts.B[1], eigen_pts.B[1]]
@@ -200,6 +198,8 @@ class EPCanvas(object):
         # Add it to axes.
         aux_line = Line2D(x, y, color="#595959", linewidth=1, linestyle="dashed")
         self.axes.add_line(aux_line)
+
+        return self
 
     def add_vertical_auxiliary_lines(self, ep_line):
         """ Add vertical auxiliary line to a specific energy profile line.
@@ -230,6 +230,57 @@ class EPCanvas(object):
                            xytext=(x, y2),
                            textcoords="data",
                            arrowprops=dict(arrowstyle="<->"))
+
+        return self
+
+    def add_energy_annotations(self, ep_line):
+        """ Add energy related annotations to a specific energy profile line.
+
+        Parameters:
+        -----------
+        ep_line: EPLine object, the energy profile line.
+        """
+        eigen_pts = ep_line.eigen_points
+
+        # Energy latex strings.
+        if eigen_pts.has_barrier:
+            act_energy_latex = r"$\bf{G_{a} = " + str(ep_line.energies[1]) + r" eV}$"
+        rxn_energy_latex = r"$\bf{\Delta G = " + str(ep_line.energies[-1]) + r" eV}$"
+
+        el = Ellipse((2, -1), 0.5, 0.5)
+
+        if eigen_pts.has_barrier:
+            # Text annotation for barrier.
+            x = eigen_pts.C[0]
+            y = (eigen_pts.B[1] + eigen_pts.C[1])/2.0
+            self.axes.annotate(act_energy_latex,
+                               xy=(x, y),
+                               xytext=(-150, 30),
+                               textcoords="offset points",
+                               size=13,
+                               color="#B22222",
+                               arrowprops=dict(arrowstyle="simple",
+                                               fc="0.6",
+                                               ec="none",
+                                               patchB=el,
+                                               connectionstyle="arc3,rad=0.2"))
+
+        # Text annotation for reaction energy.
+        x = (eigen_pts.D[0] + eigen_pts.E[0])/2.0
+        y = (eigen_pts.D[1] + eigen_pts.B[1])/2.0
+        self.axes.annotate(rxn_energy_latex,
+                           xy=(x, y),
+                           xytext=(50, 30),
+                           textcoords="offset points",
+                           size=13,
+                           color="#8E388E",
+                           arrowprops=dict(arrowstyle="simple",
+                                           fc="0.6",
+                                           ec="none",
+                                           patchB=el,
+                                           connectionstyle="arc3,rad=0.2"))
+
+        return self
 
     def draw(self):
         """ Draw all lines to canvas.
