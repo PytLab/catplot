@@ -111,3 +111,6 @@ DOS*
 # vim temp files.
 *.swp
 
+# jupyter notebook checkpoint.
+.ipynb_checkpoints
+
