@@ -4,8 +4,11 @@
 """ Module for line object in energy profile.
 """
 
+from collections import namedtuple
+
 from matplotlib.lines import Line2D
 from matplotlib import transforms
+import numpy as np
 
 import catplot.ep_components.descriptors as dc
 from catplot.interpolate import get_potential_energy_points
@@ -100,7 +103,7 @@ class ElementaryLine(EPLine):
     interp_method = dc.InterpolationMethod("interp_method")
 
     def __init__(self, energies, **kwargs):
-        self.energies = energies
+        self.energies = self._get_relative_energies(energies)
 
         # Attributes for basic line.
         self.n = kwargs.pop("n", 100)
@@ -116,4 +119,50 @@ class ElementaryLine(EPLine):
                                               peak_width=self.peak_width,
                                               kind=self.interp_method)
         super(ElementaryLine, self).__init__(x, y, **kwargs)
+
+    def _get_relative_energies(self, energies):
+        """ Translate the energy tuple to origin.
+        """
+        reference = energies[0]
+        return (np.array(energies) - reference).tolist()
+
+    @property
+    def eigen_points(self):
+        r""" Get the important points for an elementary profile line.
+
+             _ C                                C__E
+            / \                                 /D
+           /   \_ E    or without barrier      /
+        A_/    D                            A_/
+           B                                   B
+
+        Get coordinates of points A, B, C, D, E.
+        """
+        # Coordinate for point A.
+        ca = (self.x[0], self.y[0])
+
+        # B
+        cb = (ca[0] + self.hline_length, ca[1])
+
+        # D
+        cd = (cb[0] + self.peak_width, cb[1] + self.energies[-1])
+
+        # C, the peak.
+        if len(self.energies) == 3:
+            y = np.max(self.y)
+            idx = self.y.tolist().index(y)
+            x = self.x[idx]
+            cc = (x, y)
+            has_barrier = True
+        else:
+            cc = cd
+            has_barrier = False
+
+        # E
+        ce = (cd[0] + self.hline_length, cd[1])
+
+        # Define a namedtuple for eigen points here.
+        EigenPts = namedtuple("EigenPts", ["has_barrier", "A", "B", "C", "D", "E"])
+
+        return EigenPts._make([has_barrier, ca, cb, cc, cd, ce])
 

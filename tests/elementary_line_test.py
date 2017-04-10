@@ -63,6 +63,29 @@ class ElementaryLineTest(unittest.TestCase):
                  0.19999999999999996]
         self.assertListEqual(line.y.tolist(), ref_y)
 
+    def test_eigen_pts(self):
+        """ Test we can get correct eigen points for an elemnetary line.
+        """
+        line = ElementaryLine([0.0, 1.2, 0.8])
+        eigen_pts = line.eigen_points
+
+        self.assertTrue(eigen_pts.has_barrier)
+        self.assertTupleEqual(eigen_pts.A, (0.0, 0.0))
+        self.assertTupleEqual(eigen_pts.B, (1.0, 0.0))
+        self.assertTupleEqual(eigen_pts.C, (1.5151515151515151, 1.2008062953822003))
+        self.assertTupleEqual(eigen_pts.D, (2.0, 0.80000000000000004))
+        self.assertTupleEqual(eigen_pts.E, (3.0, 0.80000000000000004))
+
+        line = ElementaryLine([0.0, 0.8])
+        eigen_pts = line.eigen_points
+
+        self.assertFalse(eigen_pts.has_barrier)
+        self.assertTupleEqual(eigen_pts.A, (0.0, 0.0))
+        self.assertTupleEqual(eigen_pts.B, (1.0, 0.0))
+        self.assertTupleEqual(eigen_pts.C, (2.0, 0.80000000000000004))
+        self.assertTupleEqual(eigen_pts.D, (2.0, 0.80000000000000004))
+        self.assertTupleEqual(eigen_pts.E, (3.0, 0.80000000000000004))
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
