@@ -116,11 +116,11 @@ class ElementaryLine(EPLine):
         self.rxn_equation = kwargs.pop("rxn_equation", None)
 
         # Get x and y lists for the given energies.
-        x, y, _ = get_potential_energy_points(self.energies,
-                                              n=self.n,
-                                              hline_length=self.hline_length,
-                                              peak_width=self.peak_width,
-                                              kind=self.interp_method)
+        x, y = get_potential_energy_points(self.energies,
+                                           n=self.n,
+                                           hline_length=self.hline_length,
+                                           peak_width=self.peak_width,
+                                           kind=self.interp_method)
         super(ElementaryLine, self).__init__(x, y, **kwargs)
 
     def _get_relative_energies(self, energies):

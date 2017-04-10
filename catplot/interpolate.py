@@ -280,6 +280,6 @@ def get_potential_energy_points(energies,
 
 #    plt.plot(x, y)
 #    plt.show()
-    return x, y, x2  # x2 is the x value of barrier
+    return x, y
     # }}}
 
