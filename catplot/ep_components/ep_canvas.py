@@ -96,6 +96,14 @@ class EPCanvas(object):
 
         return self
 
+    def add_all_energy_annotations(self):
+        """ Add all energy annotations to all elementary lines in canvas.
+        """
+        for line in self.lines:
+            self.add_energy_annotations(line)
+
+        return self
+
     def _render_ep_lines(self):
         """ Render energy profile lines in canvas.
         """
