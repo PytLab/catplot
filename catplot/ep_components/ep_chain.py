@@ -37,3 +37,50 @@ class EPLineChain(object):
             trans_x, trans_y = prev_line.eigen_points.E
             line.translate(trans_x, "x").translate(trans_y, "y")
 
+    def translate(self, distance, direction="x"):
+        """ Translate all elementary lines in the chain.
+
+        Parameters:
+        -----------
+        distance: float, translation distance.
+        direction: str, translation direction ("x", "y").
+        """
+        for line in self.elementary_lines:
+            line.translate(distance, direction)
+
+        return self
+
+    def append(self, elementary_line):
+        """ Append a elementary energy profile line to chain.
+        """
+        if elementary_line in self:
+            msg = "Can't append a line in chain, try to append a copy of it."
+            raise ValueError(msg)
+
+        trans_x, trans_y = self.elementary_lines[-1].eigen_points.E
+        elementary_line.translate(trans_x, "x").translate(trans_y, "y")
+        self.elementary_lines.append(elementary_line)
+
+    @property
+    def scale_x(self):
+        """ The scale of x values.
+        """
+        max_x = self.elementary_lines[-1].eigen_points.E[0]
+        min_x = self.elementary_lines[-0].eigen_points.A[0]
+
+        return max_x - min_x
+
+    # -------------------------------------------------------------------------
+    # Magic method to change default behaviours.
+    # -------------------------------------------------------------------------
+
+    def __contains__(self, item):
+        """ Membership test operators.
+        """
+        return item in self.elementary_lines
+
+    def __iter__(self):
+        """ Make the chain iterable.
+        """
+        return iter(self.elementary_lines)
+
