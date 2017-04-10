@@ -86,7 +86,7 @@ class EPCanvas(object):
 
         return Limits._make(limits)
 
-    def add_species_annotates(self, ep_line):
+    def add_species_annotations(self, ep_line):
         """ Add annoatates to a specific elementary energy profile line.
 
         Parameters:
@@ -98,11 +98,6 @@ class EPCanvas(object):
 
         eigen_pts = ep_line.eigen_points
         states = RxnEquation(ep_line.rxn_equation).tolist()
-
-        # Energy latex strings.
-        if eigen_pts.has_barrier:
-            act_energy_latex = r"$\bf{G_{a} = " + str(ep_line.energies[1]) + r" eV}$"
-        rxn_energy_latex = r"$\bf{\Delta G = " + str(ep_line.energies[-1]) + r" eV}$"
 
         note_offset = ep_line.scale_y/40
         params = []
@@ -132,6 +127,24 @@ class EPCanvas(object):
                 self.axes.text(*param_list, fontdict={"fontsize": 13, "color": "#CD5555"})
             else:
                 self.axes.text(*param_list, fontdict={'fontsize': 13, 'color': '#1874CD'})
+
+    def add_horizontal_auxiliary_line(self, ep_line):
+        """ Add horizontal auxiliary line to a specific energy profile line.
+        """
+        eigen_pts = ep_line.eigen_points
+
+        # Energy latex strings.
+        if eigen_pts.has_barrier:
+            act_energy_latex = r"$\bf{G_{a} = " + str(ep_line.energies[1]) + r" eV}$"
+        rxn_energy_latex = r"$\bf{\Delta G = " + str(ep_line.energies[-1]) + r" eV}$"
+
+        # Horizontal auxiliary line.
+        x = [eigen_pts.B[0], eigen_pts.E[0]]
+        y = [eigen_pts.B[1], eigen_pts.B[1]]
+
+        # Add it to axes.
+        aux_line = Line2D(x, y, color="#595959", linewidth=1, linestyle="dashed")
+        self.axes.add_line(aux_line)
 
     def draw(self):
         """ Draw all lines to canvas.
