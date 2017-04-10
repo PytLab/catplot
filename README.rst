@@ -39,7 +39,7 @@ Installation
 Example
 -------
 
-See examples for more details.
+See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details.
 
 Plot an energy profile for an elementary reaction.
 
@@ -72,6 +72,6 @@ Important update log
 .. csv-table::
     :header: "Date", "Version", "Description"
 
-    "2017-04-10", "1.0.0", "A complete new CatPlot"
+    "2017-04-10", "1.0.0", "A brand new CatPlot"
     "2015-08-03", "0.0.1", "Intial Version"
 
