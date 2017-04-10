@@ -30,7 +30,7 @@ class ElementaryLineTest(unittest.TestCase):
         self.assertIsNone(line.rxn_equation)
         self.assertEqual(line.color, "#000000")
         self.assertEqual(line.shadow_color, "#595959")
-        self.assertEqual(line.shadow_depth, 7)
+        self.assertEqual(line.shadow_depth, 0)
         self.assertEqual(line.hline_length, 1.0)
         self.assertEqual(line.interp_method, "spline")
         self.assertEqual(line.n, 2)
