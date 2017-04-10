@@ -127,6 +127,24 @@ class ElementaryLine(EPLine):
         return (np.array(energies) - reference).tolist()
 
     @property
+    def scale_x(self):
+        """ The scale of x values.
+        """
+        max_x = np.max(self.x)
+        min_x = np.min(self.x)
+
+        return max_x - min_x
+
+    @property
+    def scale_y(self):
+        """ The scale of y values.
+        """
+        max_y = np.max(self.y)
+        min_y = np.min(self.y)
+
+        return  max_y - min_y
+
+    @property
     def eigen_points(self):
         r""" Get the important points for an elementary profile line.
 
