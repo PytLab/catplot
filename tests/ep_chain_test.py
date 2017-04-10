@@ -6,7 +6,8 @@
 
 import unittest
 
-from catplot.ep_components.ep_lines import EPLineChain, ElementaryLine
+from catplot.ep_components.ep_lines import ElementaryLine
+from catplot.ep_components.ep_chain import EPLineChain
 
 
 class EPLineChainTest(unittest.TestCase):
