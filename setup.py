@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from catplot import __version__ as version
 
 maintainer = 'Shao-Zheng-Jiang'
@@ -9,7 +9,7 @@ author = maintainer
 author_email = maintainer_email
 description = __doc__
 
-requires = [
+install_requires = [
     'numpy',
     'scipy',
     'matplotlib',
@@ -40,9 +40,10 @@ setup(author=author,
       description=description,
       license=license,
       long_description=long_description,
+      install_requires=install_requires,
       maintainer=maintainer,
       name=name,
-      packages=packages,
+      packages=find_packages(),
       platforms=platforms,
       url=url,
       download_url=download_url,
