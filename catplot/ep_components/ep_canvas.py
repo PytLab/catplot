@@ -11,6 +11,7 @@ import numpy as np
 from catplot.chem_parser import RxnEquation
 import catplot.ep_components.descriptors as dc
 from catplot.ep_components.ep_lines import EPLine
+from catplot.ep_components.ep_chain import EPChain
 
 
 class EPCanvas(object):
@@ -34,6 +35,9 @@ class EPCanvas(object):
         self.lines = []
         self.shadow_lines = []
 
+        # Energy profile chains.
+        self.chains = []
+
     def add_lines(self, ep_lines):
         """ Add energy profile lines to canvas.
         """
@@ -43,6 +47,15 @@ class EPCanvas(object):
                 raise ValueError("line in ep_lines must be instance of EPLine")
 
         self.lines.extend(ep_lines)
+
+    def add_chain(self, ep_chain):
+        """ Add energy profile line chain to canvas.
+        """
+        if not isinstance(ep_chain, EPChain):
+            raise ValueError("Added chain must be instance of EPChain")
+
+        self.chains.append(ep_chain)
+        self.lines.extend(ep_chain.elementary_lines)
 
     def _render_ep_lines(self):
         """ Render energy profile lines in canvas.
