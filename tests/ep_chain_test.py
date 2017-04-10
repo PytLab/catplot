@@ -25,6 +25,18 @@ class EPLineChainTest(unittest.TestCase):
         # Now the l2 should be translated.
         self.assertTupleEqual(l2.eigen_points.A, (3.0, 0.69999999999999996))
 
+    def test_translate(self):
+        """ Make sure all lines in chain can be translated correctly.
+        """
+        l1 = ElementaryLine([0.0, 1.2, 0.6])
+        l2 = ElementaryLine([0.0, 1.0, 0.8])
+        chain = EPLineChain([l1, l2])
+
+        chain.translate(1.0, "x").translate(1.0, "y")
+
+        self.assertTupleEqual(l1.eigen_points.A, (1.0, 1.0))
+        self.assertTupleEqual(l2.eigen_points.A, (4.0, 1.6000000000000001))
+
     def test_append(self):
         """ Make sure the elementary line can be appended properly.
         """
