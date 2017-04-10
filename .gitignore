@@ -114,3 +114,9 @@ DOS*
 # jupyter notebook checkpoint.
 .ipynb_checkpoints
 
+# Ignore *.zip
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+
