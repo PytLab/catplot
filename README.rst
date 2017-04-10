@@ -39,36 +39,31 @@ Installation
 Example
 -------
 
-Get points in energy profile for a reaction:
+See examples for more details.
+
+Plot an energy profile for an elementary reaction.
 
 .. code-block:: python
 
-    In [1]: from catplot import interpolate
+    >>> from catplot.ep_components.ep_canvas import EPCanvas
+    >>> from catplot.ep_components.ep_lines import ElementaryLine
 
-    In [2]: x1, y1, _ = interpolate.get_potential_energy_points([0.0, 1.3, 0.7])
+    # Create an energy profile canvas.
+    >>> canvas = EPCanvas()
 
-    In [3]: x2, y2, _ = interpolate.get_potential_energy_points([0.0, 1.0, 0.5])
+    # Create an energy profile line.
+    >>> line = ElementaryLine([0.0, 1.2, 0.8])
 
-You can plot it with visualization tools:
+    # Add line to canvas.
+    >>> canvas.add_line(line)
 
-.. code-block:: python
-
-    In [4]: import matplotlib.pyplot as plt
-
-    In [5]: plt.plot(x1, y1)
-    Out[5]: [<matplotlib.lines.Line2D at 0x1159a29e8>]
-
-    In [6]: plt.plot(x2, y2)
-    Out[6]: [<matplotlib.lines.Line2D at 0x1159c5240>]
-
-    In [7]: plt.show()
+    # Plot it.
+    >>> canvas.draw()
+    >>> canvas.figure.show()
 
 Result:
 
 .. image:: https://github.com/PytLab/catplot/blob/master/pic/interactive.png
-
-
-.. _老版README: https://github.com/PytLab/catplot/blob/master/README_old.md
 
 
 Important update log
@@ -77,7 +72,6 @@ Important update log
 .. csv-table::
     :header: "Date", "Version", "Description"
 
-    "2017-04-07", "2.0.0", "兼容Python3 & 使用quadratic和spline结合的插值算法使绘制更通用"
-    "2015-10-02", "1.0.0", "使用新的quadratic interpolation算法"
-    "2015-08-28", "0.1.1", "新增半峰宽设置"
+    "2017-04-10", "1.0.0", "A complete new CatPlot"
+    "2015-08-03", "0.0.1", "Intial Version"
 
