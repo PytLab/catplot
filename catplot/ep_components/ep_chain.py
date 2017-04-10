@@ -5,7 +5,7 @@
 """
 
 
-class EPLineChain(object):
+class EPChain(object):
     """ Chain for multiple elementary energy profile lines joined together.
     """
     def __init__(self, elementary_lines):

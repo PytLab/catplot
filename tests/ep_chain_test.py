@@ -7,20 +7,20 @@
 import unittest
 
 from catplot.ep_components.ep_lines import ElementaryLine
-from catplot.ep_components.ep_chain import EPLineChain
+from catplot.ep_components.ep_chain import EPChain
 
 
-class EPLineChainTest(unittest.TestCase):
+class EPChainTest(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = True
 
     def test_construction_and_query(self):
-        """ Test we can construct EPLineChain object correctly.
+        """ Test we can construct EPChain object correctly.
         """
         l1 = ElementaryLine([0.0, 1.2, 0.7])
         l2 = ElementaryLine([0.0, 1.0, 0.5])
-        l = EPLineChain([l1, l2])
+        l = EPChain([l1, l2])
 
         # Now the l2 should be translated.
         self.assertTupleEqual(l2.eigen_points.A, (3.0, 0.69999999999999996))
@@ -30,7 +30,7 @@ class EPLineChainTest(unittest.TestCase):
         """
         l1 = ElementaryLine([0.0, 1.2, 0.6])
         l2 = ElementaryLine([0.0, 1.0, 0.8])
-        chain = EPLineChain([l1, l2])
+        chain = EPChain([l1, l2])
 
         chain.translate(1.0, "x").translate(1.0, "y")
 
@@ -42,7 +42,7 @@ class EPLineChainTest(unittest.TestCase):
         """
         l1 = ElementaryLine([0.0, 1.2, 0.7])
         l2 = ElementaryLine([0.0, 1.0, 0.5])
-        l = EPLineChain([l1])
+        l = EPChain([l1])
 
         l.append(l2)
 
@@ -57,7 +57,7 @@ class EPLineChainTest(unittest.TestCase):
         """
         l1 = ElementaryLine([0.0, 1.2, 0.7])
         l2 = ElementaryLine([0.0, 1.0, 0.5])
-        chain = EPLineChain([l1])
+        chain = EPChain([l1])
 
         self.assertTrue(l1 in chain)
         self.assertFalse(l2 in chain)
@@ -67,12 +67,12 @@ class EPLineChainTest(unittest.TestCase):
         """
         l1 = ElementaryLine([0.0, 1.2, 0.7])
         l2 = ElementaryLine([0.0, 1.0, 0.5])
-        chain = EPLineChain([l1, l2])
+        chain = EPChain([l1, l2])
 
         for l in chain:
             self.assertTrue(isinstance(l, ElementaryLine))
 
 if "__main__" == __name__: 
-    suite = unittest.TestLoader().loadTestsFromTestCase(EPLineChainTest)
+    suite = unittest.TestLoader().loadTestsFromTestCase(EPChainTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
 
