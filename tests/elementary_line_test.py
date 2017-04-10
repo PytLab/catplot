@@ -86,6 +86,13 @@ class ElementaryLineTest(unittest.TestCase):
         self.assertTupleEqual(eigen_pts.D, (2.0, 0.80000000000000004))
         self.assertTupleEqual(eigen_pts.E, (3.0, 0.80000000000000004))
 
+    def test_scales(self):
+        """ Test scales for x and y values.
+        """
+        line = ElementaryLine([0.0, 1.2, 0.6])
+        self.assertEqual(line.scale_x, 3.0)
+        self.assertEqual(line.scale_y, 1.2003292394429861)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
