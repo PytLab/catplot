@@ -212,3 +212,16 @@ class EPCanvas(object):
         self.axes.set_xlim(limits.min_x, limits.max_x)
         self.axes.set_ylim(limits.min_y, limits.max_y)
 
+    # -------------------------------------------------------------------------
+    # Magic method to change the default behaviours.
+    # -------------------------------------------------------------------------
+
+    def __contains__(self, item):
+        """ Membership test operators.
+        """
+        if isinstance(item, ElementaryLine):
+            return item in self.lines
+
+        if isinstance(item, EPChain):
+            return item in self.chains
+
