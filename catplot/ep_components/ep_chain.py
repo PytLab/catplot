@@ -4,6 +4,8 @@
 """ Module for elementary energy profile line chain.
 """
 
+import csv
+
 import numpy as np
 
 
