@@ -71,6 +71,14 @@ class EPLine(object):
                       linewidth=self.line_width,
                       color=self.color)
 
+    def export(self, filename):
+        """ Export line data to file.
+        """
+        with open(filename, "w") as f:
+            writer = csv.writer(f)
+            for data in zip(self.x, self.y):
+                writer.writerow(data)
+
 
 class ElementaryLine(EPLine):
     """ Energy profile line for an elementary reaction.
@@ -187,12 +195,4 @@ class ElementaryLine(EPLine):
         EigenPts = namedtuple("EigenPts", ["has_barrier", "A", "B", "C", "D", "E"])
 
         return EigenPts._make([has_barrier, ca, cb, cc, cd, ce])
-
-    def export(self, filename):
-        """ Export line data to file.
-        """
-        with open(filename, "w") as f:
-            writer = csv.writer(f)
-            for data in zip(self.x, self.y):
-                writer.writerow(data)
 
