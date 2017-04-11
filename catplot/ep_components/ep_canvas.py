@@ -309,6 +309,11 @@ class EPCanvas(object):
         self.axes.set_xlim(limits.min_x, limits.max_x)
         self.axes.set_ylim(limits.min_y, limits.max_y)
 
+    def clear(self):
+        """ Clear the canvas.
+        """
+        self.axes.clear()
+
     # -------------------------------------------------------------------------
     # Magic method to change the default behaviours.
     # -------------------------------------------------------------------------
