@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib import transforms
 from matplotlib.lines import Line2D
 from matplotlib.patches import Ellipse
+from matplotlib.spines import Spine
 import numpy as np
 
 from catplot.chem_parser import RxnEquation
@@ -48,12 +49,17 @@ class EPCanvas(object):
 
         # Create a figure.
         self.figure = plt.figure(figsize=self.figsize,
-                                 dpi=self.dpi,
-                                 facecolor=self.facecolor,
-                                 edgecolor=self.edgecolor)
+                                 dpi=self.dpi)
 
         # Add an axes to figure.
-        self.axes = self.figure.add_subplot(111)
+        # NOTE: here we use the canvas facecolor as the axes facecolor.
+        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
+
+        # Change the spine color of axes.
+        if self.edgecolor:
+            for child in self.axes.get_children():
+                if isinstance(child, Spine):
+                    child.set_color(self.edgecolor)
 
         # Energy profile lines.
         self.lines = []
