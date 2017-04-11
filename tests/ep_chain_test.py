@@ -72,6 +72,21 @@ class EPChainTest(unittest.TestCase):
         for l in chain:
             self.assertTrue(isinstance(l, ElementaryLine))
 
+    def test_x_y_data(self):
+        """ Test we can get correct data points.
+        """
+        l1 = ElementaryLine([0.0, 1.2, 0.5], n=2)
+        l2 = ElementaryLine([0.0, 0.8], n=2)
+        chain = EPChain([l1, l2])
+
+        ref_x = [0.0, 1.0, 1.0, 2.0, 2.0, 3.0, 3.0, 4.0, 4.0, 5.0, 5.0, 6.0]
+        ret_x = chain.x.tolist()
+        self.assertListEqual(ref_x, ret_x)
+
+        ref_y = [0.0, 0.0, 1.7213277274276194e-18, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.3, 1.3, 1.3]
+        ret_y = chain.y.tolist()
+        self.assertListEqual(ref_y, ret_y)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPChainTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
