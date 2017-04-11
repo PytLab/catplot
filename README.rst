@@ -24,7 +24,7 @@ catplot
 
 Introduction
 ------------
-CatPlot is a Python library for plotting energy profile using interpolation algrithm.
+CatPlot is a Python library for plotting energy profile using interpolation algorithm.
 
 Installation
 ------------
@@ -39,7 +39,7 @@ Installation
 Example
 -------
 
-See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details.
+See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
 
 Plot an energy profile for an elementary reaction.
 
