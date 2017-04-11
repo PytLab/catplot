@@ -24,13 +24,35 @@ class EPCanvas(object):
     margin_ratio: float, optional, default is 0.1
         control the white space between energy profile line and axes.
 
+    figsize : tuple of integers, optional, default: None
+        width, height in inches. If not provided, defaults to rc figure.figsize.
+
+    dpi : integer, optional, default: None
+        resolution of the figure. If not provided, defaults to rc figure.dpi.
+
+    facecolor :
+        the background color. If not provided, defaults to rc figure.facecolor
+
+    edgecolor :
+        the border color. If not provided, defaults to rc figure.edgecolor
+
     """
     margin_ratio = dc.MarginRatio("margin_ratio")
 
     def __init__(self, **kwargs):
         self.margin_ratio = kwargs.pop("margin_ratio", 0.1)
+        self.figsize = kwargs.pop("figsize", None)
+        self.dpi = kwargs.pop("dpi", None)
+        self.facecolor = kwargs.pop("facecolor", None)
+        self.edgecolor = kwargs.pop("edgecolor", None)
 
-        self.figure = plt.figure()
+        # Create a figure.
+        self.figure = plt.figure(figsize=self.figsize,
+                                 dpi=self.dpi,
+                                 facecolor=self.facecolor,
+                                 edgecolor=self.edgecolor)
+
+        # Add an axes to figure.
         self.axes = self.figure.add_subplot(111)
 
         # Energy profile lines.

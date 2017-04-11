@@ -22,6 +22,10 @@ class EPCanvasTest(unittest.TestCase):
         canvas = EPCanvas(margin_ratio=0.2)
 
         self.assertEqual(canvas.margin_ratio, 0.2)
+        self.assertIsNone(canvas.figsize)
+        self.assertIsNone(canvas.dpi)
+        self.assertIsNone(canvas.facecolor)
+        self.assertIsNone(canvas.edgecolor)
         self.assertListEqual(canvas.lines, [])
         self.assertListEqual(canvas.shadow_lines, [])
         self.assertTrue(canvas.figure)
