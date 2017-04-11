@@ -14,7 +14,7 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/pypi-v1.0.2-blue.svg
+.. image:: https://img.shields.io/badge/pypi-v1.0.3-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
 
