@@ -337,10 +337,22 @@ class EPCanvas(object):
         self.axes.set_xlim(limits.min_x, limits.max_x)
         self.axes.set_ylim(limits.min_y, limits.max_y)
 
+    def redraw(self):
+        """ Clear current content in canvas and draw all lines again.
+        """
+        self.clear()
+        self.draw()
+
     def clear(self):
-        """ Clear the canvas.
+        """ Clear the canvas (only the lines in canvas.axes).
         """
         self.axes.clear()
+
+    def deep_clear(self):
+        """ Clear all lines in canvas and canvas.axes
+        """
+        self.clear()
+        self.lines = []
 
     # -------------------------------------------------------------------------
     # Magic method to change the default behaviours.
