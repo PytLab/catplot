@@ -170,7 +170,7 @@ class EPCanvas(object):
         limits = [max_x + self.margin_ratio*scale_x,
                   min_x - self.margin_ratio*scale_x,
                   max_y + self.margin_ratio*scale_y,
-                  min_x - self.margin_ratio*scale_y]
+                  min_y - self.margin_ratio*scale_y]
 
         return Limits._make(limits)
 
