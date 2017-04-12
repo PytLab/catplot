@@ -321,6 +321,9 @@ class EPCanvas(object):
     def draw(self):
         """ Draw all lines to canvas.
         """
+        if not self.lines:
+            raise AttributeError("Can't draw an empty canvas")
+
         # Draw energy profile lines.
         for line in self.lines:
             self.axes.add_line(line.line2d())
