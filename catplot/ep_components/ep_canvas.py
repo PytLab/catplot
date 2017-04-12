@@ -11,10 +11,10 @@ from matplotlib.spines import Spine
 import numpy as np
 
 from catplot.chem_parser import RxnEquation
-import catplot.ep_components.descriptors as dc
 from catplot.ep_components.ep_lines import EPLine
 from catplot.ep_components.ep_chain import EPChain
 from catplot.ep_components.ep_lines import ElementaryLine
+import catplot.ep_components.descriptors as dc
 
 
 class EPCanvas(object):
@@ -324,16 +324,16 @@ class EPCanvas(object):
         if not self.lines:
             raise AttributeError("Can't draw an empty canvas")
 
-        # Draw energy profile lines.
-        for line in self.lines:
-            self.axes.add_line(line.line2d())
-
         # Render energy profile lines.
         self._render_ep_lines()
 
         # Draw shadows.
         for shadow_line in self.shadow_lines:
             self.axes.add_line(shadow_line)
+
+        # Draw energy profile lines.
+        for line in self.lines:
+            self.axes.add_line(line.line2d())
 
         # Set axes limits.
         limits = self._get_data_limits()
