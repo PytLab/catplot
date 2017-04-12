@@ -25,10 +25,13 @@ class EPLine(object):
 
     line_width: float, optional
         line width, default is 3.
+
     color: str, optional,
         color code of the line, default is #000000 (black).
+
     shadow_color: str, optional
         color code of the shadow lines, default is #595959.
+
     shadow_depth: int, optional
         shadow depth of the line, default is 0, no shadow.
     """
@@ -90,21 +93,29 @@ class ElementaryLine(EPLine):
 
     n: int, optional
         the point number in each state, default is 100.
+
     hline_length: float, optioanl
         the length of the horizontal line for the IS and FS.
+
     peak_width: float, optional
         the width of the peak in energy profile, default is 1.0.
+
     interp_method: str, optional
         the type of interpolation algorithm("spline", "quadratic")
         default is "spline".
+
     rxn_equation: str, optional
         elementary reaction equation, default is None.
+
     line_width: float, optional
         line width, default is 3.
+
     color: str, optional,
         color code of the line, default is #000000 (black).
+
     shadow_color: str, optional
         color code of the shadow lines, default is #595959.
+
     shadow_depth: int, optional
         shadow depth of the line, default is 0, no shadow.
     """
@@ -195,4 +206,36 @@ class ElementaryLine(EPLine):
         EigenPts = namedtuple("EigenPts", ["has_barrier", "A", "B", "C", "D", "E"])
 
         return EigenPts._make([has_barrier, ca, cb, cc, cd, ce])
+
+    def translate_state(self, state, distance):
+        """ Translate a specific state in an elementary energy profile.
+
+        state: str, state name ("IS", "TS", "FS")
+
+        distance: float, translation distance along Y axis.
+        """
+        try:
+            idx = ["IS", "TS", "FS"].index(state)
+        except ValueError:
+            raise ValueError("Invalid state name \"{}\"".format(state))
+
+        # Get a new energy list.
+        self.energies[idx] += distance
+
+        # Create a new line.
+        line = ElementaryLine(self.energies)
+
+        # Original start point.
+        x, y = self.eigen_points.A
+
+        # Coincide the start points for the original and new.
+        line.translate(y, "y")
+
+        # If the translated state is IS, extral operation must be done.
+        if idx == 0:
+            line.translate(distance, "y")
+
+        # Update the original line data.
+        self.x = line.x
+        self.y = line.y
 

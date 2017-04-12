@@ -93,6 +93,28 @@ class ElementaryLineTest(unittest.TestCase):
         self.assertEqual(line.scale_x, 3.0)
         self.assertEqual(line.scale_y, 1.2003292394429861)
 
+    def test_translate_state(self):
+        """ Test we can translate specific state correctly.
+        """
+        line = ElementaryLine([0.0, 1.3, 0.8])
+
+        # Translate IS.
+        line.translate_state("IS", -0.2)
+        self.assertEqual(line.y[0], -0.2)
+
+        # Translate TS.
+        ref_y = line.eigen_points.C[1] + 0.1
+        line.translate_state("TS", 0.1)
+        self.assertAlmostEqual(ref_y, line.eigen_points.C[1], places=2)
+
+        # Translate FS.
+        ref_y = line.eigen_points.E[1] - 0.2
+        line.translate_state("FS", -0.2)
+        self.assertAlmostEqual(ref_y, line.eigen_points.E[1], places=2)
+
+        # Check invalid state name.
+        self.assertRaises(ValueError, line.translate_state, "asd", 0.3)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
