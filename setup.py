@@ -7,7 +7,7 @@ maintainer = 'Shao-Zheng-Jiang'
 maintainer_email = 'shaozhengjiang@gmail.com'
 author = maintainer
 author_email = maintainer_email
-description = __doc__
+description = "A Python Library for Energy Profile Plotting"
 
 install_requires = [
     'numpy',
