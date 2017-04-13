@@ -39,3 +39,27 @@
 
 .. image:: output_7_0.png
 
+
+再来试试把坐标删掉
+------------------
+
+.. code:: ipython3
+
+    canvas3 = EPCanvas(x_ticks=[], y_ticks=[])
+
+
+
+.. image:: output_9_0.png
+
+
+自定义坐标
+----------
+
+.. code:: ipython3
+
+    canvas4 = EPCanvas(x_ticks=[0.0, 1.0, 2.0, 3.0], y_ticks=[0.2, 0.4, 0.6, 0.8, 1.0])
+
+
+
+.. image:: output_11_0.png
+
