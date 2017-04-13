@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 from matplotlib import transforms
 import numpy as np
 
-import catplot.ep_components.descriptors as dc
+import catplot.descriptors as dc
 from catplot.interpolate import get_potential_energy_points
 
 

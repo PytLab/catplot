@@ -10,14 +10,14 @@ from matplotlib.patches import Ellipse
 from matplotlib.spines import Spine
 import numpy as np
 
+from catplot.canvas import Canvas
 from catplot.chem_parser import RxnEquation
 from catplot.ep_components.ep_lines import EPLine
 from catplot.ep_components.ep_chain import EPChain
 from catplot.ep_components.ep_lines import ElementaryLine
-import catplot.ep_components.descriptors as dc
 
 
-class EPCanvas(object):
+class EPCanvas(Canvas):
     """ Energy profile canvas.
 
     Parameters:
@@ -44,36 +44,8 @@ class EPCanvas(object):
         set the y ticks with a list of ticks.
 
     """
-    margin_ratio = dc.MarginRatio("margin_ratio")
-
     def __init__(self, **kwargs):
-        self.margin_ratio = kwargs.pop("margin_ratio", 0.1)
-        self.figsize = kwargs.pop("figsize", None)
-        self.dpi = kwargs.pop("dpi", None)
-        self.facecolor = kwargs.pop("facecolor", None)
-        self.edgecolor = kwargs.pop("edgecolor", None)
-        self.x_ticks = kwargs.pop("x_ticks", None)
-        self.y_ticks = kwargs.pop("y_ticks", None)
-
-        # Create a figure.
-        self.figure = plt.figure(figsize=self.figsize,
-                                 dpi=self.dpi)
-
-        # Add an axes to figure.
-        # NOTE: here we use the canvas facecolor as the axes facecolor.
-        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
-
-        # Change the spine color of axes.
-        if self.edgecolor:
-            for child in self.axes.get_children():
-                if isinstance(child, Spine):
-                    child.set_color(self.edgecolor)
-
-        # Set axe ticks.
-        if self.x_ticks is not None:
-            self.axes.set_xticks(self.x_ticks)
-        if self.y_ticks is not None:
-            self.axes.set_yticks(self.y_ticks)
+        super(EPCanvas, self).__init__(**kwargs)
 
         # Energy profile lines.
         self.lines = []
