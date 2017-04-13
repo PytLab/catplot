@@ -356,6 +356,7 @@ class EPCanvas(object):
         """
         self.clear()
         self.lines = []
+        self.chains = []
 
     # -------------------------------------------------------------------------
     # Magic method to change the default behaviours.
