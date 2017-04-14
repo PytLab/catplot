@@ -9,12 +9,14 @@ import unittest
 from ep_chain_test import EPChainTest
 from ep_canvas_test import EPCanvasTest
 from elementary_line_test import ElementaryLineTest
+from node_2d_test import Node2DTest
 
 def suite():
     test_suite = unittest.TestSuite([
         unittest.TestLoader().loadTestsFromTestCase(EPChainTest),
         unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest),
         unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest),
+        unittest.TestLoader().loadTestsFromTestCase(Node2DTest),
     ])
 
     return test_suite
