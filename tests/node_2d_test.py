@@ -29,6 +29,17 @@ class Node2DTest(unittest.TestCase):
         # Exception is expected when invalid cooridnate passed in.
         self.assertRaises(ValueError, Node2D, [1.0, 1.0, 0.0])
 
+    def test_move(self):
+        """ Make sure we can move the node correctly.
+        """
+        node = Node2D([1.0, 1.0], color="#595959", line_width=1)
+        node.move([1.0, 1.0])
+        self.assertListEqual(node.coordinate.tolist(), [2.0, 2.0])
+
+        # Check chain operation.
+        node.move([-1.0, -1.0,]).move([-1.0, -1.0])
+        self.assertListEqual(node.coordinate.tolist(), [0.0, 0.0])
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Node2DTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 

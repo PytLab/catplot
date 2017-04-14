@@ -34,6 +34,8 @@ class GridNode(object):
 
     """
 
+    # NOTE: The grid may contains a huge number of nodes,
+    # so we define __slots__ for saving memery.
     __slots__ = {"coordinate", "color", "size", "style", "alpha",
                  "line_width", "edgecolor"}
 
@@ -77,4 +79,19 @@ class Node2D(GridNode):
 
     def __init__(self, coordinate, **kwargs):
         super(Node2D, self).__init__(coordinate, **kwargs)
+
+    def move(self, move_vector):
+        """ Move the node on grid along the move vector.
+
+        Parameters:
+        -----------
+        move_vector: list of float, the vector along which the node moves.
+        """
+        if not isinstance(move_vector, np.ndarray):
+            move_vector = np.array(move_vector)
+        # Move it.
+        self.coordinate += move_vector
+
+        # For chain operations.
+        return self
 
