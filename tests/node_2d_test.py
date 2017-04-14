@@ -6,10 +6,10 @@
 
 import unittest
 
-from catplot.grid_components.grid_node import Grid2DNode
+from catplot.grid_components.nodes import Node2D
 
 
-class Grid2DNodeTest(unittest.TestCase):
+class Node2DTest(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = True
@@ -17,7 +17,7 @@ class Grid2DNodeTest(unittest.TestCase):
     def test_construction_and_query(self):
         """ Test we can construct Grid2DNode correctly.
         """
-        node = Grid2DNode([1.0, 1.0], color="#595959", line_width=1)
+        node = Node2D([1.0, 1.0], color="#595959", line_width=1)
 
         self.assertListEqual(node.coordinate.tolist(), [1.0, 1.0])
         self.assertEqual(node.color, "#595959")
@@ -27,9 +27,9 @@ class Grid2DNodeTest(unittest.TestCase):
         self.assertEqual(node.line_width, 1)
 
         # Exception is expected when invalid cooridnate passed in.
-        self.assertRaises(ValueError, Grid2DNode, [1.0, 1.0, 0.0])
+        self.assertRaises(ValueError, Node2D, [1.0, 1.0, 0.0])
 
 if "__main__" == __name__: 
-    suite = unittest.TestLoader().loadTestsFromTestCase(Grid2DNodeTest)
+    suite = unittest.TestLoader().loadTestsFromTestCase(Node2DTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
 

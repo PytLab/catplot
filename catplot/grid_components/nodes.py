@@ -49,8 +49,8 @@ class GridNode(object):
         self.edgecolor = kwargs.pop("edgecolor", self.color)
 
 
-class Grid2DNode(GridNode):
-    """ Node in grid.
+class Node2D(GridNode):
+    """ Node in 2D grid.
 
     Parameters:
     -----------
@@ -76,5 +76,5 @@ class Grid2DNode(GridNode):
     coordinate = dc.Coordinate2D("coordinate")
 
     def __init__(self, coordinate, **kwargs):
-        super(Grid2DNode, self).__init__(coordinate, **kwargs)
+        super(Node2D, self).__init__(coordinate, **kwargs)
 
