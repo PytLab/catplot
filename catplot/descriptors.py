@@ -85,3 +85,14 @@ class MarginRatio(DescriptorBase):
         if value <= 0.0 or value > 1.0:
             raise ValueError("margin ratio must be in (0, 1]")
 
+
+class Coordinate2D(DescriptorBase):
+    """ Descriptor for node in 2D grid.
+    """
+    def __init__(self, name):
+        super(Coordinate2D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if len(value) != 2 or not all([isinstance(entry, float) for entry in value]):
+            raise ValueError("Invalid 2D coordinate: {}".format(value))
+
