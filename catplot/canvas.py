@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from collections import namedtuple
 
 import matplotlib.pyplot as plt
 from matplotlib.spines import Spine
@@ -79,4 +80,26 @@ class Canvas(object):
 
         # Add handler to logger.
         self._logger.addHandler(handler)
+
+    def _limits(self, max_x, min_x, max_y, min_y):
+        """ Private helper function to get data limits.
+
+        Parameters:
+        -----------
+        max_x: float, the maximum of x values.
+        min_x: float, the minimum of x values.
+        max_y: float, the maximum of y values.
+        min_y: float, the minimum of y values.
+        """
+        scale_x = max_x - min_x
+        scale_y = max_y - min_y
+
+        # Define a namedtuple to be returned.
+        Limits = namedtuple("Limits", ["max_x", "min_x", "max_y", "min_y"])
+        limits = [max_x + self.margin_ratio*scale_x,
+                  min_x - self.margin_ratio*scale_x,
+                  max_y + self.margin_ratio*scale_y,
+                  min_y - self.margin_ratio*scale_y]
+
+        return Limits._make(limits)
 
