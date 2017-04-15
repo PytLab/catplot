@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
+
 import matplotlib.pyplot as plt
 from matplotlib.spines import Spine
 
@@ -64,4 +66,17 @@ class Canvas(object):
             self.axes.set_xticks(self.x_ticks)
         if self.y_ticks is not None:
             self.axes.set_yticks(self.y_ticks)
+
+        # Set logger.
+        self._logger = logging.getLogger(self.__class__.__name__)
+        self._logger.setLevel(logging.INFO)
+
+        # Set console handler.
+        formatter = logging.Formatter("%(name)s   %(levelname)-8s %(message)s")
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(formatter)
+
+        # Add handler to logger.
+        self._logger.addHandler(handler)
 
