@@ -145,20 +145,11 @@ class EPCanvas(Canvas):
 
         max_x = np.max(all_x)
         min_x = np.min(all_x)
-        scale_x = max_x - min_x
 
         max_y = np.max(all_y)
         min_y = np.min(all_y)
-        scale_y = max_y - min_y
 
-        # Define a namedtuple to be returned.
-        Limits = namedtuple("Limits", ["max_x", "min_x", "max_y", "min_y"])
-        limits = [max_x + self.margin_ratio*scale_x,
-                  min_x - self.margin_ratio*scale_x,
-                  max_y + self.margin_ratio*scale_y,
-                  min_y - self.margin_ratio*scale_y]
-
-        return Limits._make(limits)
+        return self._limits(max_x, min_x, max_y, min_y)
 
     def add_species_annotations(self, ep_line):
         """ Add annoatates to a specific elementary energy profile line.
