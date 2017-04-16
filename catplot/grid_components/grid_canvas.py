@@ -17,6 +17,9 @@ class Grid2DCanvas(Canvas):
     def __init__(self, **kwargs):
         super(Grid2DCanvas, self).__init__(**kwargs)
 
+        # Equalize the scale of x and y axis.
+        self.axes.set_aspect("equal")
+
         # Attributes for 2D grid canvas.
         self.nodes = []
         self.edges = []
@@ -32,6 +35,12 @@ class Grid2DCanvas(Canvas):
             raise ValueError("node must be a Node2D object")
 
         self.nodes.append(node)
+
+    def add_nodes(self, nodes):
+        """ Add multiple nodes to canvas.
+        """
+        for node in nodes:
+            self.add_node(node)
 
     @property
     def node_coordinates(self):
@@ -61,8 +70,8 @@ class Grid2DCanvas(Canvas):
         max_y, min_y = np.max(y), np.min(y)
 
         # Make axis x and y have same scales.
-        max_x = max_y = max(max_x, max_y)
-        min_x = min_y = min(min_x, min_y)
+#        max_x = max_y = max(max_x, max_y)
+#        min_x = min_y = min(min_x, min_y)
 
         return self._limits(max_x, min_x, max_y, min_y)
 
