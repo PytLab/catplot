@@ -21,25 +21,6 @@ class GridEdge(object):
         self.color = kwargs.pop("color", "#000000")
         self.line_width = kwargs.pop("line_width", 1)
 
-    @property
-    def x(self):
-        """ x values for edge data.
-        """
-        return np.linspace(self.node1.coordinate[0],
-                           self.node2.coordinate[0],
-                           num=self.n+2)
-
-    @property
-    def y(self):
-        """ y values for edge data.
-        """
-        # Interpolate linearly n values between two nodes.
-        x = [self.node1.coordinate[0], self.node2.coordinate[0]]
-        y = [self.node1.coordinate[1], self.node2.coordinate[1]]
-        interp_func = interp1d(x, y, kind="linear")
-
-        return np.array([interp_func(x) for x in self.x])
-
 class Edge2D(GridEdge):
     """ Edge in 2D grid between 2D nodes.
 
@@ -61,6 +42,25 @@ class Edge2D(GridEdge):
                 raise ValueError("node must be a Node2D object")
 
         super(Edge2D, self).__init__(node1, node2, **kwargs)
+
+    @property
+    def x(self):
+        """ x values for edge data.
+        """
+        return np.linspace(self.node1.coordinate[0],
+                           self.node2.coordinate[0],
+                           num=self.n+2)
+
+    @property
+    def y(self):
+        """ y values for edge data.
+        """
+        # Interpolate linearly n values between two nodes.
+        x = [self.node1.coordinate[0], self.node2.coordinate[0]]
+        y = [self.node1.coordinate[1], self.node2.coordinate[1]]
+        interp_func = interp1d(x, y, kind="linear")
+
+        return np.array([interp_func(x) for x in self.x])
 
     def line2d(self):
         """ Get the corresponding Line2D object for the edge.
