@@ -67,3 +67,10 @@ class Edge2D(GridEdge):
         """
         return Line2D(self.x, self.y, linewidth=self.line_width, color=self.color)
 
+    def move(self, move_vector):
+        """ Move the edge to a new position.
+        """
+        # Just move the endpoints.
+        self.node1.move(move_vector)
+        self.node2.move(move_vector)
+
