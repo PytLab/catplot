@@ -40,6 +40,15 @@ class Node2DTest(unittest.TestCase):
         node.move([-1.0, -1.0,]).move([-1.0, -1.0])
         self.assertListEqual(node.coordinate.tolist(), [0.0, 0.0])
 
+    def test_clone(self):
+        """ Make sure we can clone a node correctly.
+        """
+        node = Node2D([0.5, 0.5], color="#595959", line_width=1)
+        node_clone = node.clone(relative_position=[0.5, 0.5])
+
+        self.assertListEqual(node_clone.coordinate.tolist(), [1.0, 1.0])
+        self.assertFalse(node is node_clone)
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Node2DTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 

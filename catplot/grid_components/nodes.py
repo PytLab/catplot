@@ -95,3 +95,35 @@ class Node2D(GridNode):
         # For chain operations.
         return self
 
+    def clone(self, relative_position=None):
+        """ Clone a new 2D node to a specific position.
+
+        Parameters:
+        -----------
+        relative_position: list of two float, optional.
+            the position of new cloned node relative to the original node,
+            default is [0.0, 0.0].
+        """
+        if relative_position is not None:
+            # Check the validity.
+            if (len(relative_position) != 2 or
+                    not all([isinstance(i, float) for i in relative_position])):
+                msg = "relative position must be a sequence with two float number"
+                raise ValueError(msg)
+        else:
+            relative_position = [0.0, 0.0]
+
+        # Create a new node.
+        node = Node2D(self.coordinate,
+                      color=self.color,
+                      size=self.size,
+                      style=self.style,
+                      alpha=self.alpha,
+                      line_width=self.line_width,
+                      edgecolor=self.edgecolor)
+
+        # Move the node to predefined postion.
+        node.move(relative_position)
+
+        return node
+
