@@ -52,6 +52,18 @@ class Grid2DCanvasTest(unittest.TestCase):
         ref_coordinates = [[0.5, 0.5], [1.0, 1.0]]
         self.assertListEqual(ref_coordinates, canvas.node_coordinates.tolist())
 
+    def test_draw(self):
+        """ Make sure we can draw in grid canvas without exception raised.
+        """
+        canvas = Grid2DCanvas()
+
+        n1 = Node2D([0.5, 0.5])
+        n2 = Node2D([1.0, 1.0])
+        canvas.add_node(n1)
+        canvas.add_node(n2)
+
+        canvas.draw()
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Grid2DCanvasTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
