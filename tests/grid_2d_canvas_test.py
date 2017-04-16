@@ -41,6 +41,13 @@ class Grid2DCanvasTest(unittest.TestCase):
         for node in canvas.nodes:
             self.assertTrue(isinstance(node, Node2D))
 
+        # Check colors.
+        for c in canvas.node_edgecolors:
+            self.assertEqual(c, "#000000")
+
+        for c in canvas.node_colors:
+            self.assertEqual(c, "#000000")
+
         # Check cooridnates.
         ref_coordinates = [[0.5, 0.5], [1.0, 1.0]]
         self.assertListEqual(ref_coordinates, canvas.node_coordinates.tolist())
