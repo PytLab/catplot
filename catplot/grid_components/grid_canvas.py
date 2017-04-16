@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 from catplot.canvas import Canvas
 from catplot.grid_components.nodes import Node2D
+from catplot.grid_components.edges import Edge2D
 
 
 class Grid2DCanvas(Canvas):
@@ -41,6 +42,20 @@ class Grid2DCanvas(Canvas):
         """
         for node in nodes:
             self.add_node(node)
+
+    def add_edge(self, edge):
+        """ Add a edge to grid canvas.
+        """
+        if not isinstance(edge, Edge2D):
+            raise ValueError("edge must be an Edge2D object")
+
+        self.edges.append(edge)
+
+    def add_edges(self, edges):
+        """ Add multiple edges to canvas.
+        """
+        for edge in self.edges:
+            self.add_edge(edges)
 
     @property
     def node_coordinates(self):
@@ -86,6 +101,10 @@ class Grid2DCanvas(Canvas):
         self.collection.set_offsets(self.node_coordinates)
         self.collection.set_facecolor(self.node_colors)
         self.collection.set_edgecolor(self.node_edgecolors)
+
+        # Add edges to canvas.
+        for edge in self.edges:
+            self.axes.add_line(edge.line2d())
 
         # Set axes limits.
         limits = self._get_data_limits()
