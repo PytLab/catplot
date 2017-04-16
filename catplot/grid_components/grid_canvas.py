@@ -60,6 +60,10 @@ class Grid2DCanvas(Canvas):
         y = self.node_coordinates[:, 1]
         max_y, min_y = np.max(y), np.min(y)
 
+        # Make axis x and y have same scales.
+        max_x = max_y = max(max_x, max_y)
+        min_x = min_y = min(min_x, min_y)
+
         return self._limits(max_x, min_x, max_y, min_y)
 
     def draw(self):
