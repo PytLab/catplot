@@ -4,6 +4,8 @@
 """ Module for edge between nodes.
 """
 
+from copy import deepcopy
+
 import numpy as np
 from scipy.interpolate import interp1d
 from matplotlib.lines import Line2D
@@ -80,4 +82,29 @@ class Edge2D(GridEdge):
 
         return self
 
+    def clone(self, relative_position=None):
+        """ Clone a new 2D edge to a specific position.
+
+        Parameters:
+        -----------
+        relative_position: list of two float, optional.
+            the position of new cloned node relative to the original node,
+            default is [0.0, 0.0].
+        """
+        if relative_position is not None:
+            # Check the validity.
+            if (len(relative_position) != 2 or
+                    not all([isinstance(i, float) for i in relative_position])):
+                msg = "relative position must be a sequence with two float number"
+                raise ValueError(msg)
+        else:
+            relative_position = [0.0, 0.0]
+
+        # Clone a new edge.
+        edge = deepcopy(self)
+
+        # Move the edge to a new position.
+        edge.move(relative_position)
+
+        return edge
 
