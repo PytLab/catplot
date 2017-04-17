@@ -24,7 +24,6 @@ catplot
 
 Introduction
 ------------
-CatPlot is a Python library for plotting energy profile using interpolation algorithm.
 
 Installation
 ------------
@@ -38,6 +37,7 @@ Installation
 
 Energy Profile Plotting
 -----------------------
+**CatPlot** can plot energy profile using interpolation algorithm.
 
 See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
 
@@ -69,7 +69,7 @@ Result:
 2D Grid Plotting
 ----------------
 
-You can use CatPlot to plot abstract lattice grid, see  `examples <https://github.com/PytLab/catplot/tree/master/examples/grid_2d_examples/expand_supercell.ipynb>`_ for details.
+You can use **CatPlot** to plot abstract lattice grid, see  `example <https://github.com/PytLab/catplot/tree/master/examples/grid_2d_examples/expand_supercell.ipynb>`_ for details.
 
 Result:
 
