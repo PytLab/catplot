@@ -15,7 +15,7 @@ class GridEdge(object):
     """ Abstract base class for other edge.
     """
     def __init__(self, node1, node2, **kwargs):
-        self.node1, self.node2 = node1, node2
+        self.start, self.end = node1.coordinate, node2.coordinate
 
         self.n = kwargs.pop("n", 0)
         self.color = kwargs.pop("color", "#000000")
@@ -35,7 +35,7 @@ class Edge2D(GridEdge):
 
     color: str, optional, color for the edge, default is "#000000" (black).
 
-    line_width: int, optional, edge width, default is 1.
+    width: int, optional, edge width, default is 1.
     """
     def __init__(self, node1, node2, **kwargs):
         for node in [node1, node2]:
@@ -48,8 +48,8 @@ class Edge2D(GridEdge):
     def x(self):
         """ x values for edge data.
         """
-        return np.linspace(self.node1.coordinate[0],
-                           self.node2.coordinate[0],
+        return np.linspace(self.start[0],
+                           self.end[0],
                            num=self.n+2)
 
     @property
@@ -57,8 +57,8 @@ class Edge2D(GridEdge):
         """ y values for edge data.
         """
         # Interpolate linearly n values between two nodes.
-        x = [self.node1.coordinate[0], self.node2.coordinate[0]]
-        y = [self.node1.coordinate[1], self.node2.coordinate[1]]
+        x = [self.start[0], self.end[0]]
+        y = [self.start[1], self.end[1]]
         interp_func = interp1d(x, y, kind="linear")
 
         return np.array([interp_func(x) for x in self.x])
@@ -66,12 +66,15 @@ class Edge2D(GridEdge):
     def line2d(self):
         """ Get the corresponding Line2D object for the edge.
         """
-        return Line2D(self.x, self.y, linewidth=self.line_width, color=self.color)
+        return Line2D(self.x, self.y, linewidth=self.width, color=self.color)
 
     def move(self, move_vector):
         """ Move the edge to a new position.
         """
+        if not isinstance(move_vector, np.ndarray):
+            move_vector = np.array(move_vector)
+
         # Just move the endpoints.
-        self.node1.move(move_vector)
-        self.node2.move(move_vector)
+        self.start += move_vector
+        self.end += move_vector
 
