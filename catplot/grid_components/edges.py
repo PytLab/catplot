@@ -78,3 +78,6 @@ class Edge2D(GridEdge):
         self.start += move_vector
         self.end += move_vector
 
+        return self
+
+
