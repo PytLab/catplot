@@ -45,6 +45,7 @@ class Edge2D(GridEdge):
                 raise ValueError("node must be a Node2D object")
 
         super(Edge2D, self).__init__(node1, node2, **kwargs)
+        self.color = node1.color
 
     @property
     def x(self):
@@ -61,14 +62,20 @@ class Edge2D(GridEdge):
         # Interpolate linearly n values between two nodes.
         x = [self.start[0], self.end[0]]
         y = [self.start[1], self.end[1]]
-        interp_func = interp1d(x, y, kind="linear")
+        if x[0] != x[1]:
+            interp_func = interp1d(x, y, kind="linear")
+            return np.array([interp_func(x) for x in self.x])
+        else:
+            return np.linspace(*y, self.n+2)
 
-        return np.array([interp_func(x) for x in self.x])
 
     def line2d(self):
         """ Get the corresponding Line2D object for the edge.
         """
-        return Line2D(self.x, self.y, linewidth=self.width, color=self.color)
+        return Line2D(self.x, self.y,
+                      linewidth=self.width,
+                      color=self.color,
+                      linestyle=self.style)
 
     def move(self, move_vector):
         """ Move the edge to a new position.
