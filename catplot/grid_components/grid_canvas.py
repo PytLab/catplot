@@ -24,13 +24,12 @@ class Grid2DCanvas(Canvas):
         # Attributes for 2D grid canvas.
         self.nodes = []
         self.edges = []
-
-        # Initial path collection.
-        self.collection = self.axes.scatter([], [])
+        self.supercells = []
 
     def add_supercell(self, supercell):
         """ Add a supercell to 2D grid canvas.
         """
+        self.supercells.append(supercell)
         self.nodes.extend(supercell.nodes)
         self.edges.extend(supercell.edges)
 
@@ -107,14 +106,29 @@ class Grid2DCanvas(Canvas):
         for edge in self.edges:
             self.axes.add_line(edge.line2d())
 
-        # Add nodes to canvas.
-        self.collection.set_offsets(self.node_coordinates)
-        self.collection.set_facecolor(self.node_colors)
-        self.collection.set_edgecolor(self.node_edgecolors)
-        self.collection.set_zorder(99)
+        # Add nodes to canvas one by one.
+        for node in self.nodes:
+            self.axes.scatter(*node.coordinate,
+                              color=node.color,
+                              edgecolors=node.edgecolor,
+                              marker=node.style,
+                              zorder=99)
 
         # Set axes limits.
         limits = self._get_data_limits()
         self.axes.set_xlim(limits.min_x, limits.max_x)
         self.axes.set_ylim(limits.min_y, limits.max_y)
+
+    def clear(self):
+        """ Clear components drawned in canvas.
+        """
+        self.axes.clear()
+
+    def deep_clear(self):
+        """ Clear all components in canvas.
+        """
+        self.clear()
+        self.nodes = []
+        self.edges = []
+        self.supercells = []
 
