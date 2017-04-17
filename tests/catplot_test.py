@@ -11,6 +11,7 @@ from ep_canvas_test import EPCanvasTest
 from elementary_line_test import ElementaryLineTest
 from node_2d_test import Node2DTest
 from edge_2d_test import Edge2DTest
+from supercell_2d_test import SuperCellTest
 
 def suite():
     test_suite = unittest.TestSuite([
@@ -19,6 +20,7 @@ def suite():
         unittest.TestLoader().loadTestsFromTestCase(ElementaryLineTest),
         unittest.TestLoader().loadTestsFromTestCase(Node2DTest),
         unittest.TestLoader().loadTestsFromTestCase(Edge2DTest),
+        unittest.TestLoader().loadTestsFromTestCase(SuperCellTest),
     ])
 
     return test_suite
