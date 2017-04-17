@@ -112,12 +112,20 @@ class Grid2DCanvas(Canvas):
                               color=node.color,
                               edgecolors=node.edgecolor,
                               marker=node.style,
+                              alpha=node.alpha,
+                              s=node.size,
                               zorder=99)
 
         # Set axes limits.
         limits = self._get_data_limits()
         self.axes.set_xlim(limits.min_x, limits.max_x)
         self.axes.set_ylim(limits.min_y, limits.max_y)
+
+    def redraw(self):
+        """ Clear the canvas and draw all components again.
+        """
+        self.clear()
+        self.draw()
 
     def clear(self):
         """ Clear components drawned in canvas.
