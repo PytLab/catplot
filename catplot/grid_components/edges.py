@@ -19,7 +19,8 @@ class GridEdge(object):
 
         self.n = kwargs.pop("n", 0)
         self.color = kwargs.pop("color", "#000000")
-        self.line_width = kwargs.pop("line_width", 1)
+        self.width = kwargs.pop("width", 1)
+        self.style = kwargs.pop("style", "solid")
 
 class Edge2D(GridEdge):
     """ Edge in 2D grid between 2D nodes.

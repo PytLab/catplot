@@ -18,8 +18,8 @@ class Edge2DTest(unittest.TestCase):
     def test_construction_and_query(self):
         """ Test we can construct Grid2DNode correctly.
         """
-        node1 = Node2D([1.0, 1.0], color="#595959", line_width=1)
-        node2 = Node2D([0.5, 0.5], color="#595959", line_width=1)
+        node1 = Node2D([1.0, 1.0], color="#595959", width=1)
+        node2 = Node2D([0.5, 0.5], color="#595959", width=1)
         edge = Edge2D(node1, node2, n=10)
 
         ref_x = [1.0,
@@ -40,8 +40,8 @@ class Edge2DTest(unittest.TestCase):
     def test_move(self):
         """ Test the edge can be moved correctly.
         """
-        node1 = Node2D([1.0, 1.0], color="#595959", line_width=1)
-        node2 = Node2D([0.5, 0.5], color="#595959", line_width=1)
+        node1 = Node2D([1.0, 1.0], color="#595959", width=1)
+        node2 = Node2D([0.5, 0.5], color="#595959", width=1)
         edge = Edge2D(node1, node2, n=10)
 
         edge.move([0.5, 0.5])
