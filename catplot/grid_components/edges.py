@@ -17,7 +17,7 @@ class GridEdge(object):
     """ Abstract base class for other edge.
     """
     def __init__(self, node1, node2, **kwargs):
-        self.start, self.end = node1.coordinate, node2.coordinate
+        self.start, self.end = node1.coordinate.copy(), node2.coordinate.copy()
 
         self.n = kwargs.pop("n", 0)
         self.color = kwargs.pop("color", "#000000")
