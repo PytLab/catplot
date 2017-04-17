@@ -4,6 +4,8 @@
 """ Descriptors for energy profile line classes.
 """
 
+import numpy as np
+
 from catplot.chem_parser import RxnEquation
 
 
@@ -95,4 +97,15 @@ class Coordinate2D(DescriptorBase):
     def _check(self, instance, value):
         if len(value) != 2 or not all([isinstance(entry, float) for entry in value]):
             raise ValueError("Invalid 2D coordinate: {}".format(value))
+
+
+class Basis2D(DescriptorBase):
+    """ Descriptor for basis in 2D space.
+    """
+    def __init__(self, name):
+        super(Basis2D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if value.shape != (2, 2) or np.linalg.matrix_rank(value) != 2:
+            raise ValueError("{} is not a valid 2D basis")
 
