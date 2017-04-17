@@ -66,7 +66,7 @@ class Edge2D(GridEdge):
             interp_func = interp1d(x, y, kind="linear")
             return np.array([interp_func(x) for x in self.x])
         else:
-            return np.linspace(*y, self.n+2)
+            return np.linspace(y[0], y[1], self.n+2)
 
 
     def line2d(self):
