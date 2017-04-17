@@ -24,6 +24,7 @@ catplot
 
 Introduction
 ------------
+**CatPlot** is a Python Library for Energy Profile and Abstract Grid(2D/3D) plotting.
 
 Installation
 ------------
