@@ -4,6 +4,8 @@
 """ Module for node definition in grid.
 """
 
+from copy import deepcopy
+
 import numpy as np
 
 import catplot.descriptors as dc
@@ -114,13 +116,14 @@ class Node2D(GridNode):
             relative_position = [0.0, 0.0]
 
         # Create a new node.
-        node = Node2D(self.coordinate,
-                      color=self.color,
-                      size=self.size,
-                      style=self.style,
-                      alpha=self.alpha,
-                      line_width=self.line_width,
-                      edgecolor=self.edgecolor)
+#        node = Node2D(self.coordinate,
+#                      color=self.color,
+#                      size=self.size,
+#                      style=self.style,
+#                      alpha=self.alpha,
+#                      line_width=self.line_width,
+#                      edgecolor=self.edgecolor)
+        node = deepcopy(self)
 
         # Move the node to predefined postion.
         node.move(relative_position)
