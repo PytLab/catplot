@@ -82,6 +82,7 @@ Important update log
 .. csv-table::
     :header: "Date", "Version", "Description"
 
+    "2017-04-10", "1.1.0", "Add 2D grid plotting"
     "2017-04-10", "1.0.0", "A brand new CatPlot"
     "2015-08-03", "0.0.1", "Intial Version"
 
