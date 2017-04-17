@@ -10,20 +10,11 @@ import catplot.descriptors as dc
 
 
 class SuperCell(object):
-    """ Supercell for a lattice grid.
+    """ Abstract base class for supercell.
     """
-
-    cell_vectors = dc.Basis2D("cell_vectors")
-
-    def __init__(self, nodes, edges, cell_vectors=None):
+    def __init__(self, nodes, edges):
         self.nodes = nodes
         self.edges = edges
-
-        if cell_vectors is None:
-            self.cell_vectors = np.array([[1.0, 0.0],
-                                          [0.0, 1.0]])
-        else:
-            self.cell_vectors = np.array(cell_vectors)
 
         # Change all coordinates in nodes and edges to Cartisan coordinates.
         for node in self.nodes:
@@ -32,6 +23,22 @@ class SuperCell(object):
         for edge in self.edges:
             edge.start = np.dot(self.cell_vectors, edge.start)
             edge.end = np.dot(self.cell_vectors, edge.end)
+
+
+class SuperCell2D(SuperCell):
+    """ Supercell for a lattice grid.
+    """
+
+    cell_vectors = dc.Basis2D("cell_vectors")
+
+    def __init__(self, nodes, edges, cell_vectors=None):
+        if cell_vectors is None:
+            self.cell_vectors = np.array([[1.0, 0.0],
+                                          [0.0, 1.0]])
+        else:
+            self.cell_vectors = np.array(cell_vectors)
+
+        super(SuperCell2D, self).__init__(nodes, edges)
 
     def move(self, move_vector):
         """ Move the super cell along the move vector.
@@ -58,5 +65,5 @@ class SuperCell(object):
         new_nodes = [node.clone(relative_position) for node in self.nodes]
         new_edges = [edge.clone(relative_position) for edge in self.edges]
 
-        return SuperCell(new_nodes, new_edges)
+        return SuperCell2D(new_nodes, new_edges)
 

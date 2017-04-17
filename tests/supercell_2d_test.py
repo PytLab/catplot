@@ -8,21 +8,21 @@ import unittest
 
 from catplot.grid_components.nodes import Node2D
 from catplot.grid_components.edges import Edge2D
-from catplot.grid_components.supercell import SuperCell
+from catplot.grid_components.supercell import SuperCell2D
 
 
-class SuperCellTest(unittest.TestCase):
+class SuperCell2DTest(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = True
 
     def test_construction_and_query(self):
-        """ Test we can construct SuperCell correctly.
+        """ Test we can construct SuperCell2D correctly.
         """
         node1 = Node2D([1.0, 1.0], color="#595959", width=1)
         node2 = Node2D([0.5, 0.5], color="#595959", width=1)
         edge = Edge2D(node1, node2, n=10)
-        supercell = SuperCell([node1, node2], [edge])
+        supercell = SuperCell2D([node1, node2], [edge])
 
     def test_move(self):
         """ Test the edge can be moved correctly.
@@ -30,7 +30,7 @@ class SuperCellTest(unittest.TestCase):
         node1 = Node2D([1.0, 1.0], color="#595959", width=1)
         node2 = Node2D([0.5, 0.5], color="#595959", width=1)
         edge = Edge2D(node1, node2, n=10)
-        supercell = SuperCell([node1, node2], [edge])
+        supercell = SuperCell2D([node1, node2], [edge])
 
         supercell.move([0.5, 0.5])
 
@@ -59,7 +59,7 @@ class SuperCellTest(unittest.TestCase):
         node1 = Node2D([1.0, 1.0], color="#595959", width=1)
         node2 = Node2D([0.5, 0.5], color="#595959", width=1)
         edge = Edge2D(node1, node2, n=10)
-        supercell = SuperCell([node1, node2], [edge])
+        supercell = SuperCell2D([node1, node2], [edge])
 
         supercell_clone = supercell.clone([0.5, 0.5])
 
@@ -85,6 +85,6 @@ class SuperCellTest(unittest.TestCase):
         self.assertListEqual(supercell_clone.edges[0].y.tolist(), ref_x)
 
 if "__main__" == __name__: 
-    suite = unittest.TestLoader().loadTestsFromTestCase(SuperCellTest)
+    suite = unittest.TestLoader().loadTestsFromTestCase(SuperCell2DTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
 
