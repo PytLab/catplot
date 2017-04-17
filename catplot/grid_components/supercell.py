@@ -24,6 +24,16 @@ class SuperCell(object):
             edge.start = np.dot(self.cell_vectors, edge.start)
             edge.end = np.dot(self.cell_vectors, edge.end)
 
+    def __add__(self, other):
+        """ Redefine add operator to change the default behaviour.
+        """
+        if not np.array_equal(self.cell_vectors, other.cell_vectors):
+            raise ValueError("Can't add two supercell with different cell vectors")
+        nodes = self.nodes + other.nodes
+        edges = self.edges + other.edges
+
+        return self.__class__(nodes, edges, self.cell_vectors)
+
 
 class SuperCell2D(SuperCell):
     """ Supercell for a lattice grid.

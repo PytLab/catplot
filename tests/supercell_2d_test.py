@@ -84,6 +84,18 @@ class SuperCell2DTest(unittest.TestCase):
         self.assertListEqual(supercell_clone.edges[0].x.tolist(), ref_x)
         self.assertListEqual(supercell_clone.edges[0].y.tolist(), ref_x)
 
+    def test_add(self):
+        node1 = Node2D([1.0, 1.0], color="#595959", width=1)
+        node2 = Node2D([0.5, 0.5], color="#595959", width=1)
+        edge = Edge2D(node1, node2, n=10)
+        s1 = SuperCell2D([node1, node2], [edge])
+        s2 = SuperCell2D([node1, node2], [edge])
+
+        s = s1 + s2
+
+        self.assertListEqual(s.nodes, [node1, node2, node1, node2])
+        self.assertListEqual(s.edges, [edge, edge])
+
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(SuperCell2DTest)
     unittest.TextTestRunner(verbosity=2).run(suite) 
