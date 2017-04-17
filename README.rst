@@ -14,7 +14,7 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/pypi-v1.0.4-blue.svg
+.. image:: https://img.shields.io/badge/pypi-v1.1.0-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
 
@@ -36,8 +36,8 @@ Installation
 
     python setup.py install
 
-Example
--------
+Energy Profile Plotting
+-----------------------
 
 See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
 
@@ -63,7 +63,17 @@ Plot an energy profile for an elementary reaction.
 
 Result:
 
-.. image:: https://github.com/PytLab/catplot/blob/master/pic/interactive.png
+.. image:: https://github.com/PytLab/catplot/blob/master/pic/energy_profile.png
+
+
+2D Grid Plotting
+----------------
+
+You can use CatPlot to plot abstract lattice grid, see  `examples <https://github.com/PytLab/catplot/tree/master/examples/grid_2d_examples/expand_supercell.ipynb>`_ for details.
+
+Result:
+
+.. image:: https://github.com/PytLab/catplot/blob/master/pic/grid_2d.png
 
 
 Important update log
