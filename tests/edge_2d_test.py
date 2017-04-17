@@ -46,9 +46,6 @@ class Edge2DTest(unittest.TestCase):
 
         edge.move([0.5, 0.5])
 
-        self.assertListEqual(node1.coordinate.tolist(), [1.5, 1.5])
-        self.assertListEqual(node2.coordinate.tolist(), [1.0, 1.0])
-
         ref_x = [1.5,
                  1.4545454545454546,
                  1.4090909090909092,
