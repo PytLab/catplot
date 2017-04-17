@@ -48,7 +48,7 @@ class SuperCell2D(SuperCell):
         else:
             self.cell_vectors = np.array(cell_vectors)
 
-        super(SuperCell2D, self).__init__(nodes, edges)
+        super(self.__class__, self).__init__(nodes, edges)
 
     def move(self, move_vector):
         """ Move the super cell along the move vector.
@@ -75,5 +75,28 @@ class SuperCell2D(SuperCell):
         new_nodes = [node.clone(relative_position) for node in self.nodes]
         new_edges = [edge.clone(relative_position) for edge in self.edges]
 
-        return SuperCell2D(new_nodes, new_edges)
+        return self.__class__(new_nodes, new_edges)
+
+    def expand(self, nx, ny):
+        """ Expand the supercell to a lager supercell.
+
+        Parameters:
+        -----------
+        nx : int, the expansion number along x axis.
+        ny : int, the expansion number along y axis.
+        """
+
+        # Expand along x axis.
+        x_expanded_supercell = self
+        for i in range(1, nx):
+            move_vector = self.cell_vectors[0, :]*i
+            x_expanded_supercell += self.clone(move_vector)
+
+        # Expand along y axis.
+        expanded_supercell = x_expanded_supercell
+        for j in range(1, ny):
+            move_vector = self.cell_vectors[1, :]*j
+            expanded_supercell += x_expanded_supercell.clone(move_vector)
+
+        return expanded_supercell
 
