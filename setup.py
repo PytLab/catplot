@@ -10,9 +10,9 @@ author_email = maintainer_email
 description = "A Python Library for Energy Profile Plotting"
 
 install_requires = [
-    'numpy',
-    'scipy',
-    'matplotlib',
+    'numpy>=1.12.1',
+    'scipy>=0.19.0',
+    'matplotlib>=2.0.0',
 ]
 
 license = 'LICENSE'
