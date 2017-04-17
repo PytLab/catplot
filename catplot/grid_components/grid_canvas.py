@@ -33,6 +33,12 @@ class Grid2DCanvas(Canvas):
         self.nodes.extend(supercell.nodes)
         self.edges.extend(supercell.edges)
 
+    def add_supercells(self, supercells):
+        """ Add multiple supercells to 2D grid canvas.
+        """
+        for sc in supercells:
+            self.add_supercell(sc)
+
     def add_node(self, node):
         """ Add a node to grid canvas.
         """
@@ -102,10 +108,6 @@ class Grid2DCanvas(Canvas):
         edge_y = self.edge_coordinates[:, 1]
         y = np.append(node_y, edge_y)
         max_y, min_y = np.max(y), np.min(y)
-
-        # Make axis x and y have same scales.
-#        max_x = max_y = max(max_x, max_y)
-#        min_x = min_y = min(min_x, min_y)
 
         return self._limits(max_x, min_x, max_y, min_y)
 
