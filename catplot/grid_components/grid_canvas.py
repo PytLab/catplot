@@ -80,13 +80,27 @@ class Grid2DCanvas(Canvas):
         """
         return [node.color for node in self.nodes]
 
+    @property
+    def edge_coordinates(self):
+        """ Coordiantes for all edges.
+        """
+        x = np.concatenate([edges.x for edges in self.edges])
+        y = np.concatenate([edges.y for edges in self.edges])
+
+        return np.array(list(zip(x, y)))
+
+
     def _get_data_limits(self):
         """ Private helper function to get the limits of data.
         """
-        x = self.node_coordinates[:, 0]
+        node_x = self.node_coordinates[:, 0]
+        edge_x = self.edge_coordinates[:, 0]
+        x = np.append(node_x, edge_x)
         max_x, min_x = np.max(x), np.min(x)
 
-        y = self.node_coordinates[:, 1]
+        node_y = self.node_coordinates[:, 1]
+        edge_y = self.edge_coordinates[:, 1]
+        y = np.append(node_y, edge_y)
         max_y, min_y = np.max(y), np.min(y)
 
         # Make axis x and y have same scales.
