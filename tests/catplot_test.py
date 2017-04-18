@@ -12,6 +12,7 @@ from elementary_line_test import ElementaryLineTest
 from node_2d_test import Node2DTest
 from edge_2d_test import Edge2DTest
 from supercell_2d_test import SuperCell2DTest
+from node_3d_test import Node3DTest
 
 def suite():
     test_suite = unittest.TestSuite([
@@ -21,6 +22,7 @@ def suite():
         unittest.TestLoader().loadTestsFromTestCase(Node2DTest),
         unittest.TestLoader().loadTestsFromTestCase(Edge2DTest),
         unittest.TestLoader().loadTestsFromTestCase(SuperCell2DTest),
+        unittest.TestLoader().loadTestsFromTestCase(Node3DTest),
     ])
 
     return test_suite
