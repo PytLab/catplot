@@ -99,6 +99,17 @@ class Coordinate2D(DescriptorBase):
             raise ValueError("Invalid 2D coordinate: {}".format(value))
 
 
+class Coordinate3D(DescriptorBase):
+    """ Descriptor for node in 3D grid.
+    """
+    def __init__(self, name):
+        super(Coordinate3D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if len(value) != 3 or not all([isinstance(entry, float) for entry in value]):
+            raise ValueError("Invalid 3D coordinate: {}".format(value))
+
+
 class Basis2D(DescriptorBase):
     """ Descriptor for basis in 2D space.
     """
