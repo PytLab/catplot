@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 from catplot.ep_components.ep_lines import ElementaryLine
 from catplot.ep_components.ep_chain import EPChain
 from catplot.ep_components.ep_canvas import EPCanvas
@@ -33,7 +35,10 @@ for idx, (energy_tuples,
     chains.append(chain)
 
     # Export data.
-    chain.export("data_{}.csv".format(idx))
+    filename = "data_{}.csv".format(idx)
+    chain.export(filename)
+
+    print("Write data for chain_{} to {}...".format(idx, filename))
 
 # Create energy profile canvas.
 canvas = EPCanvas()
@@ -41,6 +46,8 @@ canvas = EPCanvas()
 # Add chains to canvas.
 canvas.add_chains(chains)
 canvas.draw()
+
+print("Drawing in canvas...")
 
 if locs["display_mode"] == "save":
     canvas.figure.savefig("multiple_energy_profile.png")
