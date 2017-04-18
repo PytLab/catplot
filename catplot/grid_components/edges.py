@@ -23,6 +23,7 @@ class GridEdge(object):
         self.color = kwargs.pop("color", "#000000")
         self.width = kwargs.pop("width", 1)
         self.style = kwargs.pop("style", "solid")
+        self.zorder = kwargs.pop("zorder", 0)
 
 class Edge2D(GridEdge):
     """ Edge in 2D grid between 2D nodes.
@@ -38,6 +39,9 @@ class Edge2D(GridEdge):
     color: str, optional, color for the edge, default is "#000000" (black).
 
     width: int, optional, edge width, default is 1.
+
+    zorder: int, optional, default is 0
+        The zorder for the artist. Artists with lower zorder values are drawn first.
     """
     def __init__(self, node1, node2, **kwargs):
         for node in [node1, node2]:
@@ -75,7 +79,8 @@ class Edge2D(GridEdge):
         return Line2D(self.x, self.y,
                       linewidth=self.width,
                       color=self.color,
-                      linestyle=self.style)
+                      linestyle=self.style,
+                      zorder=self.zorder)
 
     def move(self, move_vector):
         """ Move the edge to a new position.
