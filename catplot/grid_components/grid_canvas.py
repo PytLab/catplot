@@ -130,6 +130,7 @@ class Grid2DCanvas(Canvas):
                               marker=node.style,
                               alpha=node.alpha,
                               s=node.size,
+                              linewidth=node.line_width,
                               zorder=99)
 
         # Set axes limits.
