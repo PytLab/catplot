@@ -86,6 +86,12 @@ class EPCanvas(Canvas):
         self.chains.append(ep_chain)
         self.lines.extend(ep_chain.elementary_lines)
 
+    def add_chains(self, ep_chains):
+        """ Add multiple energy profile chains to canvas.
+        """
+        for chain in ep_chains:
+            self.add_chain(chain)
+
     def add_all_horizontal_auxiliary_lines(self):
         """ Add horizontal auxiliary lines to all elementary lines in canvas.
         """
