@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 from catplot.canvas import Canvas
 from catplot.grid_components.nodes import Node2D
-from catplot.grid_components.edges import Edge2D
+from catplot.grid_components.edges import Edge2D, Arrow2D
+from catplot.grid_components.supercell import SuperCell2D
 
 
 class Grid2DCanvas(Canvas):
@@ -24,11 +25,15 @@ class Grid2DCanvas(Canvas):
         # Attributes for 2D grid canvas.
         self.nodes = []
         self.edges = []
+        self.arrows = []
         self.supercells = []
 
     def add_supercell(self, supercell):
         """ Add a supercell to 2D grid canvas.
         """
+        if not isinstance(supercell, SuperCell2D):
+            raise ValueError("supercell must be a SuperCell2D object")
+
         self.supercells.append(supercell)
         self.nodes.extend(supercell.nodes)
         self.edges.extend(supercell.edges)
@@ -60,7 +65,10 @@ class Grid2DCanvas(Canvas):
         if not isinstance(edge, Edge2D):
             raise ValueError("edge must be an Edge2D object")
 
-        self.edges.append(edge)
+        if isinstance(edge, Arrow2D):
+            self.arrows.append(edge)
+        else:
+            self.edges.append(edge)
 
     def add_edges(self, edges):
         """ Add multiple edges to canvas.
@@ -114,13 +122,25 @@ class Grid2DCanvas(Canvas):
     def draw(self):
         """ Draw all nodes and edges on canvas.
         """
-        if not any([self.nodes, self.edges]):
+        if not any([self.nodes, self.edges, self.arrows]):
             self._logger.warning("Attempted to draw in an empty canvas")
             return
 
         # Add edges to canvas.
         for edge in self.edges:
             self.axes.add_line(edge.line2d())
+
+        for arrow in self.arrows:
+            self.axes.arrow(self.x, self.y, self.dx, self.dy,
+                            length_includes_head=True,
+                            head_width=self.head_width,
+                            head_length=self.head_length,
+                            shape=self.shape,
+                            linewidth=self.width,
+                            color=self.color,
+                            linestyle=self.style,
+                            alpha=self.alpha,
+                            zorder=self.zorder)
 
         # Add nodes to canvas one by one.
         for node in self.nodes:
@@ -155,5 +175,6 @@ class Grid2DCanvas(Canvas):
         self.clear()
         self.nodes = []
         self.edges = []
+        self.arrows = []
         self.supercells = []
 
