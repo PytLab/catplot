@@ -120,3 +120,44 @@ class Edge2D(GridEdge):
 
         return edge
 
+
+class Arrow2D(Edge2D):
+    """ Arrow edge in 2D grid between 2D nodes.
+    Parameters:
+    -----------
+    node1, node2: Node2D object, nodes at both ends of the edges.
+
+    color: str, optional, color for the edge, default is "#000000" (black).
+
+    head_width: float, total width of the full arrow head, default is 0.03.
+
+    head_length: float, length of arrow head, default is 0.06.
+
+    shape: str, optional, ['full', 'left', 'right'], default is 'full'.
+
+    zorder: int, optional, default is 0
+        The zorder for the artist. Artists with lower zorder values are drawn first.
+    """
+    def __init__(self, node1, node2, **kwargs):
+        super(Arrow2D, self).__init__(node1, node2, **kwargs)
+
+        self.head_width = kwargs.pop("head_width", 0.03)
+        self.head_length = kwargs.pop("head_width", 0.06)
+        self.shape = kwargs.pop("shape", "full")
+
+    @property
+    def x(self):
+        return self.start[0]
+
+    @property
+    def y(self):
+        return self.start[1]
+
+    @property
+    def dx(self):
+        return (self.end - self.start)[0]
+
+    @property
+    def dy(self):
+        return (self.end - self.start)[1]
+
