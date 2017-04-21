@@ -98,23 +98,43 @@ class Grid2DCanvas(Canvas):
     def edge_coordinates(self):
         """ Coordiantes for all edges.
         """
-        x = np.concatenate([edges.x for edges in self.edges])
-        y = np.concatenate([edges.y for edges in self.edges])
+        if not self.edges:
+            return []
+        else:
+            x = np.concatenate([edge.x for edge in self.edges])
+            y = np.concatenate([edge.y for edge in self.edges])
+            return np.array(list(zip(x, y)))
 
-        return np.array(list(zip(x, y)))
+    @property
+    def arrow_colors(self):
+        """ Colors for all arrows.
+        """
+        return [arrow.color for arrow in self.arrows]
 
+    @property
+    def arrow_coordinates(self):
+        """ Coordinates for all arrows.
+        """
+        if not self.arrows:
+            return []
+        else:
+            x = np.concatenate([arrow.x for arrow in self.arrows])
+            y = np.concatenate([arrow.y for arrow in self.arrows])
+            return np.array(list(zip(x, y)))
 
     def _get_data_limits(self):
         """ Private helper function to get the limits of data.
         """
-        node_x = self.node_coordinates[:, 0]
-        edge_x = self.edge_coordinates[:, 0]
-        x = np.append(node_x, edge_x)
+        node_x = self.node_coordinates[:, 0] if self.nodes else []
+        edge_x = self.edge_coordinates[:, 0] if self.edges else []
+        arrow_x = self.arrow_coordinates[:, 0] if self.arrows else []
+        x = np.concatenate([node_x, edge_x, arrow_x])
         max_x, min_x = np.max(x), np.min(x)
 
-        node_y = self.node_coordinates[:, 1]
-        edge_y = self.edge_coordinates[:, 1]
-        y = np.append(node_y, edge_y)
+        node_y = self.node_coordinates[:, 1] if self.nodes else []
+        edge_y = self.edge_coordinates[:, 1] if self.edges else []
+        arrow_y = self.arrow_coordinates[:, 1] if self.arrows else []
+        y = np.concatenate([node_y, edge_y, arrow_y])
         max_y, min_y = np.max(y), np.min(y)
 
         return self._limits(max_x, min_x, max_y, min_y)
@@ -131,16 +151,16 @@ class Grid2DCanvas(Canvas):
             self.axes.add_line(edge.line2d())
 
         for arrow in self.arrows:
-            self.axes.arrow(self.x, self.y, self.dx, self.dy,
+            self.axes.arrow(*arrow.start, arrow.dx, arrow.dy,
                             length_includes_head=True,
-                            head_width=self.head_width,
-                            head_length=self.head_length,
-                            shape=self.shape,
-                            linewidth=self.width,
-                            color=self.color,
-                            linestyle=self.style,
-                            alpha=self.alpha,
-                            zorder=self.zorder)
+                            head_width=arrow.head_width,
+                            head_length=arrow.head_length,
+                            shape=arrow.shape,
+                            alpha=arrow.alpha,
+                            linewidth=arrow.width,
+                            color=arrow.color,
+                            linestyle=arrow.style,
+                            zorder=arrow.zorder)
 
         # Add nodes to canvas one by one.
         for node in self.nodes:
