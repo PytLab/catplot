@@ -23,6 +23,7 @@ class GridEdge(object):
         self.color = kwargs.pop("color", "#000000")
         self.width = kwargs.pop("width", 1)
         self.style = kwargs.pop("style", "solid")
+        self.alpha = kwargs.pop("alpha", "1")
         self.zorder = kwargs.pop("zorder", 0)
 
 class Edge2D(GridEdge):
@@ -35,6 +36,8 @@ class Edge2D(GridEdge):
     n: int, optional,
         extra point number in edge line between nodes, default is 0
         (only include two points of the endpoints).
+
+    alpha: float (0.0 transparent through 1.0 opaque).
 
     color: str, optional, color for the edge, default is "#000000" (black).
 
@@ -80,6 +83,7 @@ class Edge2D(GridEdge):
                       linewidth=self.width,
                       color=self.color,
                       linestyle=self.style,
+                      alpha=self.alpha,
                       zorder=self.zorder)
 
     def move(self, move_vector):
@@ -144,14 +148,7 @@ class Arrow2D(Edge2D):
         self.head_width = kwargs.pop("head_width", 0.03)
         self.head_length = kwargs.pop("head_width", 0.06)
         self.shape = kwargs.pop("shape", "full")
-
-    @property
-    def x(self):
-        return self.start[0]
-
-    @property
-    def y(self):
-        return self.start[1]
+        self.edgecolor = kwargs.pop("edgecolor", self.color)
 
     @property
     def dx(self):
