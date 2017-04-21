@@ -34,6 +34,8 @@ class GridNode(object):
 
     edgecolor: str, optional, default is the color of face.
 
+    zorder: float, set the zorder for the artist, default is 0.
+
     """
 
     # NOTE: The grid may contains a huge number of nodes,
@@ -51,6 +53,7 @@ class GridNode(object):
         self.alpha = kwargs.pop("alpha", 1.0)
         self.line_width = kwargs.pop("line_width", 0)
         self.edgecolor = kwargs.pop("edgecolor", self.color)
+        self.zorder = kwargs.pop("zorder", 0)
 
 
 class Node2D(GridNode):
