@@ -52,7 +52,10 @@ class Edge2D(GridEdge):
                 raise ValueError("node must be a Node2D object")
 
         super(Edge2D, self).__init__(node1, node2, **kwargs)
-        self.color = node1.color
+
+        # Set same color with start node if no color in kwargs
+        if "color" not in kwargs:
+            self.color = node1.color
 
     @property
     def x(self):
