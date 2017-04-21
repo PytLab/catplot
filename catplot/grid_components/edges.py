@@ -23,7 +23,7 @@ class GridEdge(object):
         self.color = kwargs.pop("color", "#000000")
         self.width = kwargs.pop("width", 1)
         self.style = kwargs.pop("style", "solid")
-        self.alpha = kwargs.pop("alpha", "1")
+        self.alpha = kwargs.pop("alpha", 1)
         self.zorder = kwargs.pop("zorder", 0)
 
 class Edge2D(GridEdge):
