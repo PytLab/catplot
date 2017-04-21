@@ -12,9 +12,10 @@ import catplot.descriptors as dc
 class SuperCell(object):
     """ Abstract base class for supercell.
     """
-    def __init__(self, nodes, edges):
+    def __init__(self, nodes, edges, arrows=None):
         self.nodes = nodes
         self.edges = edges
+        self.arrows = [] if arrows is None else arrows
 
         # Change all coordinates in nodes and edges to Cartisan coordinates.
         for node in self.nodes:
@@ -24,6 +25,10 @@ class SuperCell(object):
             edge.start = np.dot(self.cell_vectors, edge.start)
             edge.end = np.dot(self.cell_vectors, edge.end)
 
+        for arrow in self.arrows:
+            arrow.start = np.dot(self.cell_vectors, arrow.start)
+            arrow.end = np.dot(self.cell_vectors, arrow.end)
+
     def __add__(self, other):
         """ Redefine add operator to change the default behaviour.
         """
@@ -31,8 +36,9 @@ class SuperCell(object):
             raise ValueError("Can't add two supercell with different cell vectors")
         nodes = self.nodes + other.nodes
         edges = self.edges + other.edges
+        arrows = self.arrows + other.arrows
 
-        return self.__class__(nodes, edges, self.cell_vectors)
+        return self.__class__(nodes, edges, arrows, self.cell_vectors)
 
 
 class SuperCell2D(SuperCell):
@@ -41,14 +47,14 @@ class SuperCell2D(SuperCell):
 
     cell_vectors = dc.Basis2D("cell_vectors")
 
-    def __init__(self, nodes, edges, cell_vectors=None):
+    def __init__(self, nodes, edges, arrows=None, cell_vectors=None):
         if cell_vectors is None:
             self.cell_vectors = np.array([[1.0, 0.0],
                                           [0.0, 1.0]])
         else:
             self.cell_vectors = np.array(cell_vectors)
 
-        super(self.__class__, self).__init__(nodes, edges)
+        super(self.__class__, self).__init__(nodes, edges, arrows)
 
     def move(self, move_vector):
         """ Move the super cell along the move vector.
@@ -60,6 +66,10 @@ class SuperCell2D(SuperCell):
         # Move edges.
         for edge in self.edges:
             edge.move(move_vector)
+
+        # Move arrows.
+        for arrow in self.arrows:
+            arrow.move(move_vector)
 
         return self
 
@@ -74,8 +84,14 @@ class SuperCell2D(SuperCell):
         """
         new_nodes = [node.clone(relative_position) for node in self.nodes]
         new_edges = [edge.clone(relative_position) for edge in self.edges]
+        new_arrows = [arrow.clone(relative_position) for arrow in self.arrows]
 
-        return self.__class__(new_nodes, new_edges)
+        new_supercell = self.__class__(new_nodes,
+                                       new_edges,
+                                       new_arrows,
+                                       self.cell_vectors)
+
+        return new_supercell
 
     def expand(self, nx, ny):
         """ Expand the supercell to a lager supercell.
