@@ -37,6 +37,7 @@ class Grid2DCanvas(Canvas):
         self.supercells.append(supercell)
         self.nodes.extend(supercell.nodes)
         self.edges.extend(supercell.edges)
+        self.arrows.extend(supercell.arrows)
 
     def add_supercells(self, supercells):
         """ Add multiple supercells to 2D grid canvas.
