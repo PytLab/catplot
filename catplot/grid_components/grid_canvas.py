@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from catplot.canvas import Canvas
 from catplot.grid_components.nodes import Node2D, Node3D
-from catplot.grid_components.edges import Edge2D, Arrow2D
+from catplot.grid_components.edges import Edge2D, Arrow2D, Edge3D
 from catplot.grid_components.supercell import SuperCell2D
 
 
@@ -284,6 +284,26 @@ class Grid3DCanvas(Grid2DCanvas):
 
         self.nodes.append(node)
 
+    def add_edge(self, edge):
+        """ Add a 3D edge or arrow to canvas.
+        """
+        if not isinstance(edge, Edge3D):
+            raise ValueError("edge must be an Edge3D object")
+
+        self.edges.append(edge)
+
+    @property
+    def edge_coordinates(self):
+        """ Coordinates for all edges in 3D grid canvas.
+        """
+        if not self.edges:
+            return []
+        else:
+            x = np.concatenate([edge.x for edge in self.edges])
+            y = np.concatenate([edge.y for edge in self.edges])
+            z = np.concatenate([edge.z for edge in self.edges])
+            return np.array(list(zip(x, y, z)))
+
     def draw(self):
         """ Draw all nodes, edges and arrows on 3D canvas.
         """
@@ -303,6 +323,16 @@ class Grid3DCanvas(Grid2DCanvas):
                               alpha=node.alpha,
                               linewidth=node.line_width,
                               zorder=node.zorder)
+
+        # Add edges to canvas.
+        for edge in self.edges:
+            self.axes.plot(edge.x, edge.y, edge.z,
+                           zdir=edge.zdir,
+                           linewidth=edge.line_width,
+                           color=edge.color,
+                           linestyle=edge.style,
+                           alpha=edge.alpha,
+                           zorder=edge.zorder)
 
         # Set axes limits.
         limits = self._get_data_limits()
