@@ -346,3 +346,23 @@ class Grid3DCanvas(Grid2DCanvas):
         self.axes.set_ylim(limits.min_y, limits.max_y)
         self.axes.set_zlim(limits.min_z, limits.max_z)
 
+    def clear(self):
+        """ Clear 3D axes.
+        """
+        self.axes.clear()
+
+    def deep_clear(self):
+        """ Clear all components in canvas.
+        """
+        self.clear()
+        self.nodes = []
+        self.edges = []
+        self.arrows = []
+        self.supercells = []
+
+    def redraw(self):
+        """ Clear the canvas and draw all components agian.
+        """
+        self.clear()
+        self.draw()
+
