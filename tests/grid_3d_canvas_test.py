@@ -6,7 +6,7 @@
 
 import unittest
 
-from matplotlib.collections import PathCollection
+import matplotlib.pyplot as plt
 
 from catplot.grid_components.grid_canvas import Grid3DCanvas
 from catplot.grid_components.nodes import Node3D
@@ -25,6 +25,8 @@ class Grid3DCanvasTest(unittest.TestCase):
 
         self.assertListEqual(canvas.nodes, [])
         self.assertListEqual(canvas.edges, [])
+
+        plt.close(canvas.figure)
 
     def test_add_node(self):
         """ Make sure we can add node to canvas correctly.
@@ -52,6 +54,8 @@ class Grid3DCanvasTest(unittest.TestCase):
         ref_coordinates = [[0.5, 0.5, 0.5], [1.0, 1.0, 1.0]]
         self.assertListEqual(ref_coordinates, canvas.node_coordinates.tolist())
 
+        plt.close(canvas.figure)
+
     def test_add_edge(self):
         """ Make sure we can add 3D edge to canvas correctly.
         """
@@ -76,6 +80,8 @@ class Grid3DCanvasTest(unittest.TestCase):
                            [1.0, 1.0, 1.0]]
         self.assertListEqual(canvas.edge_coordinates.tolist(), ref_coordinates)
 
+        plt.close(canvas.figure)
+
     def test_draw(self):
         """ Make sure we can draw in grid canvas without exception raised.
         """
@@ -90,6 +96,8 @@ class Grid3DCanvasTest(unittest.TestCase):
         canvas.add_edge(edge)
 
         canvas.draw()
+
+        plt.close(canvas.figure)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Grid3DCanvasTest)

@@ -6,7 +6,7 @@
 
 import unittest
 
-from matplotlib.collections import PathCollection
+import matplotlib.pyplot as plt
 
 from catplot.grid_components.grid_canvas import Grid2DCanvas
 from catplot.grid_components.nodes import Node2D
@@ -24,7 +24,8 @@ class Grid2DCanvasTest(unittest.TestCase):
 
         self.assertListEqual(canvas.nodes, [])
         self.assertListEqual(canvas.edges, [])
-        self.assertTrue(isinstance(canvas.collection, PathCollection))
+
+        plt.close(canvas.figure)
 
     def test_add_node(self):
         """ Make sure we can add node to canvas correctly.
@@ -52,6 +53,8 @@ class Grid2DCanvasTest(unittest.TestCase):
         ref_coordinates = [[0.5, 0.5], [1.0, 1.0]]
         self.assertListEqual(ref_coordinates, canvas.node_coordinates.tolist())
 
+        plt.close(canvas.figure)
+
     def test_draw(self):
         """ Make sure we can draw in grid canvas without exception raised.
         """
@@ -63,6 +66,8 @@ class Grid2DCanvasTest(unittest.TestCase):
         canvas.add_node(n2)
 
         canvas.draw()
+
+        plt.close(canvas.figure)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Grid2DCanvasTest)
