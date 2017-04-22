@@ -7,7 +7,6 @@
 from copy import deepcopy
 
 import numpy as np
-from scipy.interpolate import interp1d
 from matplotlib.lines import Line2D
 
 from catplot.grid_components.nodes import Node2D, Node3D
@@ -69,13 +68,6 @@ class Edge2D(GridEdge):
     def y(self):
         """ y values for edge data.
         """
-#        # Interpolate linearly n values between two nodes.
-#        x = [self.start[0], self.end[0]]
-#        y = [self.start[1], self.end[1]]
-#        if x[0] != x[1]:
-#            interp_func = interp1d(x, y, kind="linear")
-#            return np.array([interp_func(x) for x in self.x])
-#        else:
         return np.linspace(self.start[0], self.end[1], self.n+2)
 
 
