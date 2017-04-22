@@ -13,7 +13,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from catplot.canvas import Canvas
 from catplot.grid_components.nodes import Node2D, Node3D
 from catplot.grid_components.edges import Edge2D, Arrow2D, Edge3D
-from catplot.grid_components.supercell import SuperCell2D
+from catplot.grid_components.supercell import SuperCell2D, SuperCell3D
 
 
 class Grid2DCanvas(Canvas):
@@ -287,6 +287,16 @@ class Grid3DCanvas(Grid2DCanvas):
             raise ValueError("edge must be an Edge3D object")
 
         self.edges.append(edge)
+
+    def add_supercell(self, supercell):
+        """ Add a supercell to 3D grid canvas.
+        """
+        if not isinstance(supercell, SuperCell3D):
+            raise ValueError("supercell must be a SuperCell3D object")
+
+        self.supercells.append(supercell)
+        self.nodes.extend(supercell.nodes)
+        self.edges.extend(supercell.edges)
 
     @property
     def edge_coordinates(self):
