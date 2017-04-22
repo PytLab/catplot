@@ -177,7 +177,7 @@ class Edge3D(Edge2D):
             self.color = node1.color
 
         # Extra attributes for Line3D.
-        self.zdir = zdir
+        self.zdir = kwargs.pop("zdir", "z")
 
     @property
     def z(self):
