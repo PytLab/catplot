@@ -42,7 +42,18 @@ class SuperCell(object):
 
 
 class SuperCell2D(SuperCell):
-    """ Supercell for a lattice grid.
+    """ 2D supercell for a lattice grid.
+
+    Parameters:
+    -----------
+    nodes: Node2D object list, all nodes in supercell.
+
+    edges: Edge2D object list, all edges in supercell.
+
+    arrows: Arrow2D object list, all arrows in supercell, default is [].
+
+    cell_vectors: 2D-like array,
+        the basis vectors for the supercell, default is [[1.0, 0.0], [0.0, 1.0]].
     """
 
     cell_vectors = dc.Basis2D("cell_vectors")
@@ -113,6 +124,66 @@ class SuperCell2D(SuperCell):
         for j in range(1, ny):
             move_vector = self.cell_vectors[1, :]*j
             expanded_supercell += x_expanded_supercell.clone(move_vector)
+
+        return expanded_supercell
+
+
+class SuperCell3D(SuperCell2D):
+    """ 3D supercell in a 3D lattice grid.
+
+    Parameters:
+    -----------
+    nodes: Node3D object list, all nodes in supercell.
+
+    edges: Edge3D object list, all edges in supercell.
+
+    arrows: (NOT SUPPORT) Arrow3D object list, all arrows in supercell, default is [].
+
+    cell_vectors: 3D-like array,
+        the basis vectors for the supercell, default is [[1.0, 0.0, 0.0],
+                                                         [0.0, 1.0, 0.0],
+                                                         [0.0, 0.0, 1.0]].
+    """
+
+    cell_vectors = dc.Basis3D("cell_vectors")
+
+    def __init__(self, nodes, edges, arrows=None, cell_vectors=None):
+        if cell_vectors is None:
+            self.cell_vectors = np.array([[1.0, 0.0, 0.0],
+                                          [0.0, 1.0, 0.0],
+                                          [0.0, 0.0, 1.0]])
+        else:
+            self.cell_vectors = np.array(cell_vectors)
+
+        super(SuperCell2D, self).__init__(nodes, edges, arrows)
+
+    def expand(self, nx, ny, nz):
+        """ Expand the supercell to a larger one in 3D grid.
+
+        Parameters:
+        -----------
+        nx : int, the expansion number along x axis.
+        ny : int, the expansion number along y axis.
+        nz : int, the expansion number along z axis.
+        """
+
+        # Expand along x axis.
+        x_expanded_supercell = self
+        for i in range(1, nx):
+            move_vector = self.cell_vectors[0, :]*i
+            x_expanded_supercell += self.clone(move_vector)
+
+        # Expand along y axis.
+        y_expanded_supercell = x_expanded_supercell
+        for j in range(1, ny):
+            move_vector = self.cell_vectors[1, :]*j
+            y_expanded_supercell += x_expanded_supercell.clone(move_vector)
+
+        # Expand along z axis.
+        expanded_supercell = y_expanded_supercell
+        for k in range(1, nz):
+            move_vector = self.cell_vectors[2, :]*k
+            expanded_supercell += y_expanded_supercell.clone(move_vector)
 
         return expanded_supercell
 

@@ -120,3 +120,14 @@ class Basis2D(DescriptorBase):
         if value.shape != (2, 2) or np.linalg.matrix_rank(value) != 2:
             raise ValueError("{} is not a valid 2D basis")
 
+
+class Basis3D(DescriptorBase):
+    """ Descriptor for basis in 3D space.
+    """
+    def __init__(self, name):
+        super(Basis3D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if value.shape != (3, 3) or np.linalg.matrix_rank(value) != 3:
+            raise ValueError("{} is not a valid 3D basis")
+
