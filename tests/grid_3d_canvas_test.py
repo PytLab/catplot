@@ -86,6 +86,9 @@ class Grid3DCanvasTest(unittest.TestCase):
         canvas.add_node(n1)
         canvas.add_node(n2)
 
+        edge = Edge3D(n1, n2)
+        canvas.add_edge(edge)
+
         canvas.draw()
 
 if "__main__" == __name__: 
