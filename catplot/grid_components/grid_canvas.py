@@ -218,6 +218,8 @@ class Grid3DCanvas(Grid2DCanvas):
         self.axes = self.figure.add_subplot(111, projection="3d",
                                             facecolor=self.facecolor)
 
+        self.axes.set_aspect("equal")
+
         # Attributes for 3D canvas.
         self.nodes = []
         self.edges = []
