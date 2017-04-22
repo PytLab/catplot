@@ -328,7 +328,7 @@ class Grid3DCanvas(Grid2DCanvas):
         for edge in self.edges:
             self.axes.plot(edge.x, edge.y, edge.z,
                            zdir=edge.zdir,
-                           linewidth=edge.line_width,
+                           linewidth=edge.width,
                            color=edge.color,
                            linestyle=edge.style,
                            alpha=edge.alpha,
