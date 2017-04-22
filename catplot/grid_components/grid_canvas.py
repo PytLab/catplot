@@ -223,7 +223,6 @@ class Grid3DCanvas(Grid2DCanvas):
         # Attributes for 3D canvas.
         self.nodes = []
         self.edges = []
-        self.arrows = []
         self.supercells = []
 
     def _limits(self, max_x, min_x, max_y, min_y, max_z, min_z):
@@ -258,20 +257,17 @@ class Grid3DCanvas(Grid2DCanvas):
         """
         node_x = self.node_coordinates[:, 0] if self.nodes else []
         edge_x = self.edge_coordinates[:, 0] if self.edges else []
-        arrow_x = self.arrow_coordinates[:, 0] if self.arrows else []
-        x = np.concatenate([node_x, edge_x, arrow_x])
+        x = np.concatenate([node_x, edge_x])
         max_x, min_x = np.max(x), np.min(x)
 
         node_y = self.node_coordinates[:, 1] if self.nodes else []
         edge_y = self.edge_coordinates[:, 1] if self.edges else []
-        arrow_y = self.arrow_coordinates[:, 1] if self.arrows else []
-        y = np.concatenate([node_y, edge_y, arrow_y])
+        y = np.concatenate([node_y, edge_y])
         max_y, min_y = np.max(y), np.min(y)
 
         node_z = self.node_coordinates[:, 2] if self.nodes else []
         edge_z = self.edge_coordinates[:, 2] if self.edges else []
-        arrow_z = self.arrow_coordinates[:, 2] if self.arrows else []
-        z = np.concatenate([node_z, edge_z, arrow_z])
+        z = np.concatenate([node_z, edge_z])
         max_z, min_z = np.max(z), np.min(z)
 
         return self._limits(max_x, min_x, max_y, min_y, max_z, min_z)
@@ -285,7 +281,7 @@ class Grid3DCanvas(Grid2DCanvas):
         self.nodes.append(node)
 
     def add_edge(self, edge):
-        """ Add a 3D edge or arrow to canvas.
+        """ Add a 3D edge to canvas.
         """
         if not isinstance(edge, Edge3D):
             raise ValueError("edge must be an Edge3D object")
@@ -305,9 +301,9 @@ class Grid3DCanvas(Grid2DCanvas):
             return np.array(list(zip(x, y, z)))
 
     def draw(self):
-        """ Draw all nodes, edges and arrows on 3D canvas.
+        """ Draw all nodes and edges on 3D canvas.
         """
-        if not any([self.nodes, self.edges, self.arrows]):
+        if not any([self.nodes, self.edges]):
             self._logger.warning("Attempted to draw in an empty canvas")
             return
 
