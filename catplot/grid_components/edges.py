@@ -122,6 +122,7 @@ class Edge2D(GridEdge):
 
 class Arrow2D(Edge2D):
     """ Arrow edge in 2D grid between 2D nodes.
+
     Parameters:
     -----------
     node1, node2: Node2D object, nodes at both ends of the edges.
@@ -156,6 +157,25 @@ class Arrow2D(Edge2D):
 
 class Edge3D(Edge2D):
     """ Edge in 3D grid between 3D nodes.
+
+    Parameters:
+    -----------
+    node1, node2: Node3D object, nodes at both ends of the edges.
+
+    zdir: which direction to use as z (‘x’, ‘y’ or ‘z’) when plotting a 2D set.
+
+    n: int, optional,
+        extra point number in edge line between nodes, default is 0
+        (only include two points of the endpoints).
+
+    alpha: float (0.0 transparent through 1.0 opaque).
+
+    color: str, optional, color for the edge, default is "#000000" (black).
+
+    width: int, optional, edge width, default is 1.
+
+    zorder: int, optional, default is 0
+        The zorder for the artist. Artists with lower zorder values are drawn first.
     """
     def __init__(self, node1, node2, **kwargs):
         for node in [node1, node2]:
