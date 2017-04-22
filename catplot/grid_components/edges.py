@@ -68,7 +68,7 @@ class Edge2D(GridEdge):
     def y(self):
         """ y values for edge data.
         """
-        return np.linspace(self.start[0], self.end[1], self.n+2)
+        return np.linspace(self.start[1], self.end[1], self.n+2)
 
 
     def line2d(self):
