@@ -119,13 +119,72 @@ class Node2D(GridNode):
             relative_position = [0.0, 0.0]
 
         # Create a new node.
-#        node = Node2D(self.coordinate,
-#                      color=self.color,
-#                      size=self.size,
-#                      style=self.style,
-#                      alpha=self.alpha,
-#                      line_width=self.line_width,
-#                      edgecolor=self.edgecolor)
+        node = deepcopy(self)
+
+        # Move the node to predefined postion.
+        node.move(relative_position)
+
+        return node
+
+
+class Node3D(Node2D):
+    """ Node in 3D grid.
+
+    Parameters:
+    -----------
+    coordinate: list of three float
+        The location of node in 3D grid canvas.
+
+    zdir: str, optional,
+        which direction to use as z ('x', 'y' or 'z') when plotting a 2D set.
+
+    depthshade: bool, optional,
+        whether to shade the scatter markers to give the appearance of depth.
+        Default is True.
+
+    color: str, optional, default is "#000000"
+        Facecolor of node.
+
+    size: scalar, optional
+        size in points^2, default is 400.
+
+    style: MarkerStyle, optional, default is 'o'.
+
+    alpha: scalar, optional, default is 1
+        The alpha blending value, between 0 (transparent) and 1 (opaque)
+
+    line_width: scalar or array_like, optional, default is 0.
+
+    edgecolor: str, optional, default is the color of face.
+    """
+
+    coordinate = dc.Coordinate3D("coordinate")
+
+    def __init__(self, coordinate, **kwargs):
+        self.zdir = kwargs.pop("zdir", "z")
+        self.depthshade = kwargs.pop("depthshade", True)
+
+        super(Node3D, self).__init__(coordinate, **kwargs)
+
+    def clone(self, relative_position):
+        """ Clone a new 3D node to a specific position.
+
+        Parameters:
+        -----------
+        relative_position: list of three float, optional.
+            the position of new cloned node relative to the original node,
+            default is [0.0, 0.0, 0.0].
+        """
+        if relative_position is not None:
+            # Check the validity.
+            if (len(relative_position) != 3 or
+                    not all([isinstance(i, float) for i in relative_position])):
+                msg = "relative position must be a sequence with three float number"
+                raise ValueError(msg)
+        else:
+            relative_position = [0.0, 0.0, 0.0]
+
+        # Create a new node.
         node = deepcopy(self)
 
         # Move the node to predefined postion.

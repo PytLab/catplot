@@ -6,6 +6,8 @@
 
 import unittest
 
+import matplotlib.pyplot as plt
+
 from catplot.ep_components.ep_canvas import EPCanvas
 from catplot.ep_components.ep_lines import ElementaryLine
 from catplot.ep_components.ep_chain import EPChain
@@ -34,6 +36,8 @@ class EPCanvasTest(unittest.TestCase):
         # Check invalid reaction equation.
         self.assertRaises(ValueError, EPCanvas, margin_ratio=-0.1)
 
+        plt.close(canvas.figure)
+
     def test_draw(self):
         """ Make sure the lines can be added without exceptions.
         """
@@ -41,6 +45,7 @@ class EPCanvasTest(unittest.TestCase):
         line = ElementaryLine([0.0, 1.3, 0.8])
         canvas.add_lines([line])
         canvas.draw()
+        plt.close(canvas.figure)
 
     def test_add_species_annotations(self):
         """ Make sure the species annotations can be added without exceptions.
@@ -50,6 +55,7 @@ class EPCanvasTest(unittest.TestCase):
                               rxn_equation="CO_b + O_b <-> CO-O_2b -> CO2_g + 2*_b")
         canvas.add_lines([line])
         canvas.add_species_annotations(line)
+        plt.close(canvas.figure)
 
     def test_add_horizontal_auxiliary_line(self):
         """ Make sure the horizontal line can be added without exceptions.
@@ -58,6 +64,7 @@ class EPCanvasTest(unittest.TestCase):
         line = ElementaryLine([0.0, 1.3, 0.8])
         canvas.add_lines([line])
         canvas.add_horizontal_auxiliary_line(line)
+        plt.close(canvas.figure)
 
     def test_add_vertical_auxiliary_line(self):
         """ Make sure the vertical line can be added without exceptions.
@@ -66,6 +73,7 @@ class EPCanvasTest(unittest.TestCase):
         line = ElementaryLine([0.0, 1.3, 0.8])
         canvas.add_lines([line])
         canvas.add_vertical_auxiliary_lines(line)
+        plt.close(canvas.figure)
 
     def test_add_energy_annotations(self):
         """ Make sure the energy annotations can be added correctly.
@@ -74,6 +82,7 @@ class EPCanvasTest(unittest.TestCase):
         line = ElementaryLine([0.0, 1.3, 0.8])
         canvas.add_lines([line])
         canvas.add_energy_annotations(line)
+        plt.close(canvas.figure)
 
     def test_add_chain(self):
         """ Test energy profile chain can be added correctly to canvas.
@@ -97,6 +106,7 @@ class EPCanvasTest(unittest.TestCase):
 
         # Exception is expected if add the chain again.
         self.assertRaises(ValueError, canvas.add_chain, chain)
+        plt.close(canvas.figure)
 
     def test_contains(self):
         canvas = EPCanvas()
@@ -110,6 +120,7 @@ class EPCanvasTest(unittest.TestCase):
         self.assertTrue(l1 in canvas)
         self.assertTrue(chain in canvas)
         self.assertFalse(l2 in canvas)
+        plt.close(canvas.figure)
 
     def test_add_line(self):
         """ Test the line can be add to canvas correctly.
@@ -120,6 +131,7 @@ class EPCanvasTest(unittest.TestCase):
 
         # Add repeat line, exception raises.
         self.assertRaises(ValueError, canvas.add_line, l1)
+        plt.close(canvas.figure)
 
     def test_add_lines(self):
         canvas = EPCanvas()
@@ -131,6 +143,8 @@ class EPCanvasTest(unittest.TestCase):
         canvas.lines = []
         self.assertRaises(ValueError, canvas.add_lines, [l1, l1])
 
+        plt.close(canvas.figure)
+
     def test_add_all_horizontal_auxiliary_lines(self):
         """ Make sure we can add all horizontal auxiliary lines to canvas.
         """
@@ -141,6 +155,8 @@ class EPCanvasTest(unittest.TestCase):
         canvas.add_lines([l1, l2])
 
         canvas.add_all_horizontal_auxiliary_lines()
+
+        plt.close(canvas.figure)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(EPCanvasTest)

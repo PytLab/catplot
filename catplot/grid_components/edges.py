@@ -7,10 +7,9 @@
 from copy import deepcopy
 
 import numpy as np
-from scipy.interpolate import interp1d
 from matplotlib.lines import Line2D
 
-from catplot.grid_components.nodes import Node2D
+from catplot.grid_components.nodes import Node2D, Node3D
 
 
 class GridEdge(object):
@@ -69,14 +68,7 @@ class Edge2D(GridEdge):
     def y(self):
         """ y values for edge data.
         """
-        # Interpolate linearly n values between two nodes.
-        x = [self.start[0], self.end[0]]
-        y = [self.start[1], self.end[1]]
-        if x[0] != x[1]:
-            interp_func = interp1d(x, y, kind="linear")
-            return np.array([interp_func(x) for x in self.x])
-        else:
-            return np.linspace(y[0], y[1], self.n+2)
+        return np.linspace(self.start[1], self.end[1], self.n+2)
 
 
     def line2d(self):
@@ -130,6 +122,7 @@ class Edge2D(GridEdge):
 
 class Arrow2D(Edge2D):
     """ Arrow edge in 2D grid between 2D nodes.
+
     Parameters:
     -----------
     node1, node2: Node2D object, nodes at both ends of the edges.
@@ -160,4 +153,73 @@ class Arrow2D(Edge2D):
     @property
     def dy(self):
         return (self.end - self.start)[1]
+
+
+class Edge3D(Edge2D):
+    """ Edge in 3D grid between 3D nodes.
+
+    Parameters:
+    -----------
+    node1, node2: Node3D object, nodes at both ends of the edges.
+
+    zdir: which direction to use as z (‘x’, ‘y’ or ‘z’) when plotting a 2D set.
+
+    n: int, optional,
+        extra point number in edge line between nodes, default is 0
+        (only include two points of the endpoints).
+
+    alpha: float (0.0 transparent through 1.0 opaque).
+
+    color: str, optional, color for the edge, default is "#000000" (black).
+
+    width: int, optional, edge width, default is 1.
+
+    zorder: int, optional, default is 0
+        The zorder for the artist. Artists with lower zorder values are drawn first.
+    """
+    def __init__(self, node1, node2, **kwargs):
+        for node in [node1, node2]:
+            if not isinstance(node, Node3D):
+                raise ValueError("node must be a Node3D object")
+
+        super(Edge2D, self).__init__(node1, node2, **kwargs)
+
+        # Set the same color with the start node if no color in kwargs.
+        if "color" not in kwargs:
+            self.color = node1.color
+
+        # Extra attributes for Line3D.
+        self.zdir = kwargs.pop("zdir", "z")
+
+    @property
+    def z(self):
+        """ z values for edge data.
+        """
+        return np.linspace(self.start[2], self.end[2], self.n+2)
+
+    def clone(self, relative_position=None):
+        """ Clone a new 3D edge to a specific position.
+
+        Parameters:
+        -----------
+        relative_position: list of two float, optional.
+            the position of new cloned node relative to the original node,
+            default is [0.0, 0.0, 0.0].
+        """
+        if relative_position is not None:
+            # Check the validity.
+            if (len(relative_position) != 3 or
+                    not all([isinstance(i, float) for i in relative_position])):
+                msg = "relative position must be a sequence with three float number"
+                raise ValueError(msg)
+        else:
+            relative_position = [0.0, 0.0, 0.0]
+
+        # Clone a new edge.
+        edge = deepcopy(self)
+
+        # Move the edge to a new position.
+        edge.move(relative_position)
+
+        return edge
 

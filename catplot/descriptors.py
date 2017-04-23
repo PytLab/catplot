@@ -99,6 +99,17 @@ class Coordinate2D(DescriptorBase):
             raise ValueError("Invalid 2D coordinate: {}".format(value))
 
 
+class Coordinate3D(DescriptorBase):
+    """ Descriptor for node in 3D grid.
+    """
+    def __init__(self, name):
+        super(Coordinate3D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if len(value) != 3 or not all([isinstance(entry, float) for entry in value]):
+            raise ValueError("Invalid 3D coordinate: {}".format(value))
+
+
 class Basis2D(DescriptorBase):
     """ Descriptor for basis in 2D space.
     """
@@ -108,4 +119,15 @@ class Basis2D(DescriptorBase):
     def _check(self, instance, value):
         if value.shape != (2, 2) or np.linalg.matrix_rank(value) != 2:
             raise ValueError("{} is not a valid 2D basis")
+
+
+class Basis3D(DescriptorBase):
+    """ Descriptor for basis in 3D space.
+    """
+    def __init__(self, name):
+        super(Basis3D, self).__init__(name)
+
+    def _check(self, instance, value):
+        if value.shape != (3, 3) or np.linalg.matrix_rank(value) != 3:
+            raise ValueError("{} is not a valid 3D basis")
 
