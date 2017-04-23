@@ -155,7 +155,7 @@ class Grid2DCanvas(Canvas):
             self.axes.add_line(edge.line2d())
 
         for arrow in self.arrows:
-            self.axes.arrow(*arrow.start, arrow.dx, arrow.dy,
+            self.axes.arrow(*arrow.start, dx=arrow.dx, dy=arrow.dy,
                             length_includes_head=True,
                             head_width=arrow.head_width,
                             head_length=arrow.head_length,
