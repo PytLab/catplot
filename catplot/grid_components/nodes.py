@@ -41,7 +41,7 @@ class GridNode(object):
     # NOTE: The grid may contains a huge number of nodes,
     # so we define __slots__ for saving memery.
     __slots__ = {"coordinate", "color", "size", "style", "alpha",
-                 "line_width", "edgecolor"}
+                 "line_width", "line_style", "edgecolor"}
 
     def __init__(self, coordinate, **kwargs):
         self.coordinate = np.array(coordinate)
@@ -52,6 +52,7 @@ class GridNode(object):
         self.style = kwargs.pop("style", "o")
         self.alpha = kwargs.pop("alpha", 1.0)
         self.line_width = kwargs.pop("line_width", 0)
+        self.line_style = kwargs.pop("line_style", "solid")
         self.edgecolor = kwargs.pop("edgecolor", self.color)
         self.zorder = kwargs.pop("zorder", 0)
 

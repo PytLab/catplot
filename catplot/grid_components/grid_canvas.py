@@ -175,6 +175,7 @@ class Grid2DCanvas(Canvas):
                               alpha=node.alpha,
                               s=node.size,
                               linewidth=node.line_width,
+                              linestyle=node.line_style,
                               zorder=node.zorder)
 
         # Set axes limits.
