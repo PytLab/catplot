@@ -225,6 +225,7 @@ class Grid3DCanvas(Grid2DCanvas):
         self.nodes = []
         self.edges = []
         self.supercells = []
+        self.arrows = []  # Just a placeholder here.
 
     def _limits(self, max_x, min_x, max_y, min_y, max_z, min_z):
         """ Override parent's function to get 3D data limits.

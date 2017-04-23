@@ -87,13 +87,16 @@ class Grid3DCanvasTest(unittest.TestCase):
         """
         canvas = Grid3DCanvas()
 
-        n1 = Node3D([0.5, 0.5, 0.5])
+        n1 = Node3D([0.5, 0.5, 0.5], zorder=3)
         n2 = Node3D([1.0, 1.0, 1.0])
         canvas.add_node(n1)
         canvas.add_node(n2)
 
         edge = Edge3D(n1, n2)
         canvas.add_edge(edge)
+
+        # Check current zorder here.
+        self.assertEqual(canvas.current_zorder, 3)
 
         canvas.draw()
 

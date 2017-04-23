@@ -4,6 +4,7 @@
 import logging
 from collections import namedtuple
 
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.spines import Spine
 
@@ -102,4 +103,12 @@ class Canvas(object):
                   min_y - self.margin_ratio*scale_y]
 
         return Limits._make(limits)
+
+    @property
+    def current_zorder(self):
+        """ The max zorder in current canvas.
+        """
+        components = self.nodes + self.edges + self.arrows
+        current_zorder = np.max([comp.zorder for comp in components])
+        return current_zorder
 
