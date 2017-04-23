@@ -55,6 +55,20 @@ class Grid2DCanvasTest(unittest.TestCase):
 
         plt.close(canvas.figure)
 
+    def test_remove(self):
+        """ Make sure we can remove a component correctly.
+        """
+        canvas = Grid2DCanvas()
+
+        n1 = Node2D([0.5, 0.5])
+        n2 = Node2D([1.0, 1.0])
+        canvas.add_node(n1)
+        canvas.add_node(n2)
+        self.assertTrue(n1 in canvas.nodes)
+
+        canvas.remove(n1)
+        self.assertFalse(n1 in canvas.nodes)
+
     def test_draw(self):
         """ Make sure we can draw in grid canvas without exception raised.
         """

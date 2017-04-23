@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 from matplotlib.spines import Spine
 
 import catplot.descriptors as dc
+from catplot.grid_components.edges import GridEdge, Arrow2D
+from catplot.grid_components.nodes import GridNode
 
 
 class Canvas(object):
@@ -111,4 +113,23 @@ class Canvas(object):
         components = self.nodes + self.edges + self.arrows
         current_zorder = np.max([comp.zorder for comp in components])
         return current_zorder
+
+    def _remove_component(self, component):
+        """ Private helper function to remove a single components in canvas.
+        """
+        # Check the component type and remove.
+        if isinstance(component, Arrow2D):
+            self.arrows.remove(component)
+        elif isinstance(component, GridEdge):
+            self.edges.remove(component)
+        elif isinstance(component, GridNode):
+            self.nodes.remove(component)
+        else:
+            raise ValueError("component {} is not in canvas".format(component))
+
+    def remove(self, *components):
+        """ Remove components in canvas.
+        """
+        for comp in components:
+            self._remove_component(comp)
 
