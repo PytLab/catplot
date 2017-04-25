@@ -4,6 +4,8 @@
 """ Module for super cell.
 """
 
+from copy import deepcopy
+
 import numpy as np
 
 import catplot.descriptors as dc
@@ -19,15 +21,15 @@ class SuperCell(object):
 
         # Change all coordinates in nodes and edges to Cartisan coordinates.
         for node in self.nodes:
-            node.coordinate = np.dot(self.cell_vectors, node.coordinate)
+            node.coordinate = np.dot(self.cell_vectors.T, node.coordinate)
 
         for edge in self.edges:
-            edge.start = np.dot(self.cell_vectors, edge.start)
-            edge.end = np.dot(self.cell_vectors, edge.end)
+            edge.start = np.dot(self.cell_vectors.T, edge.start)
+            edge.end = np.dot(self.cell_vectors.T, edge.end)
 
         for arrow in self.arrows:
-            arrow.start = np.dot(self.cell_vectors, arrow.start)
-            arrow.end = np.dot(self.cell_vectors, arrow.end)
+            arrow.start = np.dot(self.cell_vectors.T, arrow.start)
+            arrow.end = np.dot(self.cell_vectors.T, arrow.end)
 
     def __add__(self, other):
         """ Redefine add operator to change the default behaviour.
@@ -38,7 +40,12 @@ class SuperCell(object):
         edges = self.edges + other.edges
         arrows = self.arrows + other.arrows
 
-        return self.__class__(nodes, edges, arrows, self.cell_vectors)
+        # NOTE: here the cell_vectors will not be passed in,
+        #       or the coordinate mapping will be done repeatly.
+        new_supercell = self.__class__(nodes, edges, arrows)
+        new_supercell.cell_vectors = self.cell_vectors
+
+        return new_supercell
 
 
 class SuperCell2D(SuperCell):
@@ -93,14 +100,15 @@ class SuperCell2D(SuperCell):
             the position of new cloned node relative to the original node,
             default is [0.0, 0.0].
         """
-        new_nodes = [node.clone(relative_position) for node in self.nodes]
-        new_edges = [edge.clone(relative_position) for edge in self.edges]
-        new_arrows = [arrow.clone(relative_position) for arrow in self.arrows]
-
-        new_supercell = self.__class__(new_nodes,
-                                       new_edges,
-                                       new_arrows,
-                                       self.cell_vectors)
+#        new_nodes = [node.clone(relative_position) for node in self.nodes]
+#        new_edges = [edge.clone(relative_position) for edge in self.edges]
+#        new_arrows = [arrow.clone(relative_position) for arrow in self.arrows]
+#
+#        new_supercell = self.__class__(new_nodes,
+#                                       new_edges,
+#                                       new_arrows)
+        new_supercell = deepcopy(self)
+        new_supercell.move(relative_position)
 
         return new_supercell
 
