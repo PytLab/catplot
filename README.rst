@@ -14,7 +14,7 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/pypi-v1.2.1-blue.svg
+.. image:: https://img.shields.io/badge/pypi-v1.2.2-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
 
@@ -76,12 +76,16 @@ Result:
 
 .. image:: https://github.com/PytLab/catplot/blob/master/pic/grid_2d.png
 
+
 3D Grid Plotting
 ----------------
 
 Now **CatPlot** can plot abstract 3D lattice grid, see `example <https://github.com/PytLab/catplot/tree/master/examples/grid_3d_examples/expand_3d_supercell.ipynb>`_ for plot details.
 
+Result:
+
 .. image:: https://github.com/PytLab/catplot/blob/master/pic/grid_3d.png
+
 
 Important update log
 --------------------
