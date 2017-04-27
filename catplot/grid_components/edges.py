@@ -105,7 +105,7 @@ class Edge2D(GridEdge):
         if relative_position is not None:
             # Check the validity.
             if (len(relative_position) != 2 or
-                    not all([isinstance(i, float) for i in relative_position])):
+                    not all([isinstance(i, (int, float)) for i in relative_position])):
                 msg = "relative position must be a sequence with two float number"
                 raise ValueError(msg)
         else:
@@ -209,7 +209,7 @@ class Edge3D(Edge2D):
         if relative_position is not None:
             # Check the validity.
             if (len(relative_position) != 3 or
-                    not all([isinstance(i, float) for i in relative_position])):
+                    not all([isinstance(i, (int, float)) for i in relative_position])):
                 msg = "relative position must be a sequence with three float number"
                 raise ValueError(msg)
         else:
