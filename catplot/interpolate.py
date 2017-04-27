@@ -243,9 +243,9 @@ def get_potential_energy_points(energies,
                           2*hline_length+peak_width, n)
         y_f = np.linspace(y3, y3, n)
         # Combine all points
-        y = np.array(y_i.tolist() + y_b.tolist() + y_f.tolist())
+        y = np.concatenate([y_i, y_b, y_f])
         #x = np.linspace(0, x3 + 2*hline_length, 3*n)
-        x = np.array(x_i.tolist() + x_b.tolist() + x_f.tolist())
+        x = np.concatenate([x_i, x_b, x_f])
 
     if len(energies) == 2:
         #transition state
@@ -274,8 +274,8 @@ def get_potential_energy_points(energies,
                           2*hline_length + peak_width, n)
 
         # Combine all points
-        y = np.array(y_i.tolist() + y_b.tolist() + y_f.tolist())
-        x = np.array(x_i.tolist() + x_b.tolist() + x_f.tolist())
+        y = np.concatenate([y_i, y_b, y_f])
+        x = np.concatenate([x_i, x_b, x_f])
         x2 = 0.0
 
 #    plt.plot(x, y)
