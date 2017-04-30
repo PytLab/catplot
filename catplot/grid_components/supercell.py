@@ -112,25 +112,31 @@ class SuperCell2D(SuperCell):
 
         return new_supercell
 
-    def expand(self, nx, ny):
+    def expand(self, nx, ny, cell_vectors=None):
         """ Expand the supercell to a lager supercell.
 
         Parameters:
         -----------
         nx : int, the expansion number along x axis.
         ny : int, the expansion number along y axis.
+        cell_vectors: 2x3 array, cell vectors for supercell expansion
+            default value is the same as cell vectors of this supercell.
         """
+
+        if cell_vectors is None:
+            cell_vectors = self.cell_vectors
+        cell_vectors = np.array(cell_vectors)
 
         # Expand along x axis.
         x_expanded_supercell = self
         for i in range(1, nx):
-            move_vector = self.cell_vectors[0, :]*i
+            move_vector = cell_vectors[0, :]*i
             x_expanded_supercell += self.clone(move_vector)
 
         # Expand along y axis.
         expanded_supercell = x_expanded_supercell
         for j in range(1, ny):
-            move_vector = self.cell_vectors[1, :]*j
+            move_vector = cell_vectors[1, :]*j
             expanded_supercell += x_expanded_supercell.clone(move_vector)
 
         return expanded_supercell
@@ -165,7 +171,7 @@ class SuperCell3D(SuperCell2D):
 
         super(SuperCell2D, self).__init__(nodes, edges, arrows)
 
-    def expand(self, nx, ny, nz):
+    def expand(self, nx, ny, nz, cell_vectors=None):
         """ Expand the supercell to a larger one in 3D grid.
 
         Parameters:
@@ -173,24 +179,29 @@ class SuperCell3D(SuperCell2D):
         nx : int, the expansion number along x axis.
         ny : int, the expansion number along y axis.
         nz : int, the expansion number along z axis.
+        cell_vectors: 3x3 array, cell vectors for supercell expansion
+            default value is the same as cell vectors of this supercell.
         """
+        if cell_vectors is None:
+            cell_vectors = self.cell_vectors
+        cell_vectors = np.array(cell_vectors)
 
         # Expand along x axis.
         x_expanded_supercell = self
         for i in range(1, nx):
-            move_vector = self.cell_vectors[0, :]*i
+            move_vector = cell_vectors[0, :]*i
             x_expanded_supercell += self.clone(move_vector)
 
         # Expand along y axis.
         y_expanded_supercell = x_expanded_supercell
         for j in range(1, ny):
-            move_vector = self.cell_vectors[1, :]*j
+            move_vector = cell_vectors[1, :]*j
             y_expanded_supercell += x_expanded_supercell.clone(move_vector)
 
         # Expand along z axis.
         expanded_supercell = y_expanded_supercell
         for k in range(1, nz):
-            move_vector = self.cell_vectors[2, :]*k
+            move_vector = cell_vectors[2, :]*k
             expanded_supercell += y_expanded_supercell.clone(move_vector)
 
         return expanded_supercell
