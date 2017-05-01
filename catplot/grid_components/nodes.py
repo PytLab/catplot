@@ -101,7 +101,7 @@ class Node2D(GridNode):
         # For chain operations.
         return self
 
-    def clone(self, relative_position=None):
+    def clone(self, relative_position=None, **kwargs):
         """ Clone a new 2D node to a specific position.
 
         Parameters:
@@ -109,6 +109,8 @@ class Node2D(GridNode):
         relative_position: list of two float, optional.
             the position of new cloned node relative to the original node,
             default is [0.0, 0.0].
+
+        The kwargs are Node2D properties
         """
         if relative_position is not None:
             # Check the validity.
@@ -124,6 +126,10 @@ class Node2D(GridNode):
 
         # Move the node to predefined postion.
         node.move(relative_position)
+
+        # Update node attributes.
+        for k, v in kwargs.items():
+            setattr(node, k, v)
 
         return node
 
@@ -167,7 +173,7 @@ class Node3D(Node2D):
 
         super(Node3D, self).__init__(coordinate, **kwargs)
 
-    def clone(self, relative_position):
+    def clone(self, relative_position, **kwargs):
         """ Clone a new 3D node to a specific position.
 
         Parameters:
@@ -175,6 +181,8 @@ class Node3D(Node2D):
         relative_position: list of three float, optional.
             the position of new cloned node relative to the original node,
             default is [0.0, 0.0, 0.0].
+
+        The kwargs are Node3D properties.
         """
         if relative_position is not None:
             # Check the validity.
@@ -190,6 +198,10 @@ class Node3D(Node2D):
 
         # Move the node to predefined postion.
         node.move(relative_position)
+
+        # Update node attribtues.
+        for k, v in kwargs.items():
+            setattr(node, k, v)
 
         return node
 
