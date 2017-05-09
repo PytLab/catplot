@@ -99,6 +99,22 @@ class Grid2DCanvasTest(unittest.TestCase):
         self.assertListEqual(canvas3d.nodes[0].coordinate.tolist(), [0.5, 0.5, 0.0])
         self.assertListEqual(canvas3d.nodes[1].coordinate.tolist(), [1.0, 1.0, 0.0])
 
+    def test_extract_node(self):
+        """ Make sure we can extract node from canvas correctly.
+        """
+        canvas2d = Grid2DCanvas()
+
+        n1 = Node2D([0.5, 0.5], label=True)
+        n2 = Node2D([1.0, 1.0])
+        canvas2d.add_node(n1)
+        canvas2d.add_node(n2)
+
+        canvas3d = Grid3DCanvas()
+        canvas2d.to3d(canvas3d)
+
+        n_extracted = canvas3d.extract_node(n1.label)
+        self.assertTrue(n_extracted)
+        self.assertEqual(n_extracted[0].label, n1.label)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Grid2DCanvasTest)
