@@ -9,6 +9,7 @@ from copy import deepcopy
 import numpy as np
 
 import catplot.descriptors as dc
+from catplot.grid_components import extract_plane
 
 
 class SuperCell(object):
@@ -141,13 +142,16 @@ class SuperCell2D(SuperCell):
 
         return expanded_supercell
 
-    def to3d(self, cell_vectors=None):
+    @extract_plane
+    def to3d(self, **kwargs):
         """ Map a 2D supercell to 3D space.
         """
         # Map nodes and edges.
-        nodes = [n.to3d() for n in self.nodes]
-        edges = [e.to3d() for e in self.edges]
+        plane = kwargs["plane"]
+        nodes = [n.to3d(plane=plane) for n in self.nodes]
+        edges = [e.to3d(plane=plane) for e in self.edges]
 
+        cell_vectors = kwargs.pop("cell_vectors", None)
         return SuperCell3D(nodes, edges, cell_vectors=cell_vectors)
 
 
@@ -181,10 +185,11 @@ class SuperCell3D(SuperCell2D):
         super(SuperCell2D, self).__init__(nodes, edges, arrows)
 
     @staticmethod
-    def from2d(supercell2d, cell_vectors=None):
+    @extract_plane
+    def from2d(supercell2d, **kwargs):
         """ Construct 3D supercell from a 2D supercell.
         """
-        return supercell2d.to3d(cell_vectors=cell_vectors)
+        return supercell2d.to3d(**kwargs)
 
     def expand(self, nx, ny, nz, cell_vectors=None):
         """ Expand the supercell to a larger one in 3D grid.
