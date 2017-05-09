@@ -6,7 +6,7 @@
 
 import unittest
 
-from catplot.grid_components.nodes import Node3D
+from catplot.grid_components.nodes import Node2D, Node3D
 
 
 class Node3DTest(unittest.TestCase):
@@ -30,6 +30,16 @@ class Node3DTest(unittest.TestCase):
 
         # Exception is expected when invalid cooridnate passed in.
         self.assertRaises(ValueError, Node3D, [1.0, 0.0])
+
+    def test_construction_from_2d(self):
+        """ Make sure we can construct a 3D node from 2D node.
+        """
+        node2d = Node2D([0.5, 0.5], color="#595959")
+        node3d = Node3D.from2d(node2d)
+
+        self.assertTrue(node3d, Node3D)
+        self.assertListEqual(node3d.coordinate.tolist(), [0.5, 0.5, 0.0])
+        self.assertEqual(node3d.color, node2d.color)
 
     def test_move(self):
         """ Make sure we can move the node correctly.

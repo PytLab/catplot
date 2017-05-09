@@ -195,6 +195,15 @@ class Node3D(Node2D):
 
         super(Node3D, self).__init__(coordinate, **kwargs)
 
+    @staticmethod
+    def from2d(node2d, **kwargs):
+        """ Construct a 3D node from a 2D node.
+        """
+        if not isinstance(node2d, Node2D):
+            raise ValueError("node2d must be an object of Node2D")
+
+        return node2d.to3d(**kwargs)
+
     def clone(self, relative_position, **kwargs):
         """ Clone a new 3D node to a specific position.
 
