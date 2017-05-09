@@ -141,6 +141,15 @@ class SuperCell2D(SuperCell):
 
         return expanded_supercell
 
+    def to3d(self, cell_vectors=None):
+        """ Map a 2D supercell to 3D space.
+        """
+        # Map nodes and edges.
+        nodes = [n.to3d() for n in self.nodes]
+        edges = [e.to3d() for e in self.edges]
+
+        return SuperCell3D(nodes, edges, cell_vectors=cell_vectors)
+
 
 class SuperCell3D(SuperCell2D):
     """ 3D supercell in a 3D lattice grid.
@@ -170,6 +179,12 @@ class SuperCell3D(SuperCell2D):
             self.cell_vectors = np.array(cell_vectors)
 
         super(SuperCell2D, self).__init__(nodes, edges, arrows)
+
+    @staticmethod
+    def from2d(supercell2d, cell_vectors=None):
+        """ Construct 3D supercell from a 2D supercell.
+        """
+        return supercell2d.to3d(cell_vectors=cell_vectors)
 
     def expand(self, nx, ny, nz, cell_vectors=None):
         """ Expand the supercell to a larger one in 3D grid.

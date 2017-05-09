@@ -8,7 +8,7 @@ import unittest
 
 from catplot.grid_components.nodes import Node2D
 from catplot.grid_components.edges import Edge2D
-from catplot.grid_components.supercell import SuperCell2D
+from catplot.grid_components.supercell import SuperCell2D, SuperCell3D
 
 
 class SuperCell2DTest(unittest.TestCase):
@@ -95,6 +95,18 @@ class SuperCell2DTest(unittest.TestCase):
 
         self.assertListEqual(s.nodes, [node1, node2, node1, node2])
         self.assertListEqual(s.edges, [edge, edge])
+
+    def to3d(self):
+        """ Make sure we can map 2D supercell to 3D space.
+        """
+        node1 = Node2D([1.0, 1.0], color="#595959", width=1)
+        node2 = Node2D([0.5, 0.5], color="#595959", width=1)
+        edge = Edge2D(node1, node2, n=10)
+        supercell = SuperCell2D([node1, node2], [edge])
+
+        supercell3d = supercell.to3d()
+
+        self.assertTrue(isinstance(supercell3d, SuperCell3D))
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(SuperCell2DTest)

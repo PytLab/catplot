@@ -6,9 +6,9 @@
 
 import unittest
 
-from catplot.grid_components.nodes import Node3D
-from catplot.grid_components.edges import Edge3D
-from catplot.grid_components.supercell import SuperCell3D
+from catplot.grid_components.nodes import Node2D, Node3D
+from catplot.grid_components.edges import Edge2D, Edge3D
+from catplot.grid_components.supercell import SuperCell2D, SuperCell3D
 
 
 class SuperCell3DTest(unittest.TestCase):
@@ -23,6 +23,18 @@ class SuperCell3DTest(unittest.TestCase):
         node2 = Node3D([0.5, 0.5, 0.5], color="#595959", width=1)
         edge = Edge3D(node1, node2, n=10)
         supercell = SuperCell3D([node1, node2], [edge])
+
+    def test_construction_from2d(self):
+        """ Make sure we can construct 3D supercell from 2D suercell.
+        """
+        node1 = Node2D([1.0, 1.0])
+        node2 = Node2D([1.0, 2.0])
+        edge = Edge2D(node1, node2, n=10)
+        supercell = SuperCell2D([node1, node2], [edge])
+
+        supercell3d = SuperCell3D.from2d(supercell)
+
+        self.assertTrue(isinstance(supercell3d, SuperCell3D))
 
     def test_move(self):
         """ Test the edge can be moved correctly.
