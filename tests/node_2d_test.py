@@ -6,7 +6,7 @@
 
 import unittest
 
-from catplot.grid_components.nodes import Node2D
+from catplot.grid_components.nodes import Node2D, Node3D
 
 
 class Node2DTest(unittest.TestCase):
@@ -48,6 +48,17 @@ class Node2DTest(unittest.TestCase):
 
         self.assertListEqual(node_clone.coordinate.tolist(), [1.0, 1.0])
         self.assertFalse(node is node_clone)
+
+    def test_to3d(self):
+        """ Make sure we can convert 2D node to corresponding 3D node.
+        """
+        node2d = Node2D([0.5, 0.5], color="#595959", line_width=1)
+        node3d = node2d.to3d()
+
+        self.assertTrue(isinstance(node3d, Node3D))
+        self.assertListEqual(node3d.coordinate.tolist(), [0.5, 0.5, 0.0])
+        self.assertEqual(node2d.color, node3d.color)
+        self.assertEqual(node2d.line_width, node3d.line_width)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Node2DTest)

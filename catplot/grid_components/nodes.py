@@ -40,8 +40,8 @@ class GridNode(object):
 
     # NOTE: The grid may contains a huge number of nodes,
     # so we define __slots__ for saving memery.
-    __slots__ = {"coordinate", "color", "size", "style", "alpha",
-                 "line_width", "line_style", "edgecolor"}
+    #__slots__ = {"coordinate", "color", "size", "style", "alpha",
+    #             "line_width", "line_style", "edgecolor", "zorder"}
 
     def __init__(self, coordinate, **kwargs):
         self.coordinate = np.array(coordinate)
@@ -132,6 +132,28 @@ class Node2D(GridNode):
             setattr(node, k, v)
 
         return node
+
+    def to3d(self, **kwargs):
+        """ Map the 2D node to 3D space.
+
+        Parameters:
+        -----------
+        zdir: str, optional,
+            which direction to use as z ('x', 'y' or 'z') when plotting a 2D set.
+
+        depthshade: bool, optional,
+            whether to shade the scatter markers to give the appearance of depth.
+            Default is True.
+        """
+        # Map the coordinate.
+        coordinate3d = np.append(self.coordinate, [0.0])
+
+        node3d = Node3D(coordinate3d, color=self.color, size=self.size,
+                        style=self.style, alpha=self.alpha,
+                        line_width=self.line_width, line_style=self.line_style,
+                        edgecolor=self.edgecolor, zorder=self.zorder, **kwargs)
+
+        return node3d
 
 
 class Node3D(Node2D):
