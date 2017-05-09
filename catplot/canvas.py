@@ -3,6 +3,7 @@
 
 import logging
 from collections import namedtuple
+import uuid
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -132,4 +133,13 @@ class Canvas(object):
         """
         for comp in components:
             self._remove_component(comp)
+
+    def extract_node(self, label):
+        """ Extract the correspond node from current canvas.
+        """
+        # Check before extraction.
+        if not isinstance(label, uuid.UUID):
+            raise ValueError("Invalid label type '{}'".format(type(label)))
+
+        return [n for n in self.nodes if n.label == label]
 
