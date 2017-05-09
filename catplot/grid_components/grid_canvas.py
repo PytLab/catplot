@@ -78,8 +78,8 @@ class Grid2DCanvas(Canvas):
     def add_edges(self, edges):
         """ Add multiple edges to canvas.
         """
-        for edge in self.edges:
-            self.add_edge(edges)
+        for edge in edges:
+            self.add_edge(edge)
 
     @property
     def node_coordinates(self):
