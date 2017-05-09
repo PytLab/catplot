@@ -14,7 +14,7 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/pypi-v1.2.5-blue.svg
+.. image:: https://img.shields.io/badge/pypi-v1.2.6-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
 
@@ -24,10 +24,12 @@ catplot
 
 Introduction
 ------------
+
 **CatPlot** is a Python Library for Energy Profile and Abstract Grid(2D/3D) plotting.
 
 Installation
 ------------
+
 1. Via pip (recommend)::
 
     pip install catplot
@@ -36,8 +38,10 @@ Installation
 
     python setup.py install
 
+
 Energy Profile Plotting
 -----------------------
+
 **CatPlot** can plot energy profile using interpolation algorithm.
 
 See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
