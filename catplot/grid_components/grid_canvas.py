@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from catplot.canvas import Canvas
+from catplot.grid_components import extract_plane
 from catplot.grid_components.nodes import Node2D, Node3D
 from catplot.grid_components.edges import Edge2D, Arrow2D, Edge3D
 from catplot.grid_components.supercell import SuperCell2D, SuperCell3D
@@ -202,6 +203,35 @@ class Grid2DCanvas(Canvas):
         self.edges = []
         self.arrows = []
         self.supercells = []
+
+    @extract_plane
+    def to3d(self, canvas3d, **kwargs):
+        """ Convert the 2D canvas to a 3D canvas.
+
+        Parameters:
+        -----------
+        plane: str, which plane components in 2D canvas will be mapped to.
+            The value could be "xy", "xz" or "yz".
+
+        Others in kwargs is the same with `Grid2DCanvas()`.
+        """
+        plane = kwargs.pop("plane")
+
+        # Map all components.
+        nodes = [n.to3d(plane=plane) for n in self.nodes]
+        edges = [e.to3d(plane=plane) for e in self.edges]
+        supercells = [s.to3d(plane=plane) for s in self.supercells]
+
+        if not isinstance(canvas3d, Grid3DCanvas):
+            raise ValueError("canvas3d must be a Grid3DCanvas object")
+
+        canvas3d.add_nodes(nodes)
+        canvas3d.add_edges(edges)
+
+        # NOTE: don't use add_supercells here !!!
+        canvas3d.supercells.extend(supercells)
+
+        return canvas3d
 
 
 class Grid3DCanvas(Grid2DCanvas):

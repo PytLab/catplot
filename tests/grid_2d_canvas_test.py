@@ -8,7 +8,7 @@ import unittest
 
 import matplotlib.pyplot as plt
 
-from catplot.grid_components.grid_canvas import Grid2DCanvas
+from catplot.grid_components.grid_canvas import Grid2DCanvas, Grid3DCanvas
 from catplot.grid_components.nodes import Node2D
 
 
@@ -82,6 +82,23 @@ class Grid2DCanvasTest(unittest.TestCase):
         canvas.draw()
 
         plt.close(canvas.figure)
+
+    def test_to3d(self):
+        """ Make sure we can map all components in 2D canvas to 3D canvas.
+        """
+        canvas2d = Grid2DCanvas()
+
+        n1 = Node2D([0.5, 0.5])
+        n2 = Node2D([1.0, 1.0])
+        canvas2d.add_node(n1)
+        canvas2d.add_node(n2)
+
+        canvas3d = Grid3DCanvas()
+        canvas2d.to3d(canvas3d)
+
+        self.assertListEqual(canvas3d.nodes[0].coordinate.tolist(), [0.5, 0.5, 0.0])
+        self.assertListEqual(canvas3d.nodes[1].coordinate.tolist(), [1.0, 1.0, 0.0])
+
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Grid2DCanvasTest)
