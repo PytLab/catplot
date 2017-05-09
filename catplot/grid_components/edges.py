@@ -130,8 +130,8 @@ class Edge2D(GridEdge):
         node2 = Node2D(self.end).to3d(plane=plane)
 
         edge3d = Edge3D(node1, node2, n=self.n, color=self.color,
-                        style=self.style, alpha=self.alpha, zorder=self.zorder,
-                        **kwargs)
+                        width=self.width, style=self.style, alpha=self.alpha,
+                        zorder=self.zorder, **kwargs)
         return edge3d
 
 
