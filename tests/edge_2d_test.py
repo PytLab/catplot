@@ -7,7 +7,7 @@
 import unittest
 
 from catplot.grid_components.nodes import Node2D
-from catplot.grid_components.edges import Edge2D
+from catplot.grid_components.edges import Edge2D, Edge3D
 
 
 class Edge2DTest(unittest.TestCase):
@@ -61,6 +61,19 @@ class Edge2DTest(unittest.TestCase):
 
         self.assertListEqual(edge.x.tolist(), ref_x)
         self.assertListEqual(edge.y.tolist(), ref_x)
+
+    def test_to3d(self):
+        """ Make sure we can map 2D edge to 3D space correctly.
+        """
+        node1 = Node2D([1.0, 1.0], color="#595959", width=1)
+        node2 = Node2D([0.5, 0.5], color="#595959", width=1)
+        edge = Edge2D(node1, node2, n=10)
+
+        edge3d = edge.to3d()
+
+        self.assertTrue(isinstance(edge3d, Edge3D))
+        self.assertEqual(edge3d.color, edge.color)
+        self.assertEqual(edge3d.width, edge.width)
 
 if "__main__" == __name__: 
     suite = unittest.TestLoader().loadTestsFromTestCase(Edge2DTest)

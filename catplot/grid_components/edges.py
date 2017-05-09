@@ -119,6 +119,16 @@ class Edge2D(GridEdge):
 
         return edge
 
+    def to3d(self, **kwargs):
+        """ Map a 2D edge to 3D space.
+        """
+        # Map endpoints.
+        node1, node2 = Node2D(self.start).to3d(), Node2D(self.end).to3d()
+        edge3d = Edge3D(node1, node2, n=self.n, color=self.color,
+                        style=self.style, alpha=self.alpha, zorder=self.zorder,
+                        **kwargs)
+        return edge3d
+
 
 class Arrow2D(Edge2D):
     """ Arrow edge in 2D grid between 2D nodes.
@@ -190,6 +200,12 @@ class Edge3D(Edge2D):
 
         # Extra attributes for Line3D.
         self.zdir = kwargs.pop("zdir", "z")
+
+    @staticmethod
+    def from2d(edge2d, **kwargs):
+        """ Construct 3D edge from 2D edge.
+        """
+        return edge2d.to3d(**kwargs)
 
     @property
     def z(self):

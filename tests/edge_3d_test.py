@@ -6,8 +6,8 @@
 
 import unittest
 
-from catplot.grid_components.nodes import Node3D
-from catplot.grid_components.edges import Edge3D
+from catplot.grid_components.nodes import Node2D, Node3D
+from catplot.grid_components.edges import Edge2D, Edge3D
 
 
 class Edge3DTest(unittest.TestCase):
@@ -37,6 +37,17 @@ class Edge3DTest(unittest.TestCase):
         self.assertListEqual(edge.x.tolist(), ref_x)
         self.assertListEqual(edge.y.tolist(), ref_x)
         self.assertListEqual(edge.z.tolist(), ref_x)
+
+    def test_construction_from2d(self):
+        """ Make sure we can construct 3D edge from a 2D edge.
+        """
+        node1 = Node2D([1.0, 1.0])
+        node2 = Node2D([1.0, 2.0])
+        edge2d = Edge2D(node1, node2)
+
+        edge3d = Edge3D.from2d(edge2d)
+
+        self.assertTrue(isinstance(edge3d, Edge3D))
 
     def test_move(self):
         """ Test the edge can be moved correctly.
