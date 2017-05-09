@@ -9,6 +9,7 @@ from copy import deepcopy
 import numpy as np
 from matplotlib.lines import Line2D
 
+from catplot.grid_components import extract_plane
 from catplot.grid_components.nodes import Node2D, Node3D
 
 
@@ -119,11 +120,15 @@ class Edge2D(GridEdge):
 
         return edge
 
+    @extract_plane
     def to3d(self, **kwargs):
         """ Map a 2D edge to 3D space.
         """
         # Map endpoints.
-        node1, node2 = Node2D(self.start).to3d(), Node2D(self.end).to3d()
+        plane = kwargs["plane"]
+        node1 = Node2D(self.start).to3d(plane=plane)
+        node2 = Node2D(self.end).to3d(plane=plane)
+
         edge3d = Edge3D(node1, node2, n=self.n, color=self.color,
                         style=self.style, alpha=self.alpha, zorder=self.zorder,
                         **kwargs)
@@ -202,6 +207,7 @@ class Edge3D(Edge2D):
         self.zdir = kwargs.pop("zdir", "z")
 
     @staticmethod
+    @extract_plane
     def from2d(edge2d, **kwargs):
         """ Construct 3D edge from 2D edge.
         """
