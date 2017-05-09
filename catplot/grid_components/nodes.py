@@ -5,6 +5,7 @@
 """
 
 from copy import deepcopy
+import uuid
 
 import numpy as np
 
@@ -37,6 +38,8 @@ class GridNode(object):
 
     zorder: float, set the zorder for the artist, default is 0.
 
+    labeled: bool, if add a unique id to the node, default is True.
+
     """
 
     # NOTE: The grid may contains a huge number of nodes,
@@ -56,6 +59,9 @@ class GridNode(object):
         self.line_style = kwargs.pop("line_style", "solid")
         self.edgecolor = kwargs.pop("edgecolor", self.color)
         self.zorder = kwargs.pop("zorder", 0)
+
+        labeled = kwargs.pop("labeled", True)
+        self.label = uuid.uuid4() if labeled else None
 
 
 class Node2D(GridNode):
@@ -125,6 +131,9 @@ class Node2D(GridNode):
         # Create a new node.
         node = deepcopy(self)
 
+        # Create a new id.
+        node.label = uuid.uuid4()
+
         # Move the node to predefined postion.
         node.move(relative_position)
 
@@ -166,6 +175,9 @@ class Node2D(GridNode):
                         style=self.style, alpha=self.alpha,
                         line_width=self.line_width, line_style=self.line_style,
                         edgecolor=self.edgecolor, zorder=self.zorder, **kwargs)
+
+        # The mapping dosen't change the node id.
+        node3d.label = self.label
 
         return node3d
 
@@ -241,6 +253,9 @@ class Node3D(Node2D):
 
         # Create a new node.
         node = deepcopy(self)
+
+        # Create a new id.
+        node.label = uuid.uuid4()
 
         # Move the node to predefined postion.
         node.move(relative_position)
