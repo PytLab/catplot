@@ -8,6 +8,7 @@ from copy import deepcopy
 
 import numpy as np
 
+from catplot.grid_components import extract_plane
 import catplot.descriptors as dc
 
 
@@ -133,11 +134,15 @@ class Node2D(GridNode):
 
         return node
 
+    @extract_plane
     def to3d(self, **kwargs):
         """ Map the 2D node to 3D space.
 
         Parameters:
         -----------
+        plane: str, the plane to which the node is mapped to.
+            The value could be 'xy', 'xz' or 'yz', default is 'xy'.
+
         zdir: str, optional,
             which direction to use as z ('x', 'y' or 'z') when plotting a 2D set.
 
@@ -146,7 +151,16 @@ class Node2D(GridNode):
             Default is True.
         """
         # Map the coordinate.
-        coordinate3d = np.append(self.coordinate, [0.0])
+        plane = kwargs.pop("plane")
+
+        if plane == "xy":
+            coordinate3d = np.insert(self.coordinate, 2, 0.0)
+        elif plane == "xz":
+            coordinate3d = np.insert(self.coordinate, 1, 0.0)
+        elif plane == "yz":
+            coordinate3d = np.insert(self.coordinate, 0, 0.0)
+        else:
+            raise ValueError("Invalid plane name '{}'".format(plane))
 
         node3d = Node3D(coordinate3d, color=self.color, size=self.size,
                         style=self.style, alpha=self.alpha,
@@ -196,6 +210,7 @@ class Node3D(Node2D):
         super(Node3D, self).__init__(coordinate, **kwargs)
 
     @staticmethod
+    @extract_plane
     def from2d(node2d, **kwargs):
         """ Construct a 3D node from a 2D node.
         """
