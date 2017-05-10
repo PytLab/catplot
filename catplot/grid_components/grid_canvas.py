@@ -360,7 +360,7 @@ class Grid3DCanvas(Grid2DCanvas):
     def add_planes(self, planes):
         """ Add multiple planes to canvas.
         """
-        for plane in self.planes:
+        for plane in planes:
             self.add_plane(plane)
 
     @property
