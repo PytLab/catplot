@@ -15,6 +15,7 @@ from catplot.grid_components import extract_plane
 from catplot.grid_components.nodes import Node2D, Node3D
 from catplot.grid_components.edges import Edge2D, Arrow2D, Edge3D
 from catplot.grid_components.supercell import SuperCell2D, SuperCell3D
+from catplot.grid_components.planes import Plane3D
 
 
 class Grid2DCanvas(Canvas):
@@ -270,6 +271,7 @@ class Grid3DCanvas(Grid2DCanvas):
         self.edges = []
         self.supercells = []
         self.arrows = []  # Just a placeholder here.
+        self.planes = []
 
     def _limits(self, max_x, min_x, max_y, min_y, max_z, min_z):
         """ Override parent's function to get 3D data limits.
@@ -303,17 +305,20 @@ class Grid3DCanvas(Grid2DCanvas):
         """
         node_x = self.node_coordinates[:, 0] if self.nodes else []
         edge_x = self.edge_coordinates[:, 0] if self.edges else []
-        x = np.concatenate([node_x, edge_x])
+        plane_x = np.concatenate([np.concatenate(plane.x) for plane in self.planes])
+        x = np.concatenate([node_x, edge_x, plane_x])
         max_x, min_x = np.max(x), np.min(x)
 
         node_y = self.node_coordinates[:, 1] if self.nodes else []
         edge_y = self.edge_coordinates[:, 1] if self.edges else []
-        y = np.concatenate([node_y, edge_y])
+        plane_y = np.concatenate([np.concatenate(plane.y) for plane in self.planes])
+        y = np.concatenate([node_y, edge_y, plane_y])
         max_y, min_y = np.max(y), np.min(y)
 
         node_z = self.node_coordinates[:, 2] if self.nodes else []
         edge_z = self.edge_coordinates[:, 2] if self.edges else []
-        z = np.concatenate([node_z, edge_z])
+        plane_z = np.concatenate([np.concatenate(plane.z) for plane in self.planes])
+        z = np.concatenate([node_z, edge_z, plane_z])
         max_z, min_z = np.max(z), np.min(z)
 
         return self._limits(max_x, min_x, max_y, min_y, max_z, min_z)
@@ -344,6 +349,20 @@ class Grid3DCanvas(Grid2DCanvas):
         self.nodes.extend(supercell.nodes)
         self.edges.extend(supercell.edges)
 
+    def add_plane(self, plane):
+        """ Add a 3D plane to canvas.
+        """
+        if not isinstance(plane, Plane3D):
+            raise ValueError("plane must be an Plane3D object")
+
+        self.planes.append(plane)
+
+    def add_planes(self, planes):
+        """ Add multiple planes to canvas.
+        """
+        for plane in self.planes:
+            self.add_plane(plane)
+
     @property
     def edge_coordinates(self):
         """ Coordinates for all edges in 3D grid canvas.
@@ -359,7 +378,7 @@ class Grid3DCanvas(Grid2DCanvas):
     def draw(self):
         """ Draw all nodes and edges on 3D canvas.
         """
-        if not any([self.nodes, self.edges]):
+        if not any([self.nodes, self.edges, self.planes]):
             self._logger.warning("Attempted to draw in an empty canvas")
             return
 
@@ -386,6 +405,14 @@ class Grid3DCanvas(Grid2DCanvas):
                            alpha=edge.alpha,
                            zorder=edge.zorder)
 
+        # Add plane to canvas.
+        for plane in self.planes:
+            self.axes.plot_surface(plane.x, plane.y, plane.z,
+                                   facecolor=plane.color,
+                                   edgecolor=plane.edgecolor,
+                                   alpha=plane.alpha,
+                                   shade=plane.shade)
+
         # Set axes limits.
         limits = self._get_data_limits()
         self.axes.set_xlim(limits.min_x, limits.max_x)
@@ -405,6 +432,7 @@ class Grid3DCanvas(Grid2DCanvas):
         self.edges = []
         self.arrows = []
         self.supercells = []
+        self.planes = []
 
     def redraw(self):
         """ Clear the canvas and draw all components agian.
