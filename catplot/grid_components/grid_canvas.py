@@ -23,6 +23,22 @@ class Grid2DCanvas(Canvas):
     def __init__(self, **kwargs):
         super(Grid2DCanvas, self).__init__(**kwargs)
 
+        # Add an axes to figure.
+        # NOTE: here we use the canvas facecolor as the axes facecolor.
+        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
+
+        # Change the spine color of axes.
+        if self.edgecolor:
+            for child in self.axes.get_children():
+                if isinstance(child, Spine):
+                    child.set_color(self.edgecolor)
+
+        # Set axe ticks.
+        if self.x_ticks is not None:
+            self.axes.set_xticks(self.x_ticks)
+        if self.y_ticks is not None:
+            self.axes.set_yticks(self.y_ticks)
+
         # Equalize the scale of x and y axis.
         self.axes.set_aspect("equal")
 
@@ -241,13 +257,26 @@ class Grid3DCanvas(Grid2DCanvas):
         # NOTE: here we call the method in Canvas NOT Grid2DCanvas.
         super(Grid2DCanvas, self).__init__(**kwargs)
 
-        # Create a figure.
-        self.figure = plt.figure(figsize=self.figsize,
-                                 dpi=self.dpi)
+        self.z_ticks = kwargs.pop("z_ticks", None)
 
+        # Figure has been created in base class constructor.
         # Add an axes to figure.
         self.axes = self.figure.add_subplot(111, projection="3d",
                                             facecolor=self.facecolor)
+
+        # Change the spine color of axes.
+        if self.edgecolor:
+            for child in self.axes.get_children():
+                if isinstance(child, Spine):
+                    child.set_color(self.edgecolor)
+
+        # Set axes ticks.
+        if self.x_ticks is not None:
+            self.axes.set_xticks(self.x_ticks)
+        if self.y_ticks is not None:
+            self.axes.set_yticks(self.y_ticks)
+        if self.z_ticks is not None:
+            self.axes.set_zticks(self.z_ticks)
 
         self.axes.set_aspect("equal")
 

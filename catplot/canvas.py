@@ -56,22 +56,6 @@ class Canvas(object):
         self.figure = plt.figure(figsize=self.figsize,
                                  dpi=self.dpi)
 
-        # Add an axes to figure.
-        # NOTE: here we use the canvas facecolor as the axes facecolor.
-        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
-
-        # Change the spine color of axes.
-        if self.edgecolor:
-            for child in self.axes.get_children():
-                if isinstance(child, Spine):
-                    child.set_color(self.edgecolor)
-
-        # Set axe ticks.
-        if self.x_ticks is not None:
-            self.axes.set_xticks(self.x_ticks)
-        if self.y_ticks is not None:
-            self.axes.set_yticks(self.y_ticks)
-
         # Set logger.
         self._logger = logging.getLogger(self.__class__.__name__)
         self._logger.setLevel(logging.INFO)
