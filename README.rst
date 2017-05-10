@@ -14,7 +14,7 @@ catplot
     :target: https://www.python.org/downloads/release/python-2710
     :alt: platform
 
-.. image:: https://img.shields.io/badge/pypi-v1.2.8-blue.svg
+.. image:: https://img.shields.io/badge/pypi-v1.3.0-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
 
@@ -39,12 +39,13 @@ Installation
     python setup.py install
 
 
+See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
+
+
 Energy Profile Plotting
 -----------------------
 
 **CatPlot** can plot energy profile using interpolation algorithm.
-
-See `examples <https://github.com/PytLab/catplot/tree/master/examples>`_ for more details(Continuously updated).
 
 Plot an energy profile for an elementary reaction.
 
