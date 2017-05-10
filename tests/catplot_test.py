@@ -18,6 +18,7 @@ from node_3d_test import Node3DTest
 from edge_3d_test import Edge3DTest
 from grid_3d_canvas_test import Grid3DCanvasTest
 from supercell_3d_test import SuperCell3DTest
+from plane_3d_test import Plane3DTest
 
 def suite():
     test_suite = unittest.TestSuite([
@@ -33,6 +34,7 @@ def suite():
         unittest.TestLoader().loadTestsFromTestCase(Edge3DTest),
         unittest.TestLoader().loadTestsFromTestCase(Grid3DCanvasTest),
         unittest.TestLoader().loadTestsFromTestCase(SuperCell3DTest),
+        unittest.TestLoader().loadTestsFromTestCase(Plane3DTest),
     ])
 
     return test_suite
