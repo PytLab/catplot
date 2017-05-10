@@ -40,6 +40,11 @@ catplot
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://raw.githubusercontent.com/PytLab/catplot/master/LICENSE
 
+.. image:: https://img.shields.io/github/stars/PytLab/catplot.svg
+    :target: https://github.com/PytLab/catplot/stargazers
+
+.. image:: https://img.shields.io/github/forks/PytLab/catplot.svg
+    :target: https://github.com/PytLab/catplot/network
 
 Introduction
 ------------
