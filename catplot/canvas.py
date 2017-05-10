@@ -69,6 +69,26 @@ class Canvas(object):
         # Add handler to logger.
         self._logger.addHandler(handler)
 
+    def _set_axes(self):
+        """ Set some essential attributes of axes in canvas.
+        We put these attribute settings here for code reuse.
+        """
+        # Add an axes to figure.
+        # NOTE: here we use the canvas facecolor as the axes facecolor.
+        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
+
+        # Change the spine color of axes.
+        if self.edgecolor:
+            for child in self.axes.get_children():
+                if isinstance(child, Spine):
+                    child.set_color(self.edgecolor)
+
+        # Set axe ticks.
+        if self.x_ticks is not None:
+            self.axes.set_xticks(self.x_ticks)
+        if self.y_ticks is not None:
+            self.axes.set_yticks(self.y_ticks)
+
     def _limits(self, max_x, min_x, max_y, min_y):
         """ Private helper function to get data limits.
 

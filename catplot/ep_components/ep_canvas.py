@@ -46,6 +46,7 @@ class EPCanvas(Canvas):
     """
     def __init__(self, **kwargs):
         super(EPCanvas, self).__init__(**kwargs)
+        self._set_axes()
 
         # Energy profile lines.
         self.lines = []

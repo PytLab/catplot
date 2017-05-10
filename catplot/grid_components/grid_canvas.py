@@ -22,22 +22,7 @@ class Grid2DCanvas(Canvas):
     """
     def __init__(self, **kwargs):
         super(Grid2DCanvas, self).__init__(**kwargs)
-
-        # Add an axes to figure.
-        # NOTE: here we use the canvas facecolor as the axes facecolor.
-        self.axes = self.figure.add_subplot(111, facecolor=self.facecolor)
-
-        # Change the spine color of axes.
-        if self.edgecolor:
-            for child in self.axes.get_children():
-                if isinstance(child, Spine):
-                    child.set_color(self.edgecolor)
-
-        # Set axe ticks.
-        if self.x_ticks is not None:
-            self.axes.set_xticks(self.x_ticks)
-        if self.y_ticks is not None:
-            self.axes.set_yticks(self.y_ticks)
+        self._set_axes()
 
         # Equalize the scale of x and y axis.
         self.axes.set_aspect("equal")
