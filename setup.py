@@ -10,8 +10,8 @@ author_email = maintainer_email
 description = "A Python Library for Energy Profile and 2D/3D Lattice Grid Plotting"
 
 install_requires = [
-    'numpy>=1.12.1',
-    'scipy>=0.19.0',
+    'numpy',
+    'scipy',
     'matplotlib>=2.0.0',
 ]
 
