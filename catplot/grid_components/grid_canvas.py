@@ -305,19 +305,22 @@ class Grid3DCanvas(Grid2DCanvas):
         """
         node_x = self.node_coordinates[:, 0] if self.nodes else []
         edge_x = self.edge_coordinates[:, 0] if self.edges else []
-        plane_x = np.concatenate([np.concatenate(plane.x) for plane in self.planes])
+        plane_x = (np.concatenate([np.concatenate(plane.x) for plane in self.planes])
+                   if self.planes else [])
         x = np.concatenate([node_x, edge_x, plane_x])
         max_x, min_x = np.max(x), np.min(x)
 
         node_y = self.node_coordinates[:, 1] if self.nodes else []
         edge_y = self.edge_coordinates[:, 1] if self.edges else []
-        plane_y = np.concatenate([np.concatenate(plane.y) for plane in self.planes])
+        plane_y = (np.concatenate([np.concatenate(plane.y) for plane in self.planes])
+                   if self.planes else [])
         y = np.concatenate([node_y, edge_y, plane_y])
         max_y, min_y = np.max(y), np.min(y)
 
         node_z = self.node_coordinates[:, 2] if self.nodes else []
         edge_z = self.edge_coordinates[:, 2] if self.edges else []
-        plane_z = np.concatenate([np.concatenate(plane.z) for plane in self.planes])
+        plane_z = (np.concatenate([np.concatenate(plane.z) for plane in self.planes])
+                   if self.planes else [])
         z = np.concatenate([node_z, edge_z, plane_z])
         max_z, min_z = np.max(z), np.min(z)
 
