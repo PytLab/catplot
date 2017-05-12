@@ -48,6 +48,18 @@ class SuperCell(object):
 
         return new_supercell
 
+    def set_nodes_attr(self, name, value):
+        """ Set an attribute for all nodes in supercell.
+        """
+        for node in self.nodes:
+            setattr(node, name, value)
+
+    def set_edges_attr(self, name, value):
+        """ Set an attribute for all edges in supercell.
+        """
+        for edge in self.edges:
+            setattr(edge, name, value)
+
 
 class SuperCell2D(SuperCell):
     """ 2D supercell for a lattice grid.
