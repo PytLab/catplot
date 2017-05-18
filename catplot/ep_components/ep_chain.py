@@ -94,6 +94,12 @@ class EPChain(object):
             for data in zip(self.x, self.y):
                 writer.writerow(data)
 
+    def setattr(self, name, value):
+        """ Set attriutes for all lines in chain.
+        """
+        for line in self.elementary_lines:
+            setattr(line, name, value)
+
     # -------------------------------------------------------------------------
     # Magic method to change default behaviours.
     # -------------------------------------------------------------------------
