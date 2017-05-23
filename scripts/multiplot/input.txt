@@ -57,8 +57,11 @@ shadow_color = '#595959'
 # Line attrs
 line_width = 6
 
+# Initial x offset
+initial_xs = [0.0, 0.0, 0.0, 1.0]
+
 # Initial y offset
-initial_ys = [0.0, 1.83, 0.0, 1.83]
+initial_ys = [0.0, 0.0, 0.0, 1.83]
 
 #y axis attrs
 #ylim = (-2.0, 2.0)  # (min, max)

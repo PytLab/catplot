@@ -18,9 +18,11 @@ chains = []
 for idx, (energy_tuples,
           peak_widths,
           color,
+          initial_x,
           initial_y) in enumerate(zip(locs["multi_energy_tuples"],
                                       locs["peak_widths"],
                                       locs["colors"],
+                                      locs["initial_xs"],
                                       locs["initial_ys"])):
     lines = []
     for peak_width, energies in zip(peak_widths, energy_tuples):
@@ -34,6 +36,7 @@ for idx, (energy_tuples,
         lines.append(line)
 
     chain = EPChain(lines)
+    chain.translate(initial_x, "x")
     chain.translate(initial_y, "y")
     chains.append(chain)
 
