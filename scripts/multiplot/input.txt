@@ -55,7 +55,7 @@ shadow_depth = 0
 shadow_color = '#595959'
 
 # Line attrs
-line_width = 4.5
+line_width = 6
 
 # Initial y offset
 initial_ys = [0.0, 1.83, 0.0, 1.83]
@@ -72,5 +72,9 @@ peak_widths = [
     (1.0, 1.0, 1.0, 1.5, 1.5, 1.0, 1.0),
     (1.0, 1.0, 1.0, 1.5, 1.5, 1.0, 1.0),
 ]
+
+# Figure size settings.
+figsize = (30, 20)
+dpi = 30
 
 display_mode = "save"  # "interactive" | "save"
