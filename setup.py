@@ -29,6 +29,9 @@ catplot
    :target: https://landscape.io/github/PytLab/catplot/master
    :alt: Code Health
 
+.. image:: https://codecov.io/gh/PytLab/catplot/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/PytLab/catplot
+
 .. image:: https://img.shields.io/badge/python-3.5, 2.7-green.svg
     :target: https://www.python.org/downloads/release/python-351/
     :alt: platform
@@ -36,9 +39,6 @@ catplot
 .. image:: https://img.shields.io/badge/pypi-v1.3.3-blue.svg
     :target: https://pypi.python.org/pypi/catplot/
     :alt: versions
-
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg
-    :target: https://raw.githubusercontent.com/PytLab/catplot/master/LICENSE
 
 Introduction
 ------------
