@@ -24,9 +24,11 @@ before_install:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install codecov
   - python setup.py install  # install catplot
 # command to run tests
 script:
-  - cd tests
-  - python catplot_test.py
+  - coverage run tests/catplot_test.py
+after_success:
+  - codecov
 
