@@ -16,18 +16,21 @@ line_width = locs.get("line_width", 3)
 # Create chains.
 chains = []
 for idx, (energy_tuples,
+          hline_lengths,
           peak_widths,
           color,
           initial_x,
           initial_y) in enumerate(zip(locs["multi_energy_tuples"],
+                                      locs["hline_lengths"],
                                       locs["peak_widths"],
                                       locs["colors"],
                                       locs["initial_xs"],
                                       locs["initial_ys"])):
     lines = []
-    for peak_width, energies in zip(peak_widths, energy_tuples):
+    for hline_length, peak_width, energies in zip(hline_lengths, peak_widths, energy_tuples):
         # Create an elementary line.
         line = ElementaryLine(energies,
+                              hline_length=hline_length,
                               peak_width=peak_width,
                               line_width=line_width,
                               color=color,
