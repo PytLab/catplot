@@ -86,38 +86,36 @@ class EPLine(object):
 class ElementaryLine(EPLine):
     """ Energy profile line for an elementary reaction.
 
-    Parameters:
-    -----------
-    energies: tuple or list,
-        energies for states of a elementary reaction.
+    :param energies: energies for states of a elementary reaction
+    :type energies: tuple or list
 
-    n: int, optional
-        the point number in each state, default is 100.
+    :param n: the point number in each state, default is 100.
+    :type n: int
 
-    hline_length: float, optioanl
-        the length of the horizontal line for the IS and FS.
+    :param hline_leng: the length of the horizontal line for the IS and FS
+    :type hline_length: float
 
-    peak_width: float, optional
-        the width of the peak in energy profile, default is 1.0.
+    :param the width of the peak in energy profile, default is 1.0.
+    :type peak_width: float
 
-    interp_method: str, optional
-        the type of interpolation algorithm("spline", "quadratic")
-        default is "spline".
+    :param interp_method: the type of interpolation algorithm, possible value: 
+    "spline", "quadratic", default is "spline".
+    :type interp_method: str
 
-    rxn_equation: str, optional
-        elementary reaction equation, default is None.
+    :param rxn_equation: elementary reaction equation, default is None.
+    :type rxn_equation: str
 
-    line_width: float, optional
-        line width, default is 3.
+    :param line_width: line width, default is 3.
+    :type line_width: float
 
-    color: str, optional,
-        color code of the line, default is #000000 (black).
+    :param color: color code of the line, default is #000000 (black).
+    :type color: str
 
-    shadow_color: str, optional
-        color code of the shadow lines, default is #595959.
+    :param shadow_color: color code of the shadow lines, default is #595959.
+    :type shadow_color: str
 
-    shadow_depth: int, optional
-        shadow depth of the line, default is 0, no shadow.
+    :param shadow_depth: shadow depth of the line, default is 0, no shadow.
+    :type shadow_depth: int
     """
     # Descriptors.
 
